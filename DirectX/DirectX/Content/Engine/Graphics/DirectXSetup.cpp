@@ -89,15 +89,18 @@ LRESULT CALLBACK CDirectXSetup::WindowProc(HWND HWnd, UINT Message, WPARAM WPara
 		EndPaint(HWnd, &PS);
 		break;
 
+
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
+
 
 	case WM_KEYDOWN:
 		if (WParam == VK_ESCAPE)
 			//DestroyWindow(WindowHandle);
 			MessageBox(HWnd, "Boop", "Beep", NULL);
 		return 0;
+
 
 	case WM_MOUSEMOVE:
 		break;
@@ -123,7 +126,7 @@ HRESULT CDirectXSetup::InitialiseD3D()
 	UINT CreateDeviceFlags{ 0 };
 
 #ifdef _DEBUG
-	CreateDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+	//CreateDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
 	D3D_DRIVER_TYPE DriverTypes[] =
@@ -204,6 +207,7 @@ void CDirectXSetup::ShutdownD3D()
 	if (PixelShader) PixelShader->Release();
 	if (BackBufferRTView) BackBufferRTView->Release();
 	if (SwapChain) SwapChain->Release();
+	if (ConstantBuffer) ConstantBuffer->Release();
 	if (DeviceContext) DeviceContext->Release();
 	if (Device) Device->Release();
 }
@@ -226,10 +230,28 @@ HRESULT CDirectXSetup::InitialiseGraphics()
 	BufferDesc.ByteWidth = sizeof(SVertex) * 3;
 	BufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	BufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
+	
 	HR = Device->CreateBuffer(&BufferDesc, NULL, &VertexBuffer);
-
 	if (FAILED(HR)) return HR;
+
+
+	D3D11_BUFFER_DESC CBuffer;
+	ZeroMemory(&CBuffer, sizeof(CBuffer));
+
+	CBuffer.Usage = D3D11_USAGE_DEFAULT;
+	CBuffer.ByteWidth = 80;
+	CBuffer.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+
+	HR = Device->CreateBuffer(&CBuffer, NULL, &ConstantBuffer);
+	if (FAILED(HR)) return HR;
+
+	SConstantBuffer CBValues;
+	CBValues.RedAmount = 0.5f;
+
+	DeviceContext->UpdateSubresource(ConstantBuffer, 0, 0, &CBValues, 0, 0);
+
+	DeviceContext->VSSetConstantBuffers(0, 1, &ConstantBuffer);
+	
 
 	D3D11_MAPPED_SUBRESOURCE MS;
 
@@ -252,7 +274,7 @@ HRESULT CDirectXSetup::InitialiseGraphics()
 		}
 	}
 
-	HR = D3DX11CompileFromFile("shaders.hlsl", 0, 0, "PSader", "ps_4_0", 0, 0, 0, &PS, &Error, 0);
+	HR = D3DX11CompileFromFile("shaders.hlsl", 0, 0, "PShader", "ps_4_0", 0, 0, 0, &PS, &Error, 0);
 	if (Error != 0)
 	{
 		OutputDebugStringA((char*)Error->GetBufferPointer());
@@ -282,6 +304,9 @@ HRESULT CDirectXSetup::InitialiseGraphics()
 	if (FAILED(HR)) return HR;
 
 	DeviceContext->IASetInputLayout(InputLayout);
+
+
+	
 	return S_OK;
 }
 

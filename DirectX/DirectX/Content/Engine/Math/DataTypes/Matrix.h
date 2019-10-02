@@ -43,7 +43,7 @@ public:
 	// @param Transform - The location, rotation and scale this matrix should be created at.
 	SMatrix(STransform Transform)
 	{
-		ASSERT(Columns == 4, Rows = 4, "Illigal use of constructor, Is the matrix the correct size?");
+		ASSERT(Columns == 4 && Rows == 4, "Illigal use of constructor, Is the matrix the correct size?");
 		SetTransform(Transform);
 	}
 
@@ -55,7 +55,7 @@ public:
 	// @param Scale - The scale this matrix should be at.
 	SMatrix(SVector4 Location, SQuaternion Rotation, SVector4 Scale)
 	{
-		ASSERT(Columns == 4, Rows = 4, "Illigal use of constructor, Is the matrix the correct size?");
+		ASSERT(Columns == 4 && Rows == 4, "Illigal use of constructor, Is the matrix the correct size?");
 		SetTransform(Location, Rotation, Scale);
 	}
 
@@ -67,11 +67,11 @@ public:
 	// @param Scale - The scale this matrix should be at.
 	SMatrix(SVector Location, SQuaternion Rotation, SVector Scale)
 	{
-		ASSERT(Columns == 4, Rows = 4, "Illigal use of constructor, Is the matrix the correct size?");
+		ASSERT(Columns == 4 && Rows == 4, "Illigal use of constructor, Is the matrix the correct size?");
 		SetTransform(Location, Rotation, Scale);
 	}
 
-
+	
 	/// Operators
 
 	// Adds each component of this matrix by the same component on another matrix.
@@ -565,7 +565,7 @@ inline SMatrix<Columns2, Rows> SMatrix<Columns, Rows>::operator*(const SMatrix<C
 		{
 			for (uint i = 0; i < Columns; ++i)
 			{
-				Results[y][x] += (Data[y][i] * M[i][x]);
+				Result[y][x] += (Data[y][i] * M[i][x]);
 			}
 		}
 	}
@@ -674,7 +674,7 @@ inline void SMatrix<Columns, Rows>::SetToIdentity(float Value)
 			Data[y][x] = ((x == y) * Value);
 		}
 	}
-	Data[x - 1][y - 1] = 1.0f;
+	Data[Columns - 1][Rows - 1] = 1.0f;
 }
 
 
@@ -687,7 +687,7 @@ inline SMatrix<4, 4> SMatrix<Columns, Rows>::Translate(const SVector4& Location)
 
 	for (uint i = 0; i < 4; ++i)
 	{
-		Matrix[i][W] = Position[i];
+		Matrix[i][W] = Location[i];
 	}
 	return *this * Matrix;
 }
@@ -715,7 +715,7 @@ inline SMatrix<4, 4> SMatrix<Columns, Rows>::SetTranslate(const SVector4& Locati
 
 	for (uint i = 0; i < 4; ++i)
 	{
-		Matrix[i][W] = Position[i];
+		Matrix[i][W] = Location[i];
 	}
 	*this *= Matrix;
 	return *this;
@@ -960,7 +960,7 @@ template <uint Columns, uint Rows>
 inline SMatrix<4, 4> SMatrix<Columns, Rows>::SetTransform(const STransform& InTransform)
 {
 	SetScale(InTransform.Scale);
-	SetRotation(InTransform.Rotation);
+	SetRotate(InTransform.Rotation);
 	SetTranslate(InTransform.Location);
 	return *this;
 }

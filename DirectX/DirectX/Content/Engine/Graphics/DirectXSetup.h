@@ -5,6 +5,18 @@
 #include <windows.h>
 #include <dxerr.h>
 #include "../Math/DataTypes/Vertex.h"
+#include "../Math/DataTypes/Matrix.h"
+#include "../Math/DataTypes/Vector.h"
+
+
+struct SConstantBuffer
+{
+	SMatrix4 WorldMatrix;
+	float RedAmount;
+	float Scale;
+	//SVector2 Packing;
+	XMFLOAT2 Packing;
+};
 
 
 class CDirectXSetup
@@ -37,6 +49,8 @@ private:
 	ID3D11InputLayout* InputLayout;
 
 	ID3D11RenderTargetView* BackBufferRTView{ NULL };
+
+	ID3D11Buffer* ConstantBuffer;
 
 public:
 	/// Constructors

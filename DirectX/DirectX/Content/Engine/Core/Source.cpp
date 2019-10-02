@@ -1,5 +1,6 @@
 #include "EngineSetup.h"
 
+
 int WINAPI WinMain(_In_ HINSTANCE HandleInstance, _In_opt_ HINSTANCE HPrevInstance, _In_ LPSTR LPCmdLine, _In_ int nCmdShow)
 {
 	UNREFERENCED_PARAMETER(HPrevInstance);

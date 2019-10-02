@@ -1,3 +1,11 @@
+struct CBuffer
+{
+	matrix Matrix;
+	float RedFraction;
+	float Scale;
+	float2 Packing;
+};
+
 struct VOut
 {
 	float4 position : SV_POSITION;
@@ -9,7 +17,8 @@ VOut VShader(float4 position : POSITION, float4 color : COLOR)
 {
 	VOut output;
 
-	output.position = position;
+	color.r *= RedFraction;
+	output.position = mul(Matrix, position);
 	output.color = color;
 
 	return output;
