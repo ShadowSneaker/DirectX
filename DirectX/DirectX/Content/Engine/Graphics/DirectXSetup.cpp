@@ -219,9 +219,54 @@ HRESULT CDirectXSetup::InitialiseGraphics()
 
 	SVertex Vertices[] =
 	{
-		{XMFLOAT3(0.9f,  0.9f, 0.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f)},
-		{XMFLOAT3(0.9f, -0.9f, 0.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f)},
-		{XMFLOAT3(-0.9f,-0.9f, 0.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f)}
+		// back face
+		{SVector{-1.0f,  1.0f,  1.0f}, SVector4{1.0f, 0.0f, 0.0f, 1.0f}},
+		{SVector{-1.0f, -1.0f,  1.0f}, SVector4{0.1f, 1.0f, 0.0f, 1.0f}},
+		{SVector{ 1.0f,  1.0f,  1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{ 1.0f,  1.0f,  1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{-1.0f, -1.0f,  1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{ 1.0f, -1.0f,  1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+
+		// front face
+		{SVector{-1.0f, -1.0f, -1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{-1.0f,  1.0f, -1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{ 1.0f,  1.0f, -1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{-1.0f, -1.0f, -1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{ 1.0f,  1.0f, -1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{ 1.0f, -1.0f, -1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+
+		// left face
+		{SVector{-1.0f, -1.0f, -1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{-1.0f, -1.0f,  1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{-1.0f,  1.0f, -1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{-1.0f, -1.0f,  1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{-1.0f,  1.0f,  1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{-1.0f,  1.0f, -1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+
+		// right face
+		{SVector{ 1.0f, -1.0f,  1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{ 1.0f, -1.0f, -1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{ 1.0f,  1.0f, -1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{ 1.0f,  1.0f,  1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{ 1.0f, -1.0f,  1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{ 1.0f,  1.0f, -1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+
+		// bottom face
+		{SVector{ 1.0f, -1.0f, -1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{ 1.0f, -1.0f,  1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{-1.0f, -1.0f, -1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{ 1.0f, -1.0f,  1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{-1.0f, -1.0f,  1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{-1.0f, -1.0f, -1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+
+		// top face
+		{SVector{ 1.0f,  1.0f,  1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{ 1.0f,  1.0f, -1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{-1.0f,  1.0f, -1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{-1.0f,  1.0f,  1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{ 1.0f,  1.0f,  1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+		{SVector{-1.0f,  1.0f, -1.0f}, SVector4{0.1f, 0.0f, 1.0f, 1.0f}},
+
 	};
 
 	D3D11_BUFFER_DESC BufferDesc;
@@ -237,20 +282,13 @@ HRESULT CDirectXSetup::InitialiseGraphics()
 
 	D3D11_BUFFER_DESC CBuffer;
 	ZeroMemory(&CBuffer, sizeof(CBuffer));
-
+	
 	CBuffer.Usage = D3D11_USAGE_DEFAULT;
-	CBuffer.ByteWidth = 80;
+	CBuffer.ByteWidth = 16;
 	CBuffer.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-
+	
 	HR = Device->CreateBuffer(&CBuffer, NULL, &ConstantBuffer);
 	if (FAILED(HR)) return HR;
-
-	SConstantBuffer CBValues;
-	CBValues.RedAmount = 0.5f;
-
-	DeviceContext->UpdateSubresource(ConstantBuffer, 0, 0, &CBValues, 0, 0);
-
-	DeviceContext->VSSetConstantBuffers(0, 1, &ConstantBuffer);
 	
 
 	D3D11_MAPPED_SUBRESOURCE MS;
@@ -323,6 +361,14 @@ void CDirectXSetup::RenderFrame()
 	UINT Offset = 0;
 	DeviceContext->IASetVertexBuffers(0, 1, &VertexBuffer, &Stride, &Offset);
 	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	SConstantBuffer CBValues;
+	CBValues.RedAmount = 0.0f;
+
+	DeviceContext->UpdateSubresource(ConstantBuffer, 0, 0, &CBValues, 0, 0);
+
+	DeviceContext->VSSetConstantBuffers(0, 1, &ConstantBuffer);
+
 	DeviceContext->Draw(3, 0);
 
 

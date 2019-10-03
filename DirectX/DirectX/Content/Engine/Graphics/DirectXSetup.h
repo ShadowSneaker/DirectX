@@ -6,16 +6,16 @@
 #include <dxerr.h>
 #include "../Math/DataTypes/Vertex.h"
 #include "../Math/DataTypes/Matrix.h"
-#include "../Math/DataTypes/Vector.h"
 
 
 struct SConstantBuffer
 {
-	SMatrix4 WorldMatrix;
+	//SMatrix4 WorldMatrix;
+	//DirectX::XMMATRIX WorldMatrix;
 	float RedAmount;
-	float Scale;
-	//SVector2 Packing;
-	XMFLOAT2 Packing;
+	//float Scale;
+	SVector Packing;
+	//DirectX::XMFLOAT3 Packing;
 };
 
 

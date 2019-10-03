@@ -1,11 +1,11 @@
 #pragma once
 #define _XM_NO_INTRINSICS_
 #define XM_NO_ALIGNMENT
-#include <xnamath.h>
-
+//#include <xnamath.h>
+#include "../DataTypes/Vector.h"
 
 struct SVertex
 {
-	XMFLOAT3 Position;
-	XMFLOAT4 Colour;
+	SVector Position;
+	SVector4 Colour;
 };

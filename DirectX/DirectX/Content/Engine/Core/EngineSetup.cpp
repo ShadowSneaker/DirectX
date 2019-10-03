@@ -22,6 +22,7 @@ void CEngineSetup::MainLoop()
 	while (DirectXSetup->GetMessage().message != WM_QUIT)
 	{
 		DirectXSetup->ReadMessage();
+
 		DirectXSetup->RenderFrame();
 	}
 }
