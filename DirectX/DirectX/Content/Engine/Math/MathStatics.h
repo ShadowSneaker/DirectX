@@ -4,12 +4,22 @@
 #include <math.h>
 
 
+#define TO_RADIAN(x) { (float) ((x) * (TMath::Pi / 180.0f)) }
+#define RADIAN { (float) (TMath::Pi * 2.0f) }
+#define TO_DEGREES(x) { (float) ((x) * (180.0f / TMath::Pi)) }
+#define DEGREES { (float) (TMath::Pi / 180.0f) }
+
+
 // class that holds a large amount of static math functions.
 class TMath
 {
 public:
 	static const float Pi;
-	static const float InvsersePi;
+	static const float Pi2;
+	static const float InversePi;
+	static const float Divide2Pi;
+	static const float PiDivide2;
+	static const float PiDivide4;
 	static const float HalfPi;
 
 public:
@@ -36,7 +46,7 @@ public:
 
 	static void SinCos(float* ScalarSin, float* ScalarCos, float Value)
 	{
-		float Quotient = (InvsersePi * 0.5f) * Value;
+		float Quotient = (InversePi * 0.5f) * Value;
 		Quotient = (float)((int)(Quotient + (Value >= 0.0f) ? 0.5f : -0.5f));
 
 		float Y = Value - (2.0f * Pi) * Quotient;
@@ -356,6 +366,54 @@ public:
 		return NearlyEqual<double>(A, B, Range);
 	}
 
+	static inline bool ScalarNearEqual(float S1, float S2, float Epsilon)
+	{
+		float Delta = S1 - S2;
+		return (fabsf(Delta) <= Epsilon);
+	}
+
+
+	static inline void ScalarSinCos(float* pSin, float* pCos, float Value)
+	{
+		if (!pSin || !pCos)
+		{
+			return;
+		}
+
+		float Quotient = Divide2Pi * Value;
+		if (Value >= 0.0f)
+		{
+			Quotient = static_cast<float>(static_cast<int>(Quotient + 0.5f));
+		}
+		else
+		{
+			Quotient = static_cast<float>(static_cast<int>(Quotient - 0.5f));
+		}
+
+		float Y = Value - Pi2 * Quotient;
+
+		float Sign;
+		if (Y > PiDivide2)
+		{
+			Y = Pi - Y;
+			Sign = -1.0f;
+		}
+		else if (Y < -PiDivide2)
+		{
+			Y = -Pi - Y;
+			Sign = -1.0f;
+		}
+		else
+		{
+			Sign = 1.0f;
+		}
+
+		float Y2 = Y * Y;
+
+		*pSin = (((((-2.3889859e-08f * Y2 + 2.7525562e-06f) * Y2 - 0.00019840874f) * Y2 + 0.0083333310f) * Y2 - 0.16666667f) * Y2 + 1.0f) * Y;
+		float P = ((((-2.6051615e-07f * Y2 + 2.4760495e-05f) * Y2 - 0.0013888378f) * Y2 + 0.041666638f) * Y2 - 0.5f) * Y2 + 1.0f;
+		*pCos = Sign * P;
+	}
 
 	//...
 
@@ -380,6 +438,8 @@ public:
 
 
 };
+
+
 
 
 //#ifndef PI

@@ -10,12 +10,12 @@
 
 struct SConstantBuffer
 {
-	//SMatrix4 WorldMatrix;
+	SMatrix4 WorldMatrix;
 	//DirectX::XMMATRIX WorldMatrix;
 	float RedAmount;
-	//float Scale;
-	SVector Packing;
-	//DirectX::XMFLOAT3 Packing;
+	float Scale;
+	SVector2 Packing;
+	//DirectX::XMFLOAT2 Packing;
 };
 
 
@@ -51,6 +51,10 @@ private:
 	ID3D11RenderTargetView* BackBufferRTView{ NULL };
 
 	ID3D11Buffer* ConstantBuffer;
+
+	ID3D11DepthStencilView* ZBuffer;
+
+	float TempRotate = 0.0f;
 
 public:
 	/// Constructors

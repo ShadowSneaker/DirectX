@@ -2,10 +2,7 @@
 #include "Vector.h"
 
 //#define TO_RADIAN(x) { (float) ((x) * PI / 180.0f) }
-#define TO_RADIAN(x) { (float) ((x) * (PI * 2.0f)) }
-#define RADIAN { (float) (PI * 2.0f) }
-#define TO_DEGREES(x) { (float) ((x) * (PI / 180.0f)) }
-#define DEGREES { (float) (PI / 180.0f) }
+
 
 
 // Quaternion

@@ -2,6 +2,8 @@
 #include "Transform.h"
 #include "../MathStatics.h"
 
+#include <DirectXMath.h>
+
 
 // A 2D arangement of numbers in rows and columns.
 template <uint Columns, uint Rows>
@@ -25,7 +27,10 @@ public:
 	{
 		for (uint i = 0; i < Rows; ++i)
 		{
-			Data[Rows] = F;
+			for (uint j = 0; j < Columns; ++j)
+			{
+				Data[i][j] = F;
+			}
 		}
 	}
 
@@ -344,6 +349,15 @@ public:
 	// @return - Returns the transformed matrix.
 	inline SMatrix<4, 4> SetTransform(const SVector4& Location, const SQuaternion& Rotation, const SVector4& InScale);
 
+	// 
+	inline SMatrix<4, 4> SetLocation(const SVector4& NewLocation);
+
+	// 
+	inline SMatrix<4, 4> SetLocation(const SVector3& NewLocation, const float& W = 1.0f);
+
+	//
+	inline SMatrix<4, 4> SetLocation(const float& X, const float& Y, const float& Z, const float& W = 1.0f);
+
 	// Calculates the inverse of this matrix.
 	// Note: This does not apply the inverse to this matrix.
 	// Note: If the result is an empty matrix then the inputted matrix could not be inversed.
@@ -369,6 +383,41 @@ public:
 
 	// Creates a matrix by taking the transpose of the cofactor matrix.
 	inline SMatrix<Columns, Rows> Adjoint() const;
+
+
+	
+
+
+	
+	static inline SMatrix<4, 4> PersepctiveFovLH(float FovAngleY, float AspectRatio, float NearZ, float FarZ)
+	{
+		//ASSERT(NearZ > 0.0f && FarZ > 0.0f);
+		//ASSERT(!TMath::ScalarNearEqual(FovAngleY, 0.0f, 0.00001f * 2.0f));
+		//ASSERT(!TMath::ScalarNearEqual(AspectRatio, 0.0f, 0.00001f));
+		//ASSERT(!TMath::ScalarNearEqual(FarZ, NearZ, 0.00001f));
+
+		assert(NearZ > 0.0f && FarZ > 0.0f);
+		assert(!TMath::ScalarNearEqual(FovAngleY, 0.0f, 0.00001f * 2.0f));
+		assert(!TMath::ScalarNearEqual(AspectRatio, 0.0f, 0.00001f));
+		assert(!TMath::ScalarNearEqual(FarZ, NearZ, 0.00001f));
+
+		float SinFOV;
+		float CosFOV;
+		TMath::ScalarSinCos(&SinFOV, &CosFOV, 0.5f * FovAngleY);
+
+		float Height = CosFOV / SinFOV;
+		float Width = Height / AspectRatio;
+		float FRange = FarZ / (FarZ - NearZ);
+
+		SMatrix<4, 4> Result{ 0.0f };
+		Result[0][0] = Width;
+		Result[1][1] = Height;
+		Result[2][2] = FRange;
+		Result[2][3] = 1.0f;
+		Result[3][2] = -FRange * NearZ;
+
+		return Result;
+	}
 
 
 
@@ -745,10 +794,10 @@ inline SMatrix<4, 4> SMatrix<Columns, Rows>::RotatePitch(const float& Angle) con
 	SMatrix<4, 4> Result;
 	Result.SetToIdentity();
 
-	Result[1][1] = TMath::Con(Angle);
-	Result[1][2] = -TMath::Sin(Angle);
-	Result[2][1] = TMath::Sin(Angle);
-	Result[2][2] = TMath::Con(Angle);
+	Result[1][1] = TMath::Cos(Angle);
+	Result[1][2] = TMath::Sin(Angle);
+	Result[2][1] = -TMath::Sin(Angle);
+	Result[2][2] = TMath::Cos(Angle);
 
 	return Result;
 }
@@ -763,10 +812,10 @@ inline SMatrix<4, 4> SMatrix<Columns, Rows>::RotateYaw(const float& Angle) const
 	SMatrix<4, 4> Result;
 	Result.SetToIdentity();
 
-	Result[0][0] = TMath::Con(Angle);
-	Result[0][2] = TMath::Sin(Angle);
-	Result[2][0] = -TMath::Sin(Angle);
-	Result[2][2] = TMath::Con(Angle);
+	Result[0][0] = TMath::Cos(Angle);
+	Result[0][2] = -TMath::Sin(Angle);
+	Result[2][0] = TMath::Sin(Angle);
+	Result[2][2] = TMath::Cos(Angle);
 
 	return Result;
 }
@@ -782,8 +831,8 @@ inline SMatrix<4, 4> SMatrix<Columns, Rows>::RotateRoll(const float& Angle) cons
 	Result.SetToIdentity();
 
 	Result[0][0] = TMath::Cos(Angle);
-	Result[0][1] = -TMath::Sin(Angle);
-	Result[1][0] = TMath::Sin(Angle);
+	Result[0][1] = TMath::Sin(Angle);
+	Result[1][0] = -TMath::Sin(Angle);
 	Result[1][1] = TMath::Cos(Angle);
 
 	return Result;
@@ -970,6 +1019,31 @@ template <uint Columns, uint Rows>
 inline SMatrix<4, 4> SMatrix<Columns, Rows>::SetTransform(const SVector4& Location, const SQuaternion& Rotation, const SVector4& InScale)
 {
 	return SetTransform(STransform{ Location, Rotation, InScale });
+}
+
+
+template <uint Columns, uint Rows>
+inline SMatrix<4, 4> SMatrix<Columns, Rows>::SetLocation(const SVector4& NewLocation)
+{
+	for (uint i = 0; i < Rows; ++i)
+	{
+		Data[EAxis::W][i] = NewLocation[i];
+	}
+	return *this;
+}
+
+
+template <uint Columns, uint Rows>
+inline SMatrix<4, 4> SMatrix<Columns, Rows>::SetLocation(const SVector3& NewLocation, const float& W)
+{
+	return SetLocation(SVector4{ NewLocation[X], NewLocation[Y], NewLocation[Z], W });
+}
+
+
+template <uint Columns, uint Rows>
+inline SMatrix<4, 4> SMatrix<Columns, Rows>::SetLocation(const float& X, const float& Y, const float& Z, const float& W)
+{
+	return SetLocation(SVector4{ X, Y, Z, W });
 }
 
 
