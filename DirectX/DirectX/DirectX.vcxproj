@@ -144,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Content\Engine\Graphics\Camera.h" />
     <ClInclude Include="Content\Engine\Graphics\DirectXSetup.h" />
     <ClInclude Include="Content\Engine\Core\EngineSetup.h" />
     <ClInclude Include="Content\Engine\Math\Containers\Colour.h" />
@@ -158,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\Engine\Core\EngineSetup.cpp" />
+    <ClCompile Include="Content\Engine\Graphics\Camera.cpp" />
     <ClCompile Include="Content\Engine\Graphics\DirectXSetup.cpp" />
     <ClCompile Include="Content\Engine\Core\Source.cpp" />
     <ClCompile Include="Content\Engine\Math\DataTypes\Quaternion.cpp" />

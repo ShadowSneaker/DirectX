@@ -384,40 +384,11 @@ public:
 	// Creates a matrix by taking the transpose of the cofactor matrix.
 	inline SMatrix<Columns, Rows> Adjoint() const;
 
+	inline SMatrix<4, 4> Merge(SMatrix<4, 4> Mat);
+
 
 	
-
-
 	
-	static inline SMatrix<4, 4> PersepctiveFovLH(float FovAngleY, float AspectRatio, float NearZ, float FarZ)
-	{
-		//ASSERT(NearZ > 0.0f && FarZ > 0.0f);
-		//ASSERT(!TMath::ScalarNearEqual(FovAngleY, 0.0f, 0.00001f * 2.0f));
-		//ASSERT(!TMath::ScalarNearEqual(AspectRatio, 0.0f, 0.00001f));
-		//ASSERT(!TMath::ScalarNearEqual(FarZ, NearZ, 0.00001f));
-
-		assert(NearZ > 0.0f && FarZ > 0.0f);
-		assert(!TMath::ScalarNearEqual(FovAngleY, 0.0f, 0.00001f * 2.0f));
-		assert(!TMath::ScalarNearEqual(AspectRatio, 0.0f, 0.00001f));
-		assert(!TMath::ScalarNearEqual(FarZ, NearZ, 0.00001f));
-
-		float SinFOV;
-		float CosFOV;
-		TMath::ScalarSinCos(&SinFOV, &CosFOV, 0.5f * FovAngleY);
-
-		float Height = CosFOV / SinFOV;
-		float Width = Height / AspectRatio;
-		float FRange = FarZ / (FarZ - NearZ);
-
-		SMatrix<4, 4> Result{ 0.0f };
-		Result[0][0] = Width;
-		Result[1][1] = Height;
-		Result[2][2] = FRange;
-		Result[2][3] = 1.0f;
-		Result[3][2] = -FRange * NearZ;
-
-		return Result;
-	}
 
 
 
@@ -461,6 +432,107 @@ public:
 		Matrix.SetToIdentity();
 		return Matrix;
 	}
+
+
+	static inline SMatrix<4, 4> PersepctiveFovLH(float FovAngleY, float AspectRatio, float NearZ, float FarZ)
+	{
+		//ASSERT(NearZ > 0.0f && FarZ > 0.0f);
+		//ASSERT(!TMath::ScalarNearEqual(FovAngleY, 0.0f, 0.00001f * 2.0f));
+		//ASSERT(!TMath::ScalarNearEqual(AspectRatio, 0.0f, 0.00001f));
+		//ASSERT(!TMath::ScalarNearEqual(FarZ, NearZ, 0.00001f));
+
+		assert(NearZ > 0.0f && FarZ > 0.0f);
+		assert(!TMath::ScalarNearEqual(FovAngleY, 0.0f, 0.00001f * 2.0f));
+		assert(!TMath::ScalarNearEqual(AspectRatio, 0.0f, 0.00001f));
+		assert(!TMath::ScalarNearEqual(FarZ, NearZ, 0.00001f));
+
+		float SinFOV;
+		float CosFOV;
+		TMath::ScalarSinCos(&SinFOV, &CosFOV, 0.5f * FovAngleY);
+
+		float Height = CosFOV / SinFOV;
+		float Width = Height / AspectRatio;
+		float FRange = FarZ / (FarZ - NearZ);
+
+		SMatrix<4, 4> Result{ 0.0f };
+		Result[0][0] = Width;
+		Result[1][1] = Height;
+		Result[2][2] = FRange;
+		Result[2][3] = 1.0f;
+		Result[3][2] = -FRange * NearZ;
+
+		return Result;
+	}
+
+
+	static inline SMatrix<4, 4> LookAt(SVector4 EyePosition, SVector4 FocusPosition, SVector4 UpDirection)
+	{
+		SVector4 EyeDirection{ FocusPosition - EyePosition };
+		return LookTo(EyePosition, EyeDirection, UpDirection);
+	}
+
+
+	static inline SMatrix<4, 4> LookTo(SVector4 EyePosition, SVector4 EyeDirection, SVector4 UpDirection)
+	{
+		//assert(EyeDirection != 0.0f);
+		//assert(UpDirection != 0.0f);
+
+
+		SVector4 R2{ SVector4::Normalize(EyeDirection) };
+		SVector4 R0{ SVector4::CrossProduct(UpDirection, R2) };
+		R0 = SVector4::Normalize(R0);
+
+		SVector4 R1{ SVector4::CrossProduct(UpDirection, R2) };
+		SVector4 NegEyePos{ -EyePosition };
+
+		SVector4 D0 = SVector4::DotProduct(R0, NegEyePos);
+		SVector4 D1 = SVector4::DotProduct(R1, NegEyePos);
+		SVector4 D2 = SVector4::DotProduct(R2, NegEyePos);
+
+		//Vector<4, uint> Control{ 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00000000 };
+
+		SMatrix<4, 4> Mat;
+		//Mat[0] = SVector4::Select(D0, R0, Control);
+		//Mat[1] = SVector4::Select(D1, R1, Control);
+		//Mat[2] = SVector4::Select(D2, R2, Control);
+		
+		Mat[0] = R0;
+		Mat[1] = R1;
+		Mat[2] = R2;
+		Mat[3] = SVector4{ 0.0f, 0.0f, 0.0f, 1.0f };
+
+		Mat.Merge(Mat);
+		return Mat;
+	}
+
+
+	//static SMatrix<4, 4> ToMatrixM(DirectX::XMMATRIX Mat)
+	//{
+	//	SMatrix<4, 4> Result;
+	//	for (uint x = 0; x < Columns; ++x)
+	//	{
+	//		for (uint y = 0; y < Rows; ++y)
+	//		{
+	//			Result[x][y] = Mat.m[x][y];
+	//		}
+	//	}
+	//	return Result;
+	//}
+
+
+	static SMatrix<4, 4> ToMatrixR(DirectX::XMMATRIX Mat)
+	{
+		SMatrix<4, 4> Result;
+		for (uint x = 0; x < Columns; ++x)
+		{
+			for (uint y = 0; y < Rows; ++y)
+			{
+				Result[x][y] = Mat.r[x][y];
+			}
+		}
+	}
+
+	
 };
 
 
@@ -1147,6 +1219,25 @@ inline SMatrix<Columns, Rows> SMatrix<Columns, Rows>::Adjoint() const
 		}
 	}
 	return Result;
+}
+
+
+template <uint Columns, uint Rows>
+inline SMatrix<4, 4> SMatrix<Columns, Rows>::Merge(SMatrix<4, 4> Mat)
+{
+	SMatrix4 P;
+	P[0] = SVector4::Merge(Mat[0], Mat[2], X, Y);
+	P[1] = SVector4::Merge(Mat[1], Mat[3], X, Y);
+	P[2] = SVector4::Merge(Mat[0], Mat[2], Z, W);
+	P[3] = SVector4::Merge(Mat[1], Mat[3], Z, W);
+
+
+	SMatrix4 MT;
+	MT[0] = SVector4::Merge(P[0], P[1], X, Y);
+	MT[1] = SVector4::Merge(P[0], P[1], Z, W);
+	MT[2] = SVector4::Merge(P[2], P[3], X, Y);
+	MT[3] = SVector4::Merge(P[2], P[3], Z, W);
+	return MT;
 }
 
 

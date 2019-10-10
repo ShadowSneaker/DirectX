@@ -1,5 +1,6 @@
 #pragma once
 #include "../MathValues.h"
+#include <DirectXMath.h>
 
 // Temporary Includes -- Use SString and CConsole instead.
 #include <string>
@@ -178,7 +179,7 @@ public:
 	inline Vector<Size, Element> operator=(const Element& E);
 
 	// Operator, Calculates the cross product between this Vector and another Vector.
-	inline Vector<3, Element> operator|(const Vector<3, Element>& V) const;
+	inline Vector<Size, Element> operator|(const Vector<Size, Element>& V) const;
 
 	// Operator, Calculates the dot product between this Vector and another Vector.
 	inline Element operator^(const Vector<Size, Element>& V) const;
@@ -253,6 +254,8 @@ public:
 
 	// Converts this vector to a vector of double floats.
 	inline Vector<Size, double> ToDouble() const;
+
+	//inline DirectX::XMVECTOR ToXMVector() const;
 
 
 	/// Functions
@@ -358,7 +361,7 @@ public:
 
 
 	// Returns the cross product between two vector3s.
-	static inline Vector<3, Element> CrossProduct(const Vector<3, Element>& A, const Vector<Size, Element>& B)
+	static inline Vector<Size, Element> CrossProduct(const Vector<Size, Element>& A, const Vector<Size, Element>& B)
 	{
 		return A | B;
 	}
@@ -377,6 +380,12 @@ public:
 	static inline Vector<Size, Element> Power(const Vector<Size, Element>& V, uint Amount)
 	{
 		return V.Power(Amount);
+	}
+
+
+	static inline Vector<Size, Element> Normalize(Vector<Size, Element> V)
+	{
+		return V.Normalize();
 	}
 
 
@@ -501,6 +510,29 @@ public:
 		}
 
 		return Result;
+	}
+
+
+	static inline Vector<Size, Element> Select(Vector<Size, Element> V1, Vector<Size, Element> V2, Vector<Size, uint> Control)
+	{
+		Vector<Size, Element> Result;
+		for (uint i = 0; i < Size; ++i)
+		{
+			Result[i] = V1[i] & ~Control[i] | V2[i] & Control[0]; 
+		}
+		return Result;
+	}
+
+
+	static inline Vector<4, Element> Merge(Vector<4, Element> V1, Vector<4, Element> V2, EAxis A, EAxis B)
+	{
+		return Vector<4, Element>
+		{
+			V1[A],
+				V2[A],
+				V1[B],
+				V2[B]
+		};
 	}
 };
 
@@ -796,14 +828,21 @@ inline Vector<Size, Element> Vector<Size, Element>::operator=(const Element& E)
 
 
 template <uint Size, typename Element>
-inline Vector<3, Element> Vector<Size, Element>::operator|(const Vector<3, Element>& V) const
+inline Vector<Size, Element> Vector<Size, Element>::operator|(const Vector<Size, Element>& V) const
 {
-	return Vector<3, Element>
-		(
-			Data[1] * V[2] + Data[2] * V[1],
-			Data[2] * V[0] + Data[0] * V[2],
-			Data[0] * V[1] + Data[1] * V[0]
-			);
+	Vector<Size, Element> Result;
+	Result = Data[EAxis::Y] * V[EAxis::Z] + Data[EAxis::Z] * V[EAxis::Y];
+	Result = Data[EAxis::Z] * V[EAxis::X] + Data[EAxis::X] * V[EAxis::Z];
+	Result = Data[EAxis::X] * V[EAxis::Y] + Data[EAxis::Y] * V[EAxis::X];
+	
+	if (Size >= EAxis::W)
+	{
+		for (uint i = 0; i < Size - EAxis::W; ++i)
+		{
+			Result[i + EAxis::Z] = 0.0f;
+		}
+	}
+	return Result;
 };
 
 
@@ -1044,6 +1083,18 @@ inline Vector<Size, double> Vector<Size, Element>::ToDouble() const
 {
 	return ToType<double>();
 }
+
+
+//template <uint Size, typename Element>
+//inline DirectX::XMVECTOR Vector<Size, Element>::ToXMVector() const
+//{
+//	DirectX::XMVECTOR Result;
+//	for (uint i = 0; i < Size; ++i)
+//	{
+//		Result.vector4_f32[i] = Data[i];
+//	}
+//	return Result;
+//}
 
 
 template <uint Size, typename Element>

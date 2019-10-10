@@ -5,12 +5,12 @@
 #include <windows.h>
 #include <dxerr.h>
 #include "../Math/DataTypes/Vertex.h"
-#include "../Math/DataTypes/Matrix.h"
+#include "Camera.h"
 
 
 struct SConstantBuffer
 {
-	SMatrix4 WorldMatrix;
+	SMatrix4 WorldProjection;
 	//DirectX::XMMATRIX WorldMatrix;
 	float RedAmount;
 	float Scale;
@@ -53,6 +53,8 @@ private:
 	ID3D11Buffer* ConstantBuffer;
 
 	ID3D11DepthStencilView* ZBuffer;
+
+	CCamera* Camera;
 
 	float TempRotate = 0.0f;
 

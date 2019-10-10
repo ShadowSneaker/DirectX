@@ -10,6 +10,7 @@ CDirectXSetup::CDirectXSetup()
 
 CDirectXSetup::~CDirectXSetup()
 {
+	delete Camera;
 	ShutdownD3D();
 }
 
@@ -33,6 +34,8 @@ bool CDirectXSetup::Init(HINSTANCE HandleInstance, int CmdShow)
 		DXTRACE_MSG("Failed to initialise graphics.");
 		return false;
 	}
+
+	Camera = new CCamera{ SVector{0.0f, 0.0f, -5.0f}, 0.0f };
 }
 
 
@@ -399,6 +402,8 @@ void CDirectXSetup::RenderFrame()
 	CBValues.RedAmount = 0.0f;
 
 
+
+
 	SMatrix4 World;
 
 	SMatrix4 Rotation, Translation, Scale;
@@ -417,17 +422,23 @@ void CDirectXSetup::RenderFrame()
 
 	SMatrix4 Projection;
 	SMatrix4 View;
+	View.SetToIdentity();
 
-	//World.SetToIdentity();
-	//World.SetLocation(0.0f, 0.0f, 5.0f);
+	//SVector4 Position{ 0.0f, 0.0f, -5.0f, 0.0f };
+	//SVector4 LookAt{ 0.0f, 0.0f, -4.0f, 0.0f };
+	//SVector4 Up{ 0.0f, 1.0f, 0.0f, 0.0f };
+
+	/// Try to somehow fix the SMatrix4::LookAt function so it actually works, it's the only way to continue using this math library. Otherwise I'll have to use the DirectX library.
 	
-	
-	//World.SetRotate(0.0f, TO_RADIAN(TempRotate), 0.0f);
+	DirectX::XMMATRIX Temp = Camera->GetViewMatrix();
+	//View = SMatrix4::ToMatrixM(Temp);
+
+	//View = SMatrix4::ToMatrixM(DirectX::XMMatrixLookAtLH(Position.ToXMVector(), LookAt.ToXMVector(), Up.ToXMVector()));
+	//View = SMatrix4::LookAt(Position, LookAt, Up);
 
 
 	Projection = SMatrix4::PersepctiveFovLH(TO_RADIAN(45.0f), 640.0f / 480.0f, 1.0f, 100.0f);
-	View.SetToIdentity();
-	CBValues.WorldMatrix = World * View * Projection;
+	CBValues.WorldProjection = World * View * Projection;
 	
 
 
