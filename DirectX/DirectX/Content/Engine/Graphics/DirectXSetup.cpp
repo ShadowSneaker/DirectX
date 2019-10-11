@@ -35,7 +35,7 @@ bool CDirectXSetup::Init(HINSTANCE HandleInstance, int CmdShow)
 		return false;
 	}
 
-	Camera = new CCamera{ SVector{0.0f, 0.0f, -5.0f}, 0.0f };
+	Camera = new CCamera{ SVector4{0.0f, 0.0f, -5.0f, 0.0f}, 0.0f };
 }
 
 
@@ -237,6 +237,8 @@ void CDirectXSetup::ShutdownD3D()
 	if (BackBufferRTView) BackBufferRTView->Release();
 	if (SwapChain) SwapChain->Release();
 	if (ConstantBuffer) ConstantBuffer->Release();
+	if (Texture0) Texture0->Release();
+	if (Sampler0) Sampler0->Release();
 	if (DeviceContext) DeviceContext->Release();
 	if (ZBuffer) ZBuffer->Release();
 	if (Device) Device->Release();
@@ -255,52 +257,52 @@ HRESULT CDirectXSetup::InitialiseGraphics()
 
 
 		// back face
-		{SVector{-1.0f,  1.0f,  1.0f}, SVector4{1.0f, 1.0f, 1.0, 1.0f}},
-		{SVector{-1.0f, -1.0f,  1.0f}, SVector4{1.0f, 1.0f, 1.0, 1.0f}},
-		{SVector{ 1.0f,  1.0f,  1.0f}, SVector4{1.0f, 1.0f, 1.0, 1.0f}},
-		{SVector{ 1.0f,  1.0f,  1.0f}, SVector4{1.0f, 1.0f, 1.0, 1.0f}},
-		{SVector{-1.0f, -1.0f,  1.0f}, SVector4{1.0f, 1.0f, 1.0, 1.0f}},
-		{SVector{ 1.0f, -1.0f,  1.0f}, SVector4{1.0f, 1.0f, 1.0, 1.0f}},
-		
-		// front face
-		{SVector{-1.0f, -1.0f, -1.0f}, SVector4{1.0, 0.0f, 1.0f, 1.0f}},
-		{SVector{-1.0f,  1.0f, -1.0f}, SVector4{1.0, 0.0f, 1.0f, 1.0f}},
-		{SVector{ 1.0f,  1.0f, -1.0f}, SVector4{1.0, 0.0f, 1.0f, 1.0f}},
-		{SVector{-1.0f, -1.0f, -1.0f}, SVector4{1.0, 0.0f, 1.0f, 1.0f}},
-		{SVector{ 1.0f,  1.0f, -1.0f}, SVector4{1.0, 0.0f, 1.0f, 1.0f}},
-		{SVector{ 1.0f, -1.0f, -1.0f}, SVector4{1.0, 0.0f, 1.0f, 1.0f}},
-		
+		{SVector{-1.0f,  1.0f,  1.0f}, SVector4{1.0f, 1.0f, 1.0f, 1.0f}, SVector2{0.0f, 0.0f}},
+		{SVector{-1.0f, -1.0f,  1.0f}, SVector4{1.0f, 1.0f, 1.0f, 1.0f}, SVector2{0.0f, 1.0f}},
+		{SVector{ 1.0f,  1.0f,  1.0f}, SVector4{1.0f, 1.0f, 1.0f, 1.0f}, SVector2{1.0f, 0.0f}},
+		{SVector{ 1.0f,  1.0f,  1.0f}, SVector4{1.0f, 1.0f, 1.0f, 1.0f}, SVector2{1.0f, 0.0f}},
+		{SVector{-1.0f, -1.0f,  1.0f}, SVector4{1.0f, 1.0f, 1.0f, 1.0f}, SVector2{0.0f, 1.0f}},
+		{SVector{ 1.0f, -1.0f,  1.0f}, SVector4{1.0f, 1.0f, 1.0f, 1.0f}, SVector2{1.0f, 1.0f}},
+																		 
+		// front face													 
+		{SVector{-1.0f, -1.0f, -1.0f}, SVector4{1.0f, 0.0f, 1.0f, 1.0f}, SVector2{0.0f, 0.0f}},
+		{SVector{-1.0f,  1.0f, -1.0f}, SVector4{1.0f, 0.0f, 1.0f, 1.0f}, SVector2{0.0f, 1.0f}},
+		{SVector{ 1.0f,  1.0f, -1.0f}, SVector4{1.0f, 0.0f, 1.0f, 1.0f}, SVector2{1.0f, 0.0f}},
+		{SVector{-1.0f, -1.0f, -1.0f}, SVector4{1.0f, 0.0f, 1.0f, 1.0f}, SVector2{1.0f, 0.0f}},
+		{SVector{ 1.0f,  1.0f, -1.0f}, SVector4{1.0f, 0.0f, 1.0f, 1.0f}, SVector2{0.0f, 1.0f}},
+		{SVector{ 1.0f, -1.0f, -1.0f}, SVector4{1.0f, 0.0f, 1.0f, 1.0f}, SVector2{1.0f, 1.0f}},
+
 		// left face
-		{SVector{-1.0f, -1.0f, -1.0f}, SVector4{0.0f, 0.0f, 1.0f, 1.0f}},
-		{SVector{-1.0f, -1.0f,  1.0f}, SVector4{0.0f, 0.0f, 1.0f, 1.0f}},
-		{SVector{-1.0f,  1.0f, -1.0f}, SVector4{0.0f, 0.0f, 1.0f, 1.0f}},
-		{SVector{-1.0f, -1.0f,  1.0f}, SVector4{0.0f, 0.0f, 1.0f, 1.0f}},
-		{SVector{-1.0f,  1.0f,  1.0f}, SVector4{0.0f, 0.0f, 1.0f, 1.0f}},
-		{SVector{-1.0f,  1.0f, -1.0f}, SVector4{0.0f, 0.0f, 1.0f, 1.0f}},
-		
+		{SVector{-1.0f, -1.0f, -1.0f}, SVector4{0.0f, 0.0f, 1.0f, 1.0f}, SVector2{0.0f, 0.0f}},
+		{SVector{-1.0f, -1.0f,  1.0f}, SVector4{0.0f, 0.0f, 1.0f, 1.0f}, SVector2{0.0f, 1.0f}},
+		{SVector{-1.0f,  1.0f, -1.0f}, SVector4{0.0f, 0.0f, 1.0f, 1.0f}, SVector2{1.0f, 0.0f}},
+		{SVector{-1.0f, -1.0f,  1.0f}, SVector4{0.0f, 0.0f, 1.0f, 1.0f}, SVector2{1.0f, 0.0f}},
+		{SVector{-1.0f,  1.0f,  1.0f}, SVector4{0.0f, 0.0f, 1.0f, 1.0f}, SVector2{0.0f, 1.0f}},
+		{SVector{-1.0f,  1.0f, -1.0f}, SVector4{0.0f, 0.0f, 1.0f, 1.0f}, SVector2{1.0f, 1.0f}},
+
 		// right face
-		{SVector{ 1.0f, -1.0f,  1.0f}, SVector4{0.0f, 1.0f, 1.0f, 1.0f}},
-		{SVector{ 1.0f, -1.0f, -1.0f}, SVector4{0.0f, 1.0f, 1.0f, 1.0f}},
-		{SVector{ 1.0f,  1.0f, -1.0f}, SVector4{0.0f, 1.0f, 1.0f, 1.0f}},
-		{SVector{ 1.0f,  1.0f,  1.0f}, SVector4{0.0f, 1.0f, 1.0f, 1.0f}},
-		{SVector{ 1.0f, -1.0f,  1.0f}, SVector4{0.0f, 1.0f, 1.0f, 1.0f}},
-		{SVector{ 1.0f,  1.0f, -1.0f}, SVector4{0.0f, 1.0f, 1.0f, 1.0f}},
-		
+		{SVector{ 1.0f, -1.0f,  1.0f}, SVector4{0.0f, 1.0f, 1.0f, 1.0f}, SVector2{0.0f, 0.0f}},
+		{SVector{ 1.0f, -1.0f, -1.0f}, SVector4{0.0f, 1.0f, 1.0f, 1.0f}, SVector2{0.0f, 1.0f}},
+		{SVector{ 1.0f,  1.0f, -1.0f}, SVector4{0.0f, 1.0f, 1.0f, 1.0f}, SVector2{1.0f, 0.0f}},
+		{SVector{ 1.0f,  1.0f,  1.0f}, SVector4{0.0f, 1.0f, 1.0f, 1.0f}, SVector2{1.0f, 0.0f}},
+		{SVector{ 1.0f, -1.0f,  1.0f}, SVector4{0.0f, 1.0f, 1.0f, 1.0f}, SVector2{0.0f, 1.0f}},
+		{SVector{ 1.0f,  1.0f, -1.0f}, SVector4{0.0f, 1.0f, 1.0f, 1.0f}, SVector2{1.0f, 1.0f}},
+
 		// bottom face
-		{SVector{ 1.0f, -1.0f, -1.0f}, SVector4{0.0f, 1.0f, 0.0f, 1.0f}},
-		{SVector{ 1.0f, -1.0f,  1.0f}, SVector4{0.0f, 1.0f, 0.0f, 1.0f}},
-		{SVector{-1.0f, -1.0f, -1.0f}, SVector4{0.0f, 1.0f, 0.0f, 1.0f}},
-		{SVector{ 1.0f, -1.0f,  1.0f}, SVector4{0.0f, 1.0f, 0.0f, 1.0f}},
-		{SVector{-1.0f, -1.0f,  1.0f}, SVector4{0.0f, 1.0f, 0.0f, 1.0f}},
-		{SVector{-1.0f, -1.0f, -1.0f}, SVector4{0.0f, 1.0f, 0.0f, 1.0f}},
-		
+		{SVector{ 1.0f, -1.0f, -1.0f}, SVector4{0.0f, 1.0f, 0.0f, 1.0f}, SVector2{0.0f, 0.0f}},
+		{SVector{ 1.0f, -1.0f,  1.0f}, SVector4{0.0f, 1.0f, 0.0f, 1.0f}, SVector2{0.0f, 1.0f}},
+		{SVector{-1.0f, -1.0f, -1.0f}, SVector4{0.0f, 1.0f, 0.0f, 1.0f}, SVector2{1.0f, 0.0f}},
+		{SVector{ 1.0f, -1.0f,  1.0f}, SVector4{0.0f, 1.0f, 0.0f, 1.0f}, SVector2{1.0f, 0.0f}},
+		{SVector{-1.0f, -1.0f,  1.0f}, SVector4{0.0f, 1.0f, 0.0f, 1.0f}, SVector2{0.0f, 1.0f}},
+		{SVector{-1.0f, -1.0f, -1.0f}, SVector4{0.0f, 1.0f, 0.0f, 1.0f}, SVector2{1.0f, 1.0f}},
+
 		// top face
-		{SVector{ 1.0f,  1.0f,  1.0f}, SVector4{1.0f, 1.0f, 0.0f, 1.0f}},
-		{SVector{ 1.0f,  1.0f, -1.0f}, SVector4{1.0f, 1.0f, 0.0f, 1.0f}},
-		{SVector{-1.0f,  1.0f, -1.0f}, SVector4{1.0f, 1.0f, 0.0f, 1.0f}},
-		{SVector{-1.0f,  1.0f,  1.0f}, SVector4{1.0f, 1.0f, 0.0f, 1.0f}},
-		{SVector{ 1.0f,  1.0f,  1.0f}, SVector4{1.0f, 1.0f, 0.0f, 1.0f}},
-		{SVector{-1.0f,  1.0f, -1.0f}, SVector4{1.0f, 1.0f, 0.0f, 1.0f}},
+		{SVector{ 1.0f,  1.0f,  1.0f}, SVector4{1.0f, 1.0f, 0.0f, 1.0f}, SVector2{0.0f, 0.0f}},
+		{SVector{ 1.0f,  1.0f, -1.0f}, SVector4{1.0f, 1.0f, 0.0f, 1.0f}, SVector2{0.0f, 1.0f}},
+		{SVector{-1.0f,  1.0f, -1.0f}, SVector4{1.0f, 1.0f, 0.0f, 1.0f}, SVector2{1.0f, 0.0f}},
+		{SVector{-1.0f,  1.0f,  1.0f}, SVector4{1.0f, 1.0f, 0.0f, 1.0f}, SVector2{1.0f, 0.0f}},
+		{SVector{ 1.0f,  1.0f,  1.0f}, SVector4{1.0f, 1.0f, 0.0f, 1.0f}, SVector2{0.0f, 1.0f}},
+		{SVector{-1.0f,  1.0f, -1.0f}, SVector4{1.0f, 1.0f, 0.0f, 1.0f}, SVector2{1.0f, 1.0f}},
 
 	};
 
@@ -371,14 +373,26 @@ HRESULT CDirectXSetup::InitialiseGraphics()
 	{
 		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 		{"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
 	};
 
-	HR = Device->CreateInputLayout(IEDesc, 2, VS->GetBufferPointer(), VS->GetBufferSize(), &InputLayout);
+	HR = Device->CreateInputLayout(IEDesc, ARRAYSIZE(IEDesc), VS->GetBufferPointer(), VS->GetBufferSize(), &InputLayout);
 	if (FAILED(HR)) return HR;
 
 	DeviceContext->IASetInputLayout(InputLayout);
 
 
+	D3DX11CreateShaderResourceViewFromFile(Device, "Content/Assets/Texture.bmp", NULL, NULL, &Texture0, NULL);
+
+	D3D11_SAMPLER_DESC SamplerDesc;
+	ZeroMemory(&SamplerDesc, sizeof(SamplerDesc));
+	SamplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	SamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	SamplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	SamplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	SamplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	Device->CreateSamplerState(&SamplerDesc, &Sampler0);
 	
 	return S_OK;
 }
@@ -393,13 +407,19 @@ void CDirectXSetup::RenderFrame()
 	DeviceContext->ClearRenderTargetView(BackBufferRTView, ClearColour);
 	DeviceContext->ClearDepthStencilView(ZBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
+
+	DeviceContext->PSSetSamplers(0, 1, &Sampler0);
+	DeviceContext->PSSetShaderResources(0, 1, &Texture0);
+
+
+
 	UINT Stride = sizeof(SVertex);
 	UINT Offset = 0;
 	DeviceContext->IASetVertexBuffers(0, 1, &VertexBuffer, &Stride, &Offset);
 	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	SConstantBuffer CBValues;
-	CBValues.RedAmount = 0.0f;
+	CBValues.RedAmount = 1.0f;
 
 
 
@@ -423,19 +443,8 @@ void CDirectXSetup::RenderFrame()
 	SMatrix4 Projection;
 	SMatrix4 View;
 	View.SetToIdentity();
-
-	//SVector4 Position{ 0.0f, 0.0f, -5.0f, 0.0f };
-	//SVector4 LookAt{ 0.0f, 0.0f, -4.0f, 0.0f };
-	//SVector4 Up{ 0.0f, 1.0f, 0.0f, 0.0f };
-
-	/// Try to somehow fix the SMatrix4::LookAt function so it actually works, it's the only way to continue using this math library. Otherwise I'll have to use the DirectX library.
-	
-	DirectX::XMMATRIX Temp = Camera->GetViewMatrix();
-	//View = SMatrix4::ToMatrixM(Temp);
-
-	//View = SMatrix4::ToMatrixM(DirectX::XMMatrixLookAtLH(Position.ToXMVector(), LookAt.ToXMVector(), Up.ToXMVector()));
-	//View = SMatrix4::LookAt(Position, LookAt, Up);
-
+	View = Camera->GetViewMatrix();
+	//DirectX::XMMATRIX Temp = DirectX::XMMatrixLookAtLH(DirectX::XMVECTOR{ 0.0f, 0.0f, -5.0f, 0.0f }, DirectX::XMVECTOR{ 0.0f, 0.0f, -4.0f, 0.0f }, DirectX::XMVECTOR{ 0.0f, 1.0f, 0.0f, 0.0 }); // - Do NOT delete, this may be important for future debugging as I don't think my function above is correct.
 
 	Projection = SMatrix4::PersepctiveFovLH(TO_RADIAN(45.0f), 640.0f / 480.0f, 1.0f, 100.0f);
 	CBValues.WorldProjection = World * View * Projection;

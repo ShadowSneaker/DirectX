@@ -7,15 +7,15 @@ class CCamera
 private:
 	/// Properties
 
-	SVector Offset;
-	//SVector Position;
-	//SVector LookAt;
+	SVector4 Offset;
+	SVector4 Position;
+	SVector4 LookAt;
+	SVector4 Up;
 
-	//SVector Up;
 
-	DirectX::XMVECTOR Position;
-	DirectX::XMVECTOR LookAt;
-	DirectX::XMVECTOR UP;
+	//DirectX::XMVECTOR Position;
+	//DirectX::XMVECTOR LookAt;
+	//DirectX::XMVECTOR UP;
 
 
 	float DX;
@@ -29,7 +29,7 @@ public:
 	/// Constructor
 	
 	// Constructor, Default.
-	CCamera(SVector InPos, float InRotation);
+	CCamera(SVector4 InPos, float InRotation);
 
 	// Destructor.
 	~CCamera();
@@ -40,10 +40,12 @@ public:
 
 	void Rotate(float Angle);
 
-	void Forward(float Distance);
+	void MoveForward(float Distance);
 
-	void Up(float Distance);
+	void MoveUp(float Distance);
 
-	//SMatrix4 GetViewMatrix()
-	DirectX::XMMATRIX GetViewMatrix();
+	void MoveLeft(float Distance);
+
+	SMatrix4 GetViewMatrix();;
+	//DirectX::XMMATRIX GetViewMatrix();
 };

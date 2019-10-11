@@ -11,11 +11,9 @@
 struct SConstantBuffer
 {
 	SMatrix4 WorldProjection;
-	//DirectX::XMMATRIX WorldMatrix;
 	float RedAmount;
 	float Scale;
 	SVector2 Packing;
-	//DirectX::XMFLOAT2 Packing;
 };
 
 
@@ -53,6 +51,12 @@ private:
 	ID3D11Buffer* ConstantBuffer;
 
 	ID3D11DepthStencilView* ZBuffer;
+
+	ID3D11ShaderResourceView* Texture0;
+
+	ID3D11SamplerState* Sampler0;
+
+
 
 	CCamera* Camera;
 

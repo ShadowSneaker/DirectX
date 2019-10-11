@@ -1,7 +1,7 @@
 #include "Camera.h"
 
 
-CCamera::CCamera(SVector InPosition, float InRotation)
+CCamera::CCamera(SVector4 InPosition, float InRotation)
 	:Offset{ InPosition }, Rotation{ InRotation }
 {
 	DX = TMath::Sin(TO_RADIAN(Rotation));
@@ -17,35 +17,38 @@ CCamera::~CCamera()
 
 void CCamera::Rotate(float Angle)
 {
-	Rotation = Angle;
+	Rotation += Angle;
+	DX = TMath::Sin(TO_RADIAN(Rotation));
+	DZ = TMath::Cos(TO_RADIAN(Rotation));
 }
 
 
-void CCamera::Forward(float Distance)
+void CCamera::MoveForward(float Distance)
 {
-	Offset[X] = DX * Distance;
-	Offset[Z] = DZ * Distance;
+	Offset[X] += DX * Distance;
+	Offset[Z] += DZ * Distance;
 }
 
 
-void CCamera::Up(float Distance)
+void CCamera::MoveUp(float Distance)
 {
-	Offset[Y] = Distance;
+	Offset[Y] += Distance;
 }
 
 
-//SMatrix4 CCamera::GetViewMatrix()
-DirectX::XMMATRIX CCamera::GetViewMatrix()
+void CCamera::MoveLeft(float Distance)
 {
-	//Position = Vector<4, uint>(Offset[X], Offset[Y], Offset[Z], 0.0f).ToFloat();
-	//LookAt = Vector<4, uint>(Offset[X] + DX, Offset[Y], Offset[Z] + DZ, 0.0f).ToFloat();
-	//UP = Vector<4, uint>(0.0f, 1.0f, 0.0f, 0.0f).ToFloat();
+	SVector4 Direction = SVector4::CrossProduct(Position, LookAt);
+	Offset[X] += Direction[X] * Distance;
+	Offset[Z] += Direction[Z] * Distance;
+}
 
-	//return SMatrix4::LookAt(Position, LookAt, UP);
-	
-	Position = DirectX::XMVectorSet(Offset[X], Offset[Y], Offset[Z], 0.0f);
-	LookAt = DirectX::XMVectorSet(Offset[X] + DX, Offset[Y], Offset[Z] + DZ, 0.0f);
-	UP = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
-	return DirectX::XMMatrixLookAtLH(Position, LookAt, UP);
+SMatrix4 CCamera::GetViewMatrix()
+{
+	Position = SVector4(Offset[X], Offset[Y], Offset[Z], 0.0f);
+	LookAt = SVector4(Offset[X] + DX, Offset[Y], Offset[Z] + DZ, 0.0f);
+	Up = SVector4(0.0f, 1.0f, 0.0f, 0.0f);
+
+	return SMatrix4::LookAt(Position, LookAt, Up);
 }

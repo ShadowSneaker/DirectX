@@ -386,7 +386,8 @@ public:
 
 	inline SMatrix<4, 4> Merge(SMatrix<4, 4> Mat);
 
-
+	// Sets a vertical row of vectors in a specified column.
+	inline SMatrix<Columns, Rows> SetColumn(const uint& Col, Vector<Rows> Vec);
 	
 	
 
@@ -474,15 +475,15 @@ public:
 
 	static inline SMatrix<4, 4> LookTo(SVector4 EyePosition, SVector4 EyeDirection, SVector4 UpDirection)
 	{
-		//assert(EyeDirection != 0.0f);
-		//assert(UpDirection != 0.0f);
+		assert(!(EyeDirection == 0.0f));
+		assert(!(UpDirection == 0.0f));
 
 
 		SVector4 R2{ SVector4::Normalize(EyeDirection) };
 		SVector4 R0{ SVector4::CrossProduct(UpDirection, R2) };
 		R0 = SVector4::Normalize(R0);
 
-		SVector4 R1{ SVector4::CrossProduct(UpDirection, R2) };
+		SVector4 R1{ SVector4::CrossProduct(R2, R0) };
 		SVector4 NegEyePos{ -EyePosition };
 
 		SVector4 D0 = SVector4::DotProduct(R0, NegEyePos);
@@ -490,16 +491,22 @@ public:
 		SVector4 D2 = SVector4::DotProduct(R2, NegEyePos);
 
 		//Vector<4, uint> Control{ 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00000000 };
+		Vector<4, bool> Control{ false, false, false, true };
 
 		SMatrix<4, 4> Mat;
 		//Mat[0] = SVector4::Select(D0, R0, Control);
 		//Mat[1] = SVector4::Select(D1, R1, Control);
 		//Mat[2] = SVector4::Select(D2, R2, Control);
-		
-		Mat[0] = R0;
-		Mat[1] = R1;
-		Mat[2] = R2;
-		Mat[3] = SVector4{ 0.0f, 0.0f, 0.0f, 1.0f };
+
+		Mat.SetColumn(EAxis::X, SVector4::Select(D0, R0, Control));
+		Mat.SetColumn(EAxis::Y, SVector4::Select(D1, R1, Control));
+		Mat.SetColumn(EAxis::Z, SVector4::Select(D2, R2, Control));
+		Mat.SetColumn(EAxis::W, SVector4{ 0.0f, 0.0f, 0.0f, 1.0f });
+
+		//Mat[0] = SVector4{ 1.0f, 0.0f, 0.0f, 0.0f };
+		//Mat[1] = SVector4{ 0.0f, 1.0f, 0.0f, 0.0f };
+		//Mat[2] = SVector4{ 0.0f, 0.0f, 1.0f, 0.0f };
+		//Mat[3] = SVector4{ 0.0f, 0.0f, 5.0f, 1.0f };
 
 		Mat.Merge(Mat);
 		return Mat;
@@ -1238,6 +1245,17 @@ inline SMatrix<4, 4> SMatrix<Columns, Rows>::Merge(SMatrix<4, 4> Mat)
 	MT[2] = SVector4::Merge(P[2], P[3], X, Y);
 	MT[3] = SVector4::Merge(P[2], P[3], Z, W);
 	return MT;
+}
+
+
+template <uint Columns, uint Rows>
+inline SMatrix<Columns, Rows> SMatrix<Columns, Rows>::SetColumn(const uint& Col, Vector<Rows> Vec)
+{
+	for (uint i = 0; i < Rows; ++i)
+	{
+		Data[i][Col] = Vec[i];
+	}
+	return *this;
 }
 
 

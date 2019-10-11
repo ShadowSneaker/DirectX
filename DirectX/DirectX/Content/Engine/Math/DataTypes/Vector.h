@@ -513,12 +513,13 @@ public:
 	}
 
 
-	static inline Vector<Size, Element> Select(Vector<Size, Element> V1, Vector<Size, Element> V2, Vector<Size, uint> Control)
+	static inline Vector<Size, Element> Select(Vector<Size, Element> V1, Vector<Size, Element> V2, Vector<Size, bool> Control)
 	{
 		Vector<Size, Element> Result;
 		for (uint i = 0; i < Size; ++i)
 		{
-			Result[i] = V1[i] & ~Control[i] | V2[i] & Control[0]; 
+			//Result[i] = V1[i] & ~Control[i] | V2[i] & Control[0]; 
+			Result[i] = ((Control[i]) ? V1[i] : V2[i]);
 		}
 		return Result;
 	}
@@ -529,9 +530,9 @@ public:
 		return Vector<4, Element>
 		{
 			V1[A],
-				V2[A],
-				V1[B],
-				V2[B]
+			V2[A],
+			V1[B],
+			V2[B]
 		};
 	}
 };
@@ -830,18 +831,11 @@ inline Vector<Size, Element> Vector<Size, Element>::operator=(const Element& E)
 template <uint Size, typename Element>
 inline Vector<Size, Element> Vector<Size, Element>::operator|(const Vector<Size, Element>& V) const
 {
-	Vector<Size, Element> Result;
-	Result = Data[EAxis::Y] * V[EAxis::Z] + Data[EAxis::Z] * V[EAxis::Y];
-	Result = Data[EAxis::Z] * V[EAxis::X] + Data[EAxis::X] * V[EAxis::Z];
-	Result = Data[EAxis::X] * V[EAxis::Y] + Data[EAxis::Y] * V[EAxis::X];
-	
-	if (Size >= EAxis::W)
-	{
-		for (uint i = 0; i < Size - EAxis::W; ++i)
-		{
-			Result[i + EAxis::Z] = 0.0f;
-		}
-	}
+	Vector<Size, Element> Result{ 0.0f };
+	Result[EAxis::X] = (Data[EAxis::Y] * V[EAxis::Z]) - (Data[EAxis::Z] * V[EAxis::Y]);
+	Result[EAxis::Y] = (Data[EAxis::Z] * V[EAxis::X]) - (Data[EAxis::X] * V[EAxis::Z]);
+	Result[EAxis::Z] = (Data[EAxis::X] * V[EAxis::Y]) - (Data[EAxis::Y] * V[EAxis::X]);
+
 	return Result;
 };
 
@@ -849,7 +843,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator|(const Vector<Size,
 template <uint Size, typename Element>
 inline Element Vector<Size, Element>::operator^(const Vector<Size, Element>& V) const
 {
-	Element Result = 0;
+	Element Result{ 0.0f };
 	for (uint i = 0; i < Size; ++i)
 	{
 		Result += Data[i] * V[i];
