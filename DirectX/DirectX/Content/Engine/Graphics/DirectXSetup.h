@@ -8,10 +8,13 @@
 #include "Camera.h"
 
 
+#include "../Font/Font.h"
+
+
 struct SConstantBuffer
 {
 	SMatrix4 WorldProjection;
-	float RedAmount;
+	float RedAmount{ 0.0f };
 	float Scale;
 	SVector2 Packing;
 };
@@ -59,6 +62,8 @@ private:
 
 
 	CCamera* Camera;
+
+	CFont* TempText;
 
 	float TempRotate = 0.0f;
 

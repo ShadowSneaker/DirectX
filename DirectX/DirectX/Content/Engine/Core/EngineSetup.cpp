@@ -1,5 +1,5 @@
 #include "EngineSetup.h"
-
+#include "../World/Level.h"
 
 CEngineSetup::CEngineSetup(HINSTANCE HandleInstance, int CommandShow)
 {

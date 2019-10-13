@@ -144,27 +144,60 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Content\Engine\Core\Systems\FileReader.h" />
+    <ClInclude Include="Content\Engine\Core\Systems\Time.h" />
+    <ClInclude Include="Content\Engine\Core\Systems\TimerManager.h" />
+    <ClInclude Include="Content\Engine\Font\Font.h" />
     <ClInclude Include="Content\Engine\Graphics\Camera.h" />
     <ClInclude Include="Content\Engine\Graphics\DirectXSetup.h" />
     <ClInclude Include="Content\Engine\Core\EngineSetup.h" />
+    <ClInclude Include="Content\Engine\Graphics\Meshes\StaticMesh.h" />
     <ClInclude Include="Content\Engine\Math\Containers\Colour.h" />
     <ClInclude Include="Content\Engine\Math\DataTypes\Matrix.h" />
     <ClInclude Include="Content\Engine\Math\DataTypes\Quaternion.h" />
     <ClInclude Include="Content\Engine\Math\DataTypes\Transform.h" />
     <ClInclude Include="Content\Engine\Math\DataTypes\Vector.h" />
     <ClInclude Include="Content\Engine\Math\DataTypes\Vertex.h" />
+    <ClInclude Include="Content\Engine\Math\Math.h" />
     <ClInclude Include="Content\Engine\Math\MathStatics.h" />
     <ClInclude Include="Content\Engine\Math\MathValues.h" />
+    <ClInclude Include="Content\Engine\Math\Physics\Collider.h" />
+    <ClInclude Include="Content\Engine\Math\Physics\Physics.h" />
+    <ClInclude Include="Content\Engine\Math\Physics\Primitives\BoxCollider.h" />
+    <ClInclude Include="Content\Engine\Math\Physics\Primitives\CapsuleCollider.h" />
+    <ClInclude Include="Content\Engine\Math\Physics\Primitives\CylinderCollider.h" />
+    <ClInclude Include="Content\Engine\Math\Physics\Primitives\SphereCollider.h" />
+    <ClInclude Include="Content\Engine\Math\Physics\Primitives\PolygonCollider.h" />
+    <ClInclude Include="Content\Engine\World\Level.h" />
+    <ClInclude Include="Content\Engine\World\Objects\ObjectBase.h" />
+    <ClInclude Include="Content\Engine\World\ObjectPool.h" />
+    <ClInclude Include="Content\Engine\World\Objects\WorldObject.h" />
     <ClInclude Include="Content\Engine\World\World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\Engine\Core\EngineSetup.cpp" />
+    <ClCompile Include="Content\Engine\Core\Systems\FileReader.cpp" />
+    <ClCompile Include="Content\Engine\Core\Systems\Time.cpp" />
+    <ClCompile Include="Content\Engine\Core\Systems\TimerManager.cpp" />
+    <ClCompile Include="Content\Engine\Font\Font.cpp" />
     <ClCompile Include="Content\Engine\Graphics\Camera.cpp" />
     <ClCompile Include="Content\Engine\Graphics\DirectXSetup.cpp" />
     <ClCompile Include="Content\Engine\Core\Source.cpp" />
+    <ClCompile Include="Content\Engine\Graphics\Meshes\StaticMesh.cpp" />
     <ClCompile Include="Content\Engine\Math\DataTypes\Quaternion.cpp" />
     <ClCompile Include="Content\Engine\Math\DataTypes\Transform.cpp" />
     <ClCompile Include="Content\Engine\Math\MathStatics.cpp" />
+    <ClCompile Include="Content\Engine\Math\Physics\Collider.cpp" />
+    <ClCompile Include="Content\Engine\Math\Physics\Physics.cpp" />
+    <ClCompile Include="Content\Engine\Math\Physics\Primitives\BoxCollider.cpp" />
+    <ClCompile Include="Content\Engine\Math\Physics\Primitives\CapsuleCollider.cpp" />
+    <ClCompile Include="Content\Engine\Math\Physics\Primitives\CylinderCollider.cpp" />
+    <ClCompile Include="Content\Engine\Math\Physics\Primitives\SphereCollider.cpp" />
+    <ClCompile Include="Content\Engine\Math\Physics\Primitives\PolygonCollider.cpp" />
+    <ClCompile Include="Content\Engine\World\Level.cpp" />
+    <ClCompile Include="Content\Engine\World\ObjectPool.cpp" />
+    <ClCompile Include="Content\Engine\World\Objects\ObectBase.cpp" />
+    <ClCompile Include="Content\Engine\World\Objects\WorldObject.cpp" />
     <ClCompile Include="Content\Engine\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +208,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0_level_9_3</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0_level_9_3</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="text2D_shaders.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -2,8 +2,6 @@
 #include "Transform.h"
 #include "../MathStatics.h"
 
-#include <DirectXMath.h>
-
 
 // A 2D arangement of numbers in rows and columns.
 template <uint Columns, uint Rows>
@@ -511,35 +509,6 @@ public:
 		Mat.Merge(Mat);
 		return Mat;
 	}
-
-
-	//static SMatrix<4, 4> ToMatrixM(DirectX::XMMATRIX Mat)
-	//{
-	//	SMatrix<4, 4> Result;
-	//	for (uint x = 0; x < Columns; ++x)
-	//	{
-	//		for (uint y = 0; y < Rows; ++y)
-	//		{
-	//			Result[x][y] = Mat.m[x][y];
-	//		}
-	//	}
-	//	return Result;
-	//}
-
-
-	static SMatrix<4, 4> ToMatrixR(DirectX::XMMATRIX Mat)
-	{
-		SMatrix<4, 4> Result;
-		for (uint x = 0; x < Columns; ++x)
-		{
-			for (uint y = 0; y < Rows; ++y)
-			{
-				Result[x][y] = Mat.r[x][y];
-			}
-		}
-	}
-
-	
 };
 
 

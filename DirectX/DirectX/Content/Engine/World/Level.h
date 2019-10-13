@@ -1,164 +1,187 @@
 #pragma once
-#include "Level.h"
+#include "../Core/Systems/FileReader.h"
+#include "Objects/WorldObject.h"
+
 #include <vector>
 
 
-class CWorld
+// Loads in from a file and creates all the objects in the level.
+// These levels are created externally and saved in a file. This
+// class just loads that file and reads all the objects to spawn.
+class CLevel : CObjectBase
 {
+private:
+
+	static const std::string DefaultFilePath;
+
 	/// Properties
 
-	// A list of all the objects in the world. - this will likely change to hold all the levels.
-	// The level class will hold all the objects.
-	// Level 0 is considered the root level.
-	std::vector<CLevel*> Levels;
+	// The name and location of this level file.
+	SFilePath FilePath;
 
+	// A list of all the stored objects in this level.
+	std::vector<class CWorldObject*> Objects;
+
+	// A reference to the world object.
+	class CWorld* World;
 
 
 
 public:
 	/// Constructors
 
-	// Constructor, 
-	CWorld();
+	// Constructor, Initiates the world based on an inputted file path.
+	CLevel(class CWorld* WorldReference, std::string InFilePath, bool UseDefaultFilePath = true);
 
-	// Destructor.
-	~CWorld();
+
+	~CLevel();
+
+
+	/// Overridables
+
+	virtual void Update() override;
 
 
 	/// Functions
 
-private:
-	// Closes all open levels in the world.
-	void CloseAllLevels();
-public:
-
-
-	// Closes the currently opened level(s) and opens the inputted level.
-	void LoadLevel(std::string File, bool UseDefaultPath = true);
 
 
 	/// Getters
 
-	// Returns the name of the current open level.
-	inline std::string GetLevelName() const { if (!Levels.empty()) { return Levels[0]->GetLevelName(); } }
+	// 
+	inline class CWorld* GetWorld() const { return World; }
 
+	// 
+	inline std::string GetLevelName() const { return FilePath.FileName; }
 
-	// Returns a list of all open level names.
-	inline std::vector<std::string> GetAllLevelNames() const;
+	// 
+	inline std::string GetLevelFilePath() const { return FilePath.GetFilePath(); }
 
-	// Returns how many levels are currently loaded.
-	inline uint GetLevelsCount() const { return Levels.size(); }
 
 
 	/// Spawning
 
+private:
+
+	void DeleteAllObjects();
+
+public:
+
 	// Deletes an inputted object from this world.
 	// @param Object - A reference to the object to be deleted.
-	void DeleteObject(class CWorldObject* Object, CLevel* Level = nullptr);
+	void DeleteObject(class CWorldObject* Object);
 
 	// Spawns an object with a default location, rotation and scale.
 	// @template - The object type that should be created - The object must be CWorldObject or a child of CWorldObject.
 	// @return - A reference to the created object.
 	template <typename Type>
-	Type* SpawnObject(CLevel* Level = nullptr);
-
-	// Spawns an object with a default location, rotation and scale.
-	// @template - The object type that should be created - The object must be CWorldObject or a child of CWorldObject.
-	// @Location - The location this object should spawn at.
-	// @return - A reference to the created object.
-	template <typename Type>
-	Type* SpawnObject(SVector Loction, CLevel* Level = nullptr);
+	Type* SpawnObject();
 
 	// Spawns an object with a default location, rotation and scale.
 	// @template - The object type that should be created - The object must be CWorldObject or a child of CWorldObject.
 	// @Location - The location this object should spawn at.
-	// @Rotation - The rotation this object should spawn at.
 	// @return - A reference to the created object.
 	template <typename Type>
-	Type* SpawnObject(SVector Location, SQuaternion Rotation, CLevel* Level = nullptr);
-
-	// Spawns an object with a default location, rotation and scale.
-	// @template - The object type that should be created - The object must be CWorldObject or a child of CWorldObject.
-	// @Rotation - The rotation this object should spawn at.
-	// @Scale - The scale this object should spawn at.
-	// @return - A reference to the created object.
-	template <typename Type>
-	Type* SpawnObject(SQuaternion Rotation, SVector Scale, CLevel* Level = nullptr);
-
-	// Spawns an object with a default location, rotation and scale.
-	// @template - The object type that should be created - The object must be CWorldObject or a child of CWorldObject.
-	// @Location - The location this object should spawn at.
-	// @Scale - The scale this object should spawn at.
-	// @return - A reference to the created object.
-	template <typename Type>
-	Type* SpawnObject(SVector Location, SVector Scale, CLevel* Level = nullptr);
+	Type* SpawnObject(SVector Loction);
 
 	// Spawns an object with a default location, rotation and scale.
 	// @template - The object type that should be created - The object must be CWorldObject or a child of CWorldObject.
 	// @Location - The location this object should spawn at.
 	// @Rotation - The rotation this object should spawn at.
+	// @return - A reference to the created object.
+	template <typename Type>
+	Type* SpawnObject(SVector Location, SQuaternion Rotation);
+
+	// Spawns an object with a default location, rotation and scale.
+	// @template - The object type that should be created - The object must be CWorldObject or a child of CWorldObject.
+	// @Rotation - The rotation this object should spawn at.
 	// @Scale - The scale this object should spawn at.
 	// @return - A reference to the created object.
 	template <typename Type>
-	Type* SpawnObject(SVector Location, SQuaternion Rotation, SVector Scale, CLevel* Level = nullptr);
+	Type* SpawnObject(SQuaternion Rotation, SVector Scale);
+
+	// Spawns an object with a default location, rotation and scale.
+	// @template - The object type that should be created - The object must be CWorldObject or a child of CWorldObject.
+	// @Location - The location this object should spawn at.
+	// @Scale - The scale this object should spawn at.
+	// @return - A reference to the created object.
+	template <typename Type>
+	Type* SpawnObject(SVector Location, SVector Scale);
+
+	// Spawns an object with a default location, rotation and scale.
+	// @template - The object type that should be created - The object must be CWorldObject or a child of CWorldObject.
+	// @Location - The location this object should spawn at.
+	// @Rotation - The rotation this object should spawn at.
+	// @Scale - The scale this object should spawn at.
+	// @return - A reference to the created object.
+	template <typename Type>
+	Type* SpawnObject(SVector Location, SQuaternion Rotation, SVector Scale);
 
 	// Spawns an object with a default location, rotation and scale.
 	// @template - The object type that should be created - The object must be CWorldObject or a child of CWorldObject.
 	// @Transform - The location, rotation and scale this object should be spawned at.
 	// @return - A reference to the created object.
 	template <typename Type>
-	Type* SpawnObject(STransform Transform, CLevel* Level = nullptr);
+	Type* SpawnObject(STransform Transform);
 };
 
 
 template <typename Type>
-Type* CWorld::SpawnObject(CLevel* Level)
+Type* CLevel::SpawnObject()
 {
-	return SpawnObject<Type>(STransform{ 0.0f, 0.0f, 1.0f }, Level);
+	return SpawnObject<Type>(STransform{ 0.0f, 0.0f, 1.0f });
 }
 
 
 template <typename Type>
-Type* CWorld::SpawnObject(SVector Location, CLevel* Level)
+Type* CLevel::SpawnObject(SVector Location)
 {
-	return SpawnObject<Type>(STransform{ Location, 0.0f, 1.0f }, Level);
+	return SpawnObject<Type>(STransform{ Location, 0.0f, 1.0f });
 }
 
 
 template <typename Type>
-Type* CWorld::SpawnObject(SVector Location, SQuaternion Rotation, CLevel* Level)
+Type* CLevel::SpawnObject(SVector Location, SQuaternion Rotation)
 {
-	return SpawnObject<Type>(STransform{ Location, Rotation, 1.0f }, Level);
+	return SpawnObject<Type>(STransform{ Location, Rotation, 1.0f });
 }
 
 
 template <typename Type>
-Type* CWorld::SpawnObject(SQuaternion Rotation, SVector Scale, CLevel* Level)
+Type* CLevel::SpawnObject(SQuaternion Rotation, SVector Scale)
 {
-	return SpawnObject<Type>(STransform{ 0.0f, Rotation, Scale }, Level);
+	return SpawnObject<Type>(STransform{ 0.0f, Rotation, Scale });
 }
 
 
 template <typename Type>
-Type* CWorld::SpawnObject(SVector Location, SVector Scale, CLevel* Level)
+Type* CLevel::SpawnObject(SVector Location, SVector Scale)
 {
-	return SpawnObject<Type>(STransform{ Location, 0.0f, Scale }, Level);
+	return SpawnObject<Type>(STransform{ Location, 0.0f, Scale });
 }
 
 
 template <typename Type>
-Type* CWorld::SpawnObject(SVector Location, SQuaternion Rotation, SVector Scale, CLevel* Level)
+Type* CLevel::SpawnObject(SVector Location, SQuaternion Rotation, SVector Scale)
 {
-	return SpawnObject<Type>(STransform{ Location, Rotation, Scale }, Level);
+	return SpawnObject<Type>(STransform{ Location, Rotation, Scale });
 }
 
 
 template <typename Type>
-Type* CWorld::SpawnObject(STransform Transform, CLevel* Level)
+Type* CLevel::SpawnObject(STransform Transform)
 {
-	if (Level)
+	Type* NewObject = new Type{};
+	if (NewObject)
 	{
-		Level->SpawnObject<Type>(Transform);
+		Objects.push_back(NewObject);
+		if (NewObject->UpdateBeforeBegin)
+		{
+			NewObject->Update();
+		}
+		NewObject->Begin();
+		return NewObject;
 	}
-	Levels[0]->SpawnObject<Type>(Transform);
+	delete NewObject;
+	return nullptr;
 }

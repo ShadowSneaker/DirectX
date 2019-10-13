@@ -10,6 +10,7 @@ CDirectXSetup::CDirectXSetup()
 
 CDirectXSetup::~CDirectXSetup()
 {
+	delete TempText;
 	delete Camera;
 	ShutdownD3D();
 }
@@ -36,6 +37,10 @@ bool CDirectXSetup::Init(HINSTANCE HandleInstance, int CmdShow)
 	}
 
 	Camera = new CCamera{ SVector4{0.0f, 0.0f, -5.0f, 0.0f}, 0.0f };
+	TempText = new CFont{ "Content/Assets/Fonts/font1.bmp", Device, DeviceContext };
+	TempText->SetText("Beep Boop");
+	TempText->Location = SVector2{ -1.0f, 1.0f };
+	return true;
 }
 
 
@@ -45,10 +50,6 @@ void CDirectXSetup::ReadMessage()
 	{
 		TranslateMessage(&Message);
 		DispatchMessage(&Message);
-	}
-	else
-	{
-		// Do something.
 	}
 }
 
@@ -102,7 +103,8 @@ LRESULT CALLBACK CDirectXSetup::WindowProc(HWND HWnd, UINT Message, WPARAM WPara
 	case WM_KEYDOWN:
 		if (WParam == VK_ESCAPE)
 			//DestroyWindow(WindowHandle);
-			MessageBox(HWnd, "Boop", "Beep", NULL);
+			//MessageBox(HWnd, "Boop", "Beep", NULL);
+			exit(0);
 		return 0;
 
 
@@ -455,8 +457,15 @@ void CDirectXSetup::RenderFrame()
 	DeviceContext->UpdateSubresource(ConstantBuffer, 0, 0, &CBValues, 0, 0);
 
 	DeviceContext->VSSetConstantBuffers(0, 1, &ConstantBuffer);
+	DeviceContext->IASetInputLayout(InputLayout);
+	DeviceContext->VSSetShader(VertexShader, 0, 0);
+	DeviceContext->PSSetShader(PixelShader, 0, 0);
 
 	DeviceContext->Draw(36, 0);
+
+	TempText->RenderText();
+
+
 
 
 	// Display what has just been rendered.

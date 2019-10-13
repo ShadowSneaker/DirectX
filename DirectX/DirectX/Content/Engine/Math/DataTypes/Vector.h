@@ -18,14 +18,20 @@ private:
 	/// Properties
 
 	// Stores all the Elements of this Vector class.
-	Element Data[Size];
+	Element Data[Size]{Element(0.0f)};
 
 public:
 
 	/// Constructors
 
 	// Constructor, Default. Creates an empty Vector.
-	Vector<Size, Element>() {}
+	Vector<Size, Element>() 
+	{
+		for (uint i = 0; i < Size; ++i)
+		{
+			Data[i] = (Element)0.0f;
+		}
+	}
 
 	// Constructor, Initializes a Vector2 using 2 Values.
 	Vector<Size, Element>(Element InX, Element InY)
