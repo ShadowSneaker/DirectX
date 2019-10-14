@@ -144,6 +144,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Content\Engine\Components\CharacterComponent.h" />
+    <ClInclude Include="Content\Engine\Components\Colliders\BoxComponent.h" />
+    <ClInclude Include="Content\Engine\Components\Colliders\CapsuleComponent.h" />
+    <ClInclude Include="Content\Engine\Components\Colliders\CylinderComponent.h" />
+    <ClInclude Include="Content\Engine\Components\Colliders\PolygonComponent.h" />
+    <ClInclude Include="Content\Engine\Components\Colliders\SphereComponent.h" />
+    <ClInclude Include="Content\Engine\Components\Component.h" />
     <ClInclude Include="Content\Engine\Core\Systems\FileReader.h" />
     <ClInclude Include="Content\Engine\Core\Systems\Time.h" />
     <ClInclude Include="Content\Engine\Core\Systems\TimerManager.h" />
@@ -168,6 +175,7 @@
     <ClInclude Include="Content\Engine\Math\Physics\Primitives\CylinderCollider.h" />
     <ClInclude Include="Content\Engine\Math\Physics\Primitives\SphereCollider.h" />
     <ClInclude Include="Content\Engine\Math\Physics\Primitives\PolygonCollider.h" />
+    <ClInclude Include="Content\Engine\Math\Physics\RigidBody.h" />
     <ClInclude Include="Content\Engine\World\Level.h" />
     <ClInclude Include="Content\Engine\World\Objects\ObjectBase.h" />
     <ClInclude Include="Content\Engine\World\ObjectPool.h" />
@@ -175,6 +183,13 @@
     <ClInclude Include="Content\Engine\World\World.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Content\Engine\Components\CharacterComponent.cpp" />
+    <ClCompile Include="Content\Engine\Components\Colliders\BoxComponent.cpp" />
+    <ClCompile Include="Content\Engine\Components\Colliders\CapsuleComponent.cpp" />
+    <ClCompile Include="Content\Engine\Components\Colliders\CylinderComponent.cpp" />
+    <ClCompile Include="Content\Engine\Components\Colliders\PolygonComponent.cpp" />
+    <ClCompile Include="Content\Engine\Components\Colliders\SphereComponent.cpp" />
+    <ClCompile Include="Content\Engine\Components\Component.cpp" />
     <ClCompile Include="Content\Engine\Core\EngineSetup.cpp" />
     <ClCompile Include="Content\Engine\Core\Systems\FileReader.cpp" />
     <ClCompile Include="Content\Engine\Core\Systems\Time.cpp" />
@@ -194,6 +209,7 @@
     <ClCompile Include="Content\Engine\Math\Physics\Primitives\CylinderCollider.cpp" />
     <ClCompile Include="Content\Engine\Math\Physics\Primitives\SphereCollider.cpp" />
     <ClCompile Include="Content\Engine\Math\Physics\Primitives\PolygonCollider.cpp" />
+    <ClCompile Include="Content\Engine\Math\Physics\RigidBody.cpp" />
     <ClCompile Include="Content\Engine\World\Level.cpp" />
     <ClCompile Include="Content\Engine\World\ObjectPool.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\ObectBase.cpp" />

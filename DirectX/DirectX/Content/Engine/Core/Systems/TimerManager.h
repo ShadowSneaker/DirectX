@@ -1,5 +1,6 @@
 #pragma once
 #include "../../Math/MathValues.h"
+#include "Time.h"
 
 #include <functional>
 #include <vector>

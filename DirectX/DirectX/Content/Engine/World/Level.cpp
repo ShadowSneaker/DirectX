@@ -61,6 +61,7 @@ void CLevel::DeleteObject(CWorldObject* Object)
 {
 	if (Object)
 	{
+		Object->End();
 		for (uint i = 0; i < Objects.size(); ++i)
 		{
 			if (Objects[i] == Object)

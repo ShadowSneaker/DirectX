@@ -1,7 +1,8 @@
 #include "ObjectBase.h"
 
 
-CObjectBase::CObjectBase()
+CObjectBase::CObjectBase(SObjectBase Core)
+	:Base{ Core }
 {
 
 }

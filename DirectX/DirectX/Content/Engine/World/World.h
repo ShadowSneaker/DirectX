@@ -49,6 +49,11 @@ public:
 	// Returns how many levels are currently loaded.
 	inline uint GetLevelsCount() const { return Levels.size(); }
 
+	// Returns a loaded level instance by name.
+	// If the level is not loaded this will return nullptr.
+	// @param Name - The name of the level to find.
+	CLevel* GetLevelByName(std::string Name) const;
+
 
 	/// Spawning
 

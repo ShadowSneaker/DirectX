@@ -45,6 +45,19 @@ void CWorld::LoadLevel(std::string File, bool UseDefaultFilePath)
 }
 
 
+CLevel* CWorld::GetLevelByName(std::string Name) const
+{
+	for (uint i = 0; i < Levels.size(); ++i)
+	{
+		if (Levels[i]->GetLevelName() == Name)
+		{
+			return Levels[i];
+		}
+	}
+	return nullptr;
+}
+
+
 std::vector<std::string> CWorld::GetAllLevelNames() const
 {
 	std::vector<std::string> Names;

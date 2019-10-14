@@ -27,6 +27,11 @@ public:
 	SHitInfo()
 	{}
 
+	// Constructor, Initiates the hit result and hit collider.
+	SHitInfo(bool InHit, class CCollider* HitCollider)
+		:Hit{ InHit }, Collider{ HitCollider }
+	{}
+
 	// Constructor, Initaies every component of the struct.
 	SHitInfo(bool InHit, class CCollider* HitCollider, class CWorldObject* InHitObject)
 		:Hit{ InHit }, Collider{ HitCollider }, HitObject{ InHitObject }
