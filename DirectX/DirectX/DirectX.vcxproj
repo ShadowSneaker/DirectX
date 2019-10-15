@@ -214,6 +214,7 @@
     <ClCompile Include="Content\Engine\Math\Physics\RigidBody.cpp" />
     <ClCompile Include="Content\Engine\World\Level.cpp" />
     <ClCompile Include="Content\Engine\World\ObjectPool.cpp" />
+    <ClCompile Include="Content\Engine\World\Objects\Character.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\ObectBase.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Puppet.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\WorldObject.cpp" />
