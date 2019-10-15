@@ -9,4 +9,5 @@ struct SVertex
 	SVector Position;
 	SVector4 Colour;
 	SVector2 UV;
+	SVector Normal;
 };

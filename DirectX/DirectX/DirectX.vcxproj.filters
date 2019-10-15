@@ -126,6 +126,12 @@
     <ClInclude Include="Content\Engine\Components\Colliders\PolygonComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Content\Engine\World\Objects\Puppet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Engine\World\Objects\Character.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\Engine\Graphics\DirectXSetup.cpp">
@@ -222,6 +228,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Content\Engine\Components\Colliders\PolygonComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Engine\World\Objects\Puppet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

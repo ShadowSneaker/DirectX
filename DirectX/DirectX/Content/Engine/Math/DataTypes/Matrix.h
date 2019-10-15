@@ -11,7 +11,7 @@ private:
 	/// Properties
 
 	// The stored data in the matrix.
-	Vector<Rows> Data[Columns];
+	Vector<Columns> Data[Rows];
 
 public:
 	/// Constructors
@@ -74,7 +74,7 @@ public:
 		SetTransform(Location, Rotation, Scale);
 	}
 
-	
+
 	/// Operators
 
 	// Adds each component of this matrix by the same component on another matrix.
@@ -356,6 +356,10 @@ public:
 	//
 	inline SMatrix<4, 4> SetLocation(const float& X, const float& Y, const float& Z, const float& W = 1.0f);
 
+	// 
+	inline SVector4 VectorTransform(SVector4 Vec);
+
+
 	// Calculates the inverse of this matrix.
 	// Note: This does not apply the inverse to this matrix.
 	// Note: If the result is an empty matrix then the inputted matrix could not be inversed.
@@ -386,8 +390,8 @@ public:
 
 	// Sets a vertical row of vectors in a specified column.
 	inline SMatrix<Columns, Rows> SetColumn(const uint& Col, Vector<Rows> Vec);
-	
-	
+
+
 
 
 
@@ -424,6 +428,17 @@ public:
 
 
 	/// Statics
+
+	static SMatrix<1, Rows> ToMatrix(Vector<Rows> Vec)
+	{
+		SMatrix<1, Rows> Result;
+		for (uint i = 0; i < Rows; ++i)
+		{
+			Result[i][0] = Vec[i];
+		}
+		return Result;
+	}
+
 
 	static SMatrix<Columns, Rows> Indentity()
 	{
@@ -508,6 +523,23 @@ public:
 
 		Mat.Merge(Mat);
 		return Mat;
+	}
+
+
+	static SMatrix<4, 4> Transpose(SMatrix<4, 4> Mat)
+	{
+		SMatrix<4, 4> M;
+		M[0] = SVector4::Merge(Mat[0], Mat[2], EAxis::X, EAxis::Y);
+		M[1] = SVector4::Merge(Mat[1], Mat[3], EAxis::X, EAxis::Y);
+		M[2] = SVector4::Merge(Mat[0], Mat[2], EAxis::Z, EAxis::W);
+		M[3] = SVector4::Merge(Mat[1], Mat[3], EAxis::Z, EAxis::W);
+
+		SMatrix<4, 4> Result;
+		Result[0] = SVector4::Merge(M[0], M[1], EAxis::X, EAxis::Y);
+		Result[1] = SVector4::Merge(M[0], M[1], EAxis::Z, EAxis::W);
+		Result[2] = SVector4::Merge(M[2], M[3], EAxis::X, EAxis::Y);
+		Result[3] = SVector4::Merge(M[2], M[3], EAxis::Z, EAxis::W);
+		return Result;
 	}
 };
 
@@ -686,6 +718,10 @@ template <uint Columns, uint Rows>
 inline Vector<Rows> SMatrix<Columns, Rows>::operator*(const Vector<Rows>& V) const
 {
 	return (*this * SMatrix<1, Rows>::ToMatrix(V)).ToVector();
+
+	//SMatrix<1, Rows> NewMat = *this * SMatrix<1, Rows>::ToMatrix(V);
+	//return NewMat.ToVector();
+	//return Vector<Rows>();
 }
 
 
@@ -1092,6 +1128,20 @@ template <uint Columns, uint Rows>
 inline SMatrix<4, 4> SMatrix<Columns, Rows>::SetLocation(const float& X, const float& Y, const float& Z, const float& W)
 {
 	return SetLocation(SVector4{ X, Y, Z, W });
+}
+
+
+template <uint Columns, uint Rows>
+inline SVector4 SMatrix<Columns, Rows>::VectorTransform(SVector4 Vec)
+{
+	SVector4 VecX = Vec[X];
+	SVector4 VecY = Vec[Y];
+	SVector4 VecZ = Vec[Z];
+
+	SVector4 Result = (VecZ * Data[2]) + Data[3];
+	Result = (VecY * Data[1]) + Result;
+	Result = (VecX * Data[0]) + Result;
+	return Result;
 }
 
 

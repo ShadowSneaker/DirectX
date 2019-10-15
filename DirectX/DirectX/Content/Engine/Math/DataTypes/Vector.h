@@ -319,6 +319,8 @@ public:
 	template <uint NewSize>
 	inline Vector<NewSize, Element> Resize(const Element& Value = 0.0f) const;
 
+	
+
 
 	/// Getters
 
@@ -506,7 +508,7 @@ public:
 
 
 	// Calculates the distance between two vectors.
-	static inline float Pythagoras(const Vector<Size, Element>& V1, const Vector<Size, Element>& V2)
+	static inline float Distance(const Vector<Size, Element>& V1, const Vector<Size, Element>& V2)
 	{
 		float Result{ 0.0f };
 		for (uint i = 0; i < Size; ++i)

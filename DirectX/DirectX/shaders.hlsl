@@ -5,9 +5,9 @@ SamplerState sampler0;
 cbuffer CBuffer
 {
 	matrix Matrix;
-	float RedFraction;
-	float Scale;
-	float2 Packing;
+	float4 DirectionalLight;
+	float4 DirectionalLightColour;
+	float4 AmbientLightColour;
 };
 
 struct VOut
@@ -18,15 +18,17 @@ struct VOut
 };
 
 
-VOut VShader(float4 position : POSITION, float4 color : COLOR, float2 texcoord : TEXCOORD)
+VOut VShader(float4 position : POSITION, float4 color : COLOR, float2 texcoord : TEXCOORD, float3 normal : NORMAL)
 {
 	VOut output;
 
-	color.r *= RedFraction;
 	output.position = mul(Matrix, position);
-	output.color = color;
-	output.texcoord = texcoord;
 
+	float DiffuseAmount = dot(DirectionalLight, normal);
+	DiffuseAmount = saturate(DiffuseAmount);
+	output.color = AmbientLightColour + (DirectionalLightColour * DiffuseAmount);
+
+	output.texcoord = texcoord;
 	return output;
 }
 

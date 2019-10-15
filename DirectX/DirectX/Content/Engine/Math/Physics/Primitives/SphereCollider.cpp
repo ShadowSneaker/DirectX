@@ -33,7 +33,7 @@ bool CSphereCollider::CheckCollision(const CSphereCollider* Other) const
 	float Radi{ GetRadius() + Other->GetRadius() };
 	Radi *= Radi;
 
-	return (Radi < SVector::Pythagoras(WorldLocation, OtherLocation));
+	return (Radi < SVector::Distance(WorldLocation, OtherLocation));
 }
 
 

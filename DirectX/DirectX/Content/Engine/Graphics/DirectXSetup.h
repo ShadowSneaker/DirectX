@@ -14,9 +14,9 @@
 struct SConstantBuffer
 {
 	SMatrix4 WorldProjection;
-	float RedAmount{ 0.0f };
-	float Scale;
-	SVector2 Packing;
+	SVector4 DirectionalLight;
+	SVector4 DirectionalLightColour;
+	SVector4 AmbientLightColour;
 };
 
 
@@ -58,6 +58,12 @@ private:
 	ID3D11ShaderResourceView* Texture0;
 
 	ID3D11SamplerState* Sampler0;
+
+
+
+	SVector4 DirectionalLight{ SVector4{ 0.0f, 0.8f, 0.5f, 0.0f } };
+	SVector4 DirectionalLightColour{ SVector4{ 1.0f, 1.0f, 1.0f, 0.0f } };
+	SVector4 AmbientLightColour{ SVector4{ 0.1f, 0.1f, 0.1f, 1.0f } };
 
 
 
