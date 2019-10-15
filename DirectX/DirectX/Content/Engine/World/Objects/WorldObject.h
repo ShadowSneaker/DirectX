@@ -70,7 +70,7 @@ public:
 template <typename Type>
 Type* CWorldObject::CreateComponent()
 {
-	Type NewComponent = new Type{ SObjectBase{STransform{}, GetWOrld(), GetLevel(), GetPhysics(), GetTimerManager() }, this };
+	Type NewComponent = new Type{ SObjectBase{STransform{}, GetWorld(), GetPhysics(), GetTimerManager() }, this };
 	if (NewComponent)
 	{
 		Components.push_back(NewComponent);
@@ -78,7 +78,7 @@ Type* CWorldObject::CreateComponent()
 	}
 
 	delete NewComponent;
-	return nullptr
+	return nullptr;
 }
 
 

@@ -13,7 +13,7 @@ public:
 public:
 	/// Constructors
 
-	CCharacterComponent();
+	CCharacterComponent(SComponentInfo Info);
 
 
 	/// Fuctions

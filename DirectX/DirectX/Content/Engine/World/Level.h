@@ -31,7 +31,7 @@ public:
 	/// Constructors
 
 	// Constructor, Initiates the world based on an inputted file path.
-	CLevel(class CWorld* WorldReference, std::string InFilePath, bool UseDefaultFilePath = true);
+	CLevel(SObjectBase Core, std::string InFilePath, bool UseDefaultFilePath = true);
 
 
 	~CLevel();

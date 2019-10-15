@@ -16,9 +16,6 @@ struct SObjectBase
 	// A reference to the world object.
 	class CWorld* World{ nullptr };
 
-	// A reference to the level this object was created in.
-	class CLevel* Level{ nullptr };
-
 	// A reference to the physics object.
 	class CPhysics* Physics{ nullptr };
 
@@ -90,7 +87,6 @@ public:
 	inline class CWorld* GetWorld() const { return Base.World; }
 
 	// Returns a reference to the level this object belongs to.
-	inline class CLevel* GetLevel() const { return Base.Level; }
 
 	// Returns a reference to the physics object.
 	inline class CPhysics* GetPhysics() const { return Base.Physics; }

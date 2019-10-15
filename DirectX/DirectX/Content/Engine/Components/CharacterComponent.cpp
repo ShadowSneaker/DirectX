@@ -2,8 +2,8 @@
 #include "../World/Objects/WorldObject.h"
 
 
-CCharacterComponent::CCharacterComponent()
-	:CComponent::CComponent{}
+CCharacterComponent::CCharacterComponent(SComponentInfo Info)
+	:CComponent::CComponent{ Info }
 {
 
 }
@@ -23,5 +23,5 @@ void CCharacterComponent::Move(SVector Direction, float Axis, bool ForceMove)
 		//}
 	}
 
-	GetOwner()->Location += Location;
+	GetOwner()->Transform.Location += Location;
 }

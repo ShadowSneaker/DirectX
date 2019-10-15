@@ -1,9 +1,14 @@
 #include "World.h"
 #include "ObjectPool.h"
+#include "../Math/Physics/Physics.h"
 
 
 CWorld::CWorld()
-{}
+{
+	Physics = new CPhysics{};
+
+	ObjectPool = new CObjectPool{ this };
+}
 
 
 CWorld::~CWorld()
@@ -35,7 +40,7 @@ void CWorld::CloseAllLevels()
 void CWorld::LoadLevel(std::string File, bool UseDefaultFilePath)
 {
 	CloseAllLevels();
-	CLevel* Level = new CLevel{ this, File, UseDefaultFilePath };
+	CLevel* Level = new CLevel{ SObjectBase{ STransform{}, this, Physics }, File, UseDefaultFilePath };
 	if (Level)
 	{
 		Levels.push_back(Level);

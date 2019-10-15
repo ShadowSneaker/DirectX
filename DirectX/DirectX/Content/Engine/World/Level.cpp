@@ -5,8 +5,8 @@
 const std::string CLevel::DefaultFilePath{ "Content/Assets/Levels/" };
 
 
-CLevel::CLevel(class CWorld* WorldReference, std::string File, bool UseDeafultFilePath)
-	:World{ WorldReference }
+CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
+	:CObjectBase::CObjectBase{ Core }
 {
 	if (UseDeafultFilePath)
 	{
