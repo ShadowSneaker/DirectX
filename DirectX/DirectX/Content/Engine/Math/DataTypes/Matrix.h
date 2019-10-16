@@ -502,6 +502,7 @@ public:
 		SVector4 D0 = SVector4::DotProduct(R0, NegEyePos);
 		SVector4 D1 = SVector4::DotProduct(R1, NegEyePos);
 		SVector4 D2 = SVector4::DotProduct(R2, NegEyePos);
+		
 
 		//Vector<4, uint> Control{ 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0x00000000 };
 		Vector<4, bool> Control{ false, false, false, true };

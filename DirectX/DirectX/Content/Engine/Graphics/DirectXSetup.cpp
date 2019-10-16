@@ -1,6 +1,8 @@
 #include "DirectXSetup.h"
 #include <DirectXMath.h>
 
+#include "Meshes/StaticMesh.h"
+
 
 CDirectXSetup::CDirectXSetup()
 {
@@ -10,6 +12,7 @@ CDirectXSetup::CDirectXSetup()
 
 CDirectXSetup::~CDirectXSetup()
 {
+	delete TempMesh
 	delete TempText;
 	delete Camera;
 	ShutdownD3D();
@@ -40,6 +43,17 @@ bool CDirectXSetup::Init(HINSTANCE HandleInstance, int CmdShow)
 	TempText = new CFont{ "Content/Assets/Fonts/font1.bmp", Device, DeviceContext };
 	TempText->SetText("Beep Boop");
 	TempText->Location = SVector2{ -1.0f, 1.0f };
+	TempText->Size = 1.0f;
+
+
+	std::string FileName{ "Content/Assets/Models/Sphere.obj" };
+	//TempMesh = new CStaticMesh{ FileName, Device, DeviceContext };
+
+	//if (TempMesh->FileName == "FILE NOT LOADED")
+	//{
+	//	delete TempMesh;
+	//}
+
 	return true;
 }
 
@@ -474,9 +488,11 @@ void CDirectXSetup::RenderFrame()
 	DeviceContext->PSSetShader(PixelShader, 0, 0);
 
 	DeviceContext->Draw(36, 0);
-
+	//TempMesh->Draw();
 	TempText->RenderText();
 
+	DirectX::XMVECTOR A;
+	A.vector4_f32[0] = 5.0;
 
 
 

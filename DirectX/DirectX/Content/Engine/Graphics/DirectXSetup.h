@@ -71,6 +71,8 @@ private:
 
 	CFont* TempText;
 
+	class CStaticMesh* TempMesh;
+
 	float TempRotate = 0.0f;
 
 public:
