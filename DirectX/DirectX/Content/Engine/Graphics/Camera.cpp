@@ -38,7 +38,7 @@ void CCamera::MoveUp(float Distance)
 
 void CCamera::MoveLeft(float Distance)
 {
-	SVector4 Direction = SVector4::CrossProduct(Position, LookAt);
+	SVector4 Direction = SVector4::CrossProduct(Offset, LookAt);
 	Offset[X] += Direction[X] * Distance;
 	Offset[Z] += Direction[Z] * Distance;
 }

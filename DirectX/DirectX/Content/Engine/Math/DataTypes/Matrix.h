@@ -333,6 +333,8 @@ public:
 	// @return - Returns the transformed matrix.
 	inline SMatrix<4, 4> Transform(const SVector4& Location, const SQuaternion& Rotation, const SVector4& InScale) const;
 
+	inline SMatrix<4, 4> Transform(const SVector4 & Location, const SVector4 & Rotation, const SVector4 & InScale) const;
+
 	// Scales, rotates and translates the matrix by an inputted transform.
 	// Note: Transformation is the the order: Scale > Rotate > Translate.
 	// @param InTransform - The location, rotation and scale this matrix should be transformed by.
@@ -445,6 +447,20 @@ public:
 		SMatrix<Columns, Rows> Matrix;
 		Matrix.SetToIdentity();
 		return Matrix;
+	}
+
+
+	static SMatrix<4, 4> Scale(SVector NewScale, float InW = 1.0f)
+	{
+		//ASSERT(Columns == 4 && Rows == 4, "The matrix must be a 4x4 matrix in order to be scaled.");
+
+		SMatrix<4, 4> Result{ 0.0f };
+		for (uint i = 0; i < 4; ++i)
+		{
+			Result[i][i] = NewScale[i];
+		}
+
+		return Result;
 	}
 
 
@@ -1087,6 +1103,13 @@ template <uint Columns, uint Rows>
 inline SMatrix<4, 4> SMatrix<Columns, Rows>::Transform(const SVector4& Location, const SQuaternion& Rotation, const SVector4& InScale) const
 {
 	return Transform(STransform{ Location, Rotation, InScale });
+}
+
+
+template <uint Columns, uint Rows>
+inline SMatrix<4, 4> SMatrix<Columns, Rows>::Transform(const SVector4& Location, const SVector4& Rotation, const SVector4& InScale) const
+{
+	return Scale(InScale) * Rotate(Rotation) * Translate(Location);
 }
 
 

@@ -118,6 +118,25 @@ void CLoadMesh::ParseFile()
 
 			PositionList.push_back(TempVec);
 		}
+		else if (strncmp(&FBuffer[TokenStart], "vt", 2) == 0)
+		{
+			Success = true;
+			Success = Success && GetNextToken(TokenStart, TokenLength);
+			TempUV[X] = (float)atof(&FBuffer[TokenStart]);
+			Success = Success && GetNextToken(TokenStart, TokenLength);
+			TempUV[Y] = (float)atof(&FBuffer[TokenStart]);
+
+			if (!Success)
+			{
+				char S[100] = "ERROR: Badly formatted normal, line : ";
+				_itoa(Line, &S[strlen(S)], 10);
+				strcat(S, " : ");
+				strcat(S, FileName.c_str());
+				DXTRACE_MSG(S);
+			}
+
+			TexCoordList.push_back(TempUV);
+		}
 		else if (strncmp(&FBuffer[TokenStart], "vn", 2) == 0)
 		{
 			Success = true;
@@ -132,11 +151,9 @@ void CLoadMesh::ParseFile()
 			{
 				char S[100] = "ERROR: Badly formatted normal, line : ";
 				_itoa(Line, &S[strlen(S)], 10);
-				strcat(S, " : ");
 				strcat(S, FileName.c_str());
 				DXTRACE_MSG(S);
 			}
-
 			NormalList.push_back(TempVec);
 		}
 		else if (strncmp(&FBuffer[TokenStart], "f ", 2) == 0)
@@ -233,7 +250,8 @@ bool CLoadMesh::CreateVB()
 		if (TIndices.size() > 0)
 		{
 			int TIndex = TIndices[i] - 1;
-			Vertices[i].UV = TexCoordList[TIndex];
+			Vertices[i].UV[X] = TexCoordList[TIndex][X];
+			Vertices[i].UV[Y] = TexCoordList[TIndex][Y];
 		}
 
 		if (NIndices.size() > 0)
@@ -273,4 +291,106 @@ CStaticMesh::CStaticMesh(ID3D11Device* InDevice, ID3D11DeviceContext* InDeviceCo
 	:Device{ InDevice }, DeviceContext{ InDeviceContext }
 {
 
+}
+
+
+HRESULT CStaticMesh::SetMesh(char* FileName)
+{
+	Object = new CLoadMesh(FileName, Device, DeviceContext);
+
+	if (Object->FileName == "FILE NOT LOADED")
+	{
+		delete Object;
+		return 0;
+	}
+
+	HRESULT HR;
+
+	ID3DBlob* VS;
+	ID3DBlob* PS;
+	ID3DBlob* Error;
+
+	HR = D3DX11CompileFromFile("model_shader.hlsl", 0, 0, "ModelVS", "vs_4_0", 0, 0, 0, &VS, &Error, 0);
+	if (Error != 0)
+	{
+		OutputDebugStringA((char*)Error->GetBufferPointer());
+		Error->Release();
+		if (FAILED(HR))
+		{
+			return HR;
+		}
+	}
+
+	HR = D3DX11CompileFromFile("model_shader.hlsl", 0, 0, "ModelPS", "ps_4_0", 0, 0, 0, &PS, &Error, 0);
+	if (Error != 0)
+	{
+		OutputDebugStringA((char*)Error->GetBufferPointer());
+		Error->Release();
+		if (FAILED(HR))
+		{
+			return HR;
+		}
+	}
+
+	HR = Device->CreateVertexShader(VS->GetBufferPointer(), VS->GetBufferSize(), NULL, &VShader);
+	if (FAILED(HR)) return HR;
+
+	HR = Device->CreatePixelShader(PS->GetBufferPointer(), PS->GetBufferSize(), NULL, &PShader);
+	if (FAILED(HR)) return HR;
+
+	DeviceContext->VSSetShader(VShader, 0, 0);
+	DeviceContext->PSSetShader(PShader, 0, 0);
+
+	D3D11_INPUT_ELEMENT_DESC IEDesc[] =
+	{
+		{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0},
+		{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0}
+	};
+
+
+	HR = Device->CreateInputLayout(IEDesc, ARRAYSIZE(IEDesc), VS->GetBufferPointer(), VS->GetBufferSize(), &InputLayout);
+	if (FAILED(HR)) return HR;
+
+	DeviceContext->IASetInputLayout(InputLayout);
+
+	
+	D3D11_BUFFER_DESC CBuffer;
+	ZeroMemory(&CBuffer, sizeof(CBuffer));
+
+	CBuffer.Usage = D3D11_USAGE_DEFAULT;
+	CBuffer.ByteWidth = 64;
+	CBuffer.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+
+	HR = Device->CreateBuffer(&CBuffer, NULL, &ConstantBuffer);
+	if (FAILED(HR)) return HR;
+
+	return WN_SUCCESS;
+}
+
+
+void CStaticMesh::Draw(SMatrix4* View, SMatrix4* Projection)
+{
+	SMatrix4 World;
+	SMatrix4 Pos;
+	SMatrix4 Rot;
+	SMatrix4 Sca;
+	Pos.SetToIdentity();
+	Rot.SetToIdentity();
+	Sca.SetToIdentity();
+
+	Pos.SetTranslate(Location);
+	Rot.SetRotate(Rotation);
+	Sca.SetScale(SVector4{ Scale });
+
+	World *= Sca * Rot * Pos;
+
+
+	SModelBuffer MBuffer;
+	MBuffer.WorldMatrix = World * *View * *Projection;
+	
+	DeviceContext->VSSetConstantBuffers(0, 1, &ConstantBuffer);
+
+	DeviceContext->VSSetShader(VShader, 0, 0);
+	DeviceContext->PSSetShader(PShader, 0, 0);
 }

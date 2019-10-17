@@ -6,6 +6,12 @@
 #include <vector>
 
 #include "../../Math/DataTypes/Vertex.h"
+#include "../../Math/DataTypes/Matrix.h"
+
+struct SModelBuffer
+{
+	SMatrix4 WorldMatrix;
+};
 
 
 class CLoadMesh
@@ -79,13 +85,20 @@ private:
 	ID3D11InputLayout* InputLayout;
 	ID3D11Buffer* ConstantBuffer;
 
-	SVector Location{ 0.0f };
+	SVector Location{ 5.0f };
 	SVector Rotation{ 0.0f };
-	float Scale{ 1.0f };
+	float Scale{ 0.01f };
 
 
 public:
 	/// Constructors
 
 	CStaticMesh(ID3D11Device* InDevice, ID3D11DeviceContext* DeviceContext);
+
+
+	/// Functions
+
+	HRESULT SetMesh(char* FileName);
+
+	void Draw(SMatrix4* World, SMatrix4* Projection);
 };
