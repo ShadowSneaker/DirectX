@@ -79,22 +79,25 @@ private:
 	ID3D11Device* Device;
 	ID3D11DeviceContext* DeviceContext;
 
-	CLoadMesh* Object;
-	ID3D11VertexShader* VShader;
-	ID3D11PixelShader* PShader;
-	ID3D11InputLayout* InputLayout;
-	ID3D11Buffer* ConstantBuffer;
+	CLoadMesh* Object{ nullptr };
+	ID3D11VertexShader* VShader{ nullptr };
+	ID3D11PixelShader* PShader{ nullptr };
+	ID3D11InputLayout* InputLayout{ nullptr };
+	ID3D11Buffer* ConstantBuffer{ nullptr };
 
-	SVector Location{ 5.0f };
+
+public:
+
+	SVector Location{ 0.0f };
 	SVector Rotation{ 0.0f };
-	float Scale{ 0.01f };
+	float Scale{ 1.0f };
 
 
 public:
 	/// Constructors
 
 	CStaticMesh(ID3D11Device* InDevice, ID3D11DeviceContext* DeviceContext);
-
+	~CStaticMesh();
 
 	/// Functions
 

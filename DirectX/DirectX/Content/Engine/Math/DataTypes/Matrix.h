@@ -837,7 +837,7 @@ inline SMatrix<4, 4> SMatrix<Columns, Rows>::Translate(const SVector4& Location)
 
 	for (uint i = 0; i < 4; ++i)
 	{
-		Matrix[i][W] = Location[i];
+		Matrix[W][i] = Location[i];
 	}
 	return *this * Matrix;
 }
@@ -862,12 +862,13 @@ inline SMatrix<4, 4> SMatrix<Columns, Rows>::SetTranslate(const SVector4& Locati
 {
 	ASSERT(Columns == 4 && Rows == 4, "The matrix must be a 4x4 matrix in order to be translated.");
 	SMatrix<4, 4> Matrix;
+	Matrix.SetToIdentity();
 
 	for (uint i = 0; i < 4; ++i)
 	{
-		Matrix[i][W] = Location[i];
+		Matrix[W][i] = Location[i];
 	}
-	*this *= Matrix;
+	*this = Matrix;
 	return *this;
 }
 
@@ -1008,7 +1009,6 @@ inline SMatrix<4, 4> SMatrix<Columns, Rows>::SetRotate(const SQuaternion& Rotati
 	SetRotatePitch(Rotation.X);
 	SetRotateYaw(Rotation.Y);
 	SetRotateRoll(Rotation.Z);
-
 	return *this;
 }
 
@@ -1073,7 +1073,8 @@ inline SMatrix<4, 4> SMatrix<Columns, Rows>::SetScale(const SVector4& InScale)
 		Result[i][i] = InScale[i];
 	}
 
-	*this *= Result;
+	//*this *= Result;
+	*this = Result;
 	return *this;
 }
 

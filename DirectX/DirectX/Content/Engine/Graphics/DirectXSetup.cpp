@@ -6,7 +6,6 @@
 
 CDirectXSetup::CDirectXSetup()
 {
-	
 }
 
 
@@ -33,6 +32,10 @@ bool CDirectXSetup::Init(HINSTANCE HandleInstance, int CmdShow)
 		return false;
 	}
 
+	TempMesh = new CStaticMesh{ Device, DeviceContext };
+	TempMesh->SetMesh((char*)"Content/Assets/Models/Sphere.obj");
+	TempMesh->Location = SVector{ 0.0f, 0.0f, 5.0f };
+
 	if (FAILED(InitialiseGraphics()))
 	{
 		DXTRACE_MSG("Failed to initialise graphics.");
@@ -45,8 +48,7 @@ bool CDirectXSetup::Init(HINSTANCE HandleInstance, int CmdShow)
 	TempText->Location = SVector2{ -1.0f, 1.0f };
 	TempText->Size = 0.1f;
 
-	TempMesh = new CStaticMesh{ Device, DeviceContext };
-	TempMesh->SetMesh((char*)"Content/Assets/Models/Sphere.obj");
+	
 	
 
 	return true;
@@ -445,19 +447,19 @@ void CDirectXSetup::RenderFrame()
 	CBValues.AmbientLightColour = AmbientLightColour;
 	CBValues.DirectionalLight = Transpose.VectorTransform(DirectionalLight);
 	CBValues.DirectionalLight = DirectionalLight.Normalize();
-
-	SMatrix4 Rotation, Translation, Scale;
-	Rotation.SetToIdentity();
-	Translation.SetToIdentity();
-	Scale.SetToIdentity();
-
-	Scale.SetScale(1.0f, 1.0f, 1.0f);
-
-	TempRotate += 0.01f;
-	Rotation.SetRotate(TO_RADIAN(TempRotate), TO_RADIAN(TempRotate * 0.5f), TO_RADIAN(TempRotate));
-	Translation.SetLocation(0.0f, 0.0f, 5.0f);
-
-	World = Scale * Rotation * Translation;
+	
+	//SMatrix4 Rotation, Translation, Scale;
+	//Rotation.SetToIdentity();
+	//Translation.SetToIdentity();
+	//Scale.SetToIdentity();
+	
+	//Scale.SetScale(1.0f, 1.0f, 1.0f);
+	
+	//TempRotate += 0.01f;
+	//Rotation.SetRotate(TO_RADIAN(TempRotate), TO_RADIAN(TempRotate * 0.5f), TO_RADIAN(TempRotate));
+	//Translation.SetLocation(0.0f, 0.0f, 5.0f);
+	
+	//World = Scale * Rotation * Translation;
 
 
 	SMatrix4 Projection;
@@ -469,18 +471,18 @@ void CDirectXSetup::RenderFrame()
 	
 
 
-	Projection = SMatrix4::PersepctiveFovLH(TO_RADIAN(45.0f), 640.0f / 480.0f, 1.0f, 100.0f);
-	CBValues.WorldProjection = World * View * Projection;
+	//Projection = SMatrix4::PersepctiveFovLH(TO_RADIAN(45.0f), 640.0f / 480.0f, 1.0f, 100.0f);
+	//CBValues.WorldProjection = World * View * Projection;
 	
 
 
 
-	DeviceContext->UpdateSubresource(ConstantBuffer, 0, 0, &CBValues, 0, 0);
-
-	DeviceContext->VSSetConstantBuffers(0, 1, &ConstantBuffer);
-	DeviceContext->IASetInputLayout(InputLayout);
-	DeviceContext->VSSetShader(VertexShader, 0, 0);
-	DeviceContext->PSSetShader(PixelShader, 0, 0);
+	//DeviceContext->UpdateSubresource(ConstantBuffer, 0, 0, &CBValues, 0, 0);
+	//
+	//DeviceContext->VSSetConstantBuffers(0, 1, &ConstantBuffer);
+	//DeviceContext->IASetInputLayout(InputLayout);
+	//DeviceContext->VSSetShader(VertexShader, 0, 0);
+	//DeviceContext->PSSetShader(PixelShader, 0, 0);
 
 	//DeviceContext->Draw(36, 0);
 	TempMesh->Draw(&World, &View);
@@ -488,7 +490,6 @@ void CDirectXSetup::RenderFrame()
 
 	DirectX::XMVECTOR A;
 	A.vector4_f32[0] = 5.0;
-
 
 
 	// Display what has just been rendered.

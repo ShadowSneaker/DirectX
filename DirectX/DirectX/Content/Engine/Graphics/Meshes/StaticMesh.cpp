@@ -294,6 +294,15 @@ CStaticMesh::CStaticMesh(ID3D11Device* InDevice, ID3D11DeviceContext* InDeviceCo
 }
 
 
+CStaticMesh::~CStaticMesh()
+{
+	delete Object;
+	if (PShader) PShader->Release();
+	if (VShader) VShader->Release();
+	if (InputLayout) InputLayout->Release();
+}
+
+
 HRESULT CStaticMesh::SetMesh(char* FileName)
 {
 	Object = new CLoadMesh(FileName, Device, DeviceContext);
@@ -371,26 +380,43 @@ HRESULT CStaticMesh::SetMesh(char* FileName)
 
 void CStaticMesh::Draw(SMatrix4* View, SMatrix4* Projection)
 {
+	DirectX::XMMATRIX W;
+	DirectX::XMMATRIX P;
+	DirectX::XMMATRIX R;
+	DirectX::XMMATRIX S;
+
+	W = DirectX::XMMatrixTranslation(Location[X], Location[Y], Location[Z]);
+	W *= DirectX::XMMatrixRotationRollPitchYaw(Rotation[X], Rotation[Y], Rotation[Z]);
+	W *= DirectX::XMMatrixScaling(Scale, Scale, Scale);
+
+
+
 	SMatrix4 World;
 	SMatrix4 Pos;
 	SMatrix4 Rot;
 	SMatrix4 Sca;
-	Pos.SetToIdentity();
-	Rot.SetToIdentity();
-	Sca.SetToIdentity();
+	World.SetToIdentity();
 
+	Rot.SetToIdentity();
+
+	//Pos = Pos.Translate(Location);
 	Pos.SetTranslate(Location);
 	Rot.SetRotate(Rotation);
-	Sca.SetScale(SVector4{ Scale });
+	Sca.SetScale(SVector{ Scale });
 
-	World *= Sca * Rot * Pos;
+	World = Sca * Rot * Pos;
 
 
 	SModelBuffer MBuffer;
 	MBuffer.WorldMatrix = World * *View * *Projection;
 	
 	DeviceContext->VSSetConstantBuffers(0, 1, &ConstantBuffer);
+	DeviceContext->UpdateSubresource(ConstantBuffer, 0, 0, &MBuffer, 0, 0);
+
 
 	DeviceContext->VSSetShader(VShader, 0, 0);
 	DeviceContext->PSSetShader(PShader, 0, 0);
+	DeviceContext->IASetInputLayout(InputLayout);
+
+	Object->Draw();
 }
