@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Content\Engine\Graphics\DirectXSetup.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Content\Engine\Core\EngineSetup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -48,9 +45,6 @@
     <ClInclude Include="Content\Engine\Math\DataTypes\Vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Content\Engine\Graphics\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Content\Engine\World\Objects\ObjectBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -61,9 +55,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Content\Engine\Font\Font.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Content\Engine\Graphics\Meshes\StaticMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Content\Engine\World\ObjectPool.h">
@@ -132,11 +123,20 @@
     <ClInclude Include="Content\Engine\World\Objects\Character.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Content\Engine\Graphics\Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Engine\Graphics\Meshes\StaticMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Engine\Graphics\DirectXSetup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Engine\Graphics\Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Content\Engine\Graphics\DirectXSetup.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Content\Engine\Core\Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -155,9 +155,6 @@
     <ClCompile Include="Content\Engine\Math\DataTypes\Quaternion.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Content\Engine\Graphics\Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Content\Engine\World\Objects\ObectBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -165,9 +162,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Content\Engine\Font\Font.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Content\Engine\Graphics\Meshes\StaticMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Content\Engine\World\ObjectPool.cpp">
@@ -236,10 +230,17 @@
     <ClCompile Include="Content\Engine\World\Objects\Character.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="shaders.hlsl" />
-    <FxCompile Include="text2D_shaders.hlsl" />
-    <FxCompile Include="model_shader.hlsl" />
+    <ClCompile Include="Content\Engine\Graphics\Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Engine\Graphics\Meshes\StaticMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Engine\Graphics\DirectXSetup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Engine\Graphics\Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -155,10 +155,11 @@
     <ClInclude Include="Content\Engine\Core\Systems\Time.h" />
     <ClInclude Include="Content\Engine\Core\Systems\TimerManager.h" />
     <ClInclude Include="Content\Engine\Font\Font.h" />
-    <ClInclude Include="Content\Engine\Graphics\Camera.h" />
-    <ClInclude Include="Content\Engine\Graphics\DirectXSetup.h" />
     <ClInclude Include="Content\Engine\Core\EngineSetup.h" />
+    <ClInclude Include="Content\Engine\Graphics\DirectXSetup.h" />
     <ClInclude Include="Content\Engine\Graphics\Meshes\StaticMesh.h" />
+    <ClInclude Include="Content\Engine\Graphics\Renderer.h" />
+    <ClInclude Include="Content\Engine\Graphics\Window.h" />
     <ClInclude Include="Content\Engine\Math\Containers\Colour.h" />
     <ClInclude Include="Content\Engine\Math\DataTypes\Matrix.h" />
     <ClInclude Include="Content\Engine\Math\DataTypes\Quaternion.h" />
@@ -197,10 +198,11 @@
     <ClCompile Include="Content\Engine\Core\Systems\Time.cpp" />
     <ClCompile Include="Content\Engine\Core\Systems\TimerManager.cpp" />
     <ClCompile Include="Content\Engine\Font\Font.cpp" />
-    <ClCompile Include="Content\Engine\Graphics\Camera.cpp" />
-    <ClCompile Include="Content\Engine\Graphics\DirectXSetup.cpp" />
     <ClCompile Include="Content\Engine\Core\Source.cpp" />
+    <ClCompile Include="Content\Engine\Graphics\DirectXSetup.cpp" />
     <ClCompile Include="Content\Engine\Graphics\Meshes\StaticMesh.cpp" />
+    <ClCompile Include="Content\Engine\Graphics\Renderer.cpp" />
+    <ClCompile Include="Content\Engine\Graphics\Window.cpp" />
     <ClCompile Include="Content\Engine\Math\DataTypes\Quaternion.cpp" />
     <ClCompile Include="Content\Engine\Math\DataTypes\Transform.cpp" />
     <ClCompile Include="Content\Engine\Math\MathStatics.cpp" />
@@ -219,23 +221,6 @@
     <ClCompile Include="Content\Engine\World\Objects\Puppet.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\WorldObject.cpp" />
     <ClCompile Include="Content\Engine\World\World.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="model_shader.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="shaders.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4.0_level_9_3</ShaderModel>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0_level_9_3</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="text2D_shaders.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

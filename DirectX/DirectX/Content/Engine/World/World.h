@@ -1,11 +1,17 @@
 #pragma once
 #include "Level.h"
+#include "../Graphics/Renderer.h"
+
 #include <vector>
 
 
 class CWorld
 {
 	/// Properties
+
+
+	CRenderer* Renderer;
+
 
 	class CPhysics* Physics;
 
@@ -18,14 +24,14 @@ class CWorld
 	// Level 0 is considered the root level.
 	std::vector<CLevel*> Levels;
 
-	
+	bool Playing{ true };
 
 
 public:
 	/// Constructors
 
 	// Constructor, 
-	CWorld();
+	CWorld(HINSTANCE HandleInstance, int CommandShow);
 
 	// Destructor.
 	~CWorld();
@@ -33,7 +39,15 @@ public:
 
 	/// Functions
 
+
+	void Play();
+
 private:
+	void Inputs();
+	void Update();
+	void Graphics();
+
+
 	// Closes all open levels in the world.
 	void CloseAllLevels();
 public:

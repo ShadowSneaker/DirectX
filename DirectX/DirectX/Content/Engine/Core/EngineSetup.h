@@ -1,5 +1,5 @@
 #pragma once
-#include "../Graphics/DirectXSetup.h"
+#include "../World/World.h"
 
 
 class CEngineSetup
@@ -8,7 +8,9 @@ private:
 	/// Properties
 
 	// A reference to the created DirectX Object.
-	CDirectXSetup* DirectXSetup;
+	//CDirectXSetup* DirectXSetup;
+
+	CWorld* World;
 
 
 public:
@@ -23,5 +25,5 @@ public:
 
 	/// Functions
 
-	void MainLoop();
+	void Startup();
 };

@@ -7,10 +7,10 @@ class CCamera
 private:
 	/// Properties
 
-	SVector4 Offset;
-	SVector4 Position;
-	SVector4 LookAt;
-	SVector4 Up;
+	SVector4 Offset;// { 0.0f };
+	SVector4 Position;// { 0.0f };
+	SVector4 LookAt;// { 0.0f, 0.0f, -4.0f, 0.0f };
+	SVector4 Up;// = SVector4::Up();
 
 
 	//DirectX::XMVECTOR Position;
@@ -22,6 +22,10 @@ private:
 	float DZ;
 	float Rotation;
 
+
+public:
+	float NearClipPlane{ 0.0001f };
+	float FarClipPlane{ 10000.0f };
 
 
 

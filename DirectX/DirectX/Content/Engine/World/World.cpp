@@ -1,10 +1,15 @@
 #include "World.h"
 #include "ObjectPool.h"
+#include "..//Graphics/Renderer.h"
 #include "../Math/Physics/Physics.h"
 
 
-CWorld::CWorld()
+CWorld::CWorld(HINSTANCE HandleInstance, int CommandShow)
 {
+
+	Renderer = new CRenderer{ HandleInstance, CommandShow };
+	if (!Renderer) exit(0);
+
 	Physics = new CPhysics{};
 
 	ObjectPool = new CObjectPool{ this };
@@ -15,11 +20,39 @@ CWorld::~CWorld()
 {
 	CloseAllLevels();
 
+	delete ObjectPool;
+	delete Physics;
+	delete Renderer;
 }
 
 
+void CWorld::Play()
+{
+	while (Playing && Renderer->GetMsg().message != WM_QUIT)
+	{
+		Inputs();
+		Update();
+		Graphics();
+	}
+}
 
 
+void CWorld::Inputs()
+{
+	
+}
+
+
+void CWorld::Update()
+{
+	
+}
+
+
+void CWorld::Graphics()
+{
+	Renderer->DrawAll();
+}
 
 
 

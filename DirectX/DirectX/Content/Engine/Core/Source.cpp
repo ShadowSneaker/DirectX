@@ -7,7 +7,7 @@ int WINAPI WinMain(_In_ HINSTANCE HandleInstance, _In_opt_ HINSTANCE HPrevInstan
 	UNREFERENCED_PARAMETER(LPCmdLine);
 
 	CEngineSetup* Setup = new CEngineSetup{ HandleInstance, nCmdShow };
-	Setup->MainLoop();
+	Setup->Startup();
 	delete Setup;
 	
 	return 0;

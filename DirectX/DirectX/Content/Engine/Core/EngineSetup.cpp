@@ -1,28 +1,32 @@
 #include "EngineSetup.h"
-#include "../World/Level.h"
+#include "../World/World.h"
 
 CEngineSetup::CEngineSetup(HINSTANCE HandleInstance, int CommandShow)
 {
-	DirectXSetup = new CDirectXSetup{};
-	if (DirectXSetup->Init(HandleInstance, CommandShow))
-	{
+	World = new CWorld{ HandleInstance, CommandShow };
 
-	}
+	//DirectXSetup = new CDirectXSetup{};
+	//if (DirectXSetup->Initialise(HandleInstance, CommandShow))
+	//{
+	//
+	//}
 }
 
 
 CEngineSetup::~CEngineSetup()
 {
-	delete DirectXSetup;
+	delete World;
 }
 
 
-void CEngineSetup::MainLoop()
+void CEngineSetup::Startup()
 {
-	while (DirectXSetup->GetMessage().message != WM_QUIT)
-	{
-		DirectXSetup->ReadMessage();
+	World->Play();
 
-		DirectXSetup->RenderFrame();
-	}
+	//while (DirectXSetup->GetMessage().message != WM_QUIT)
+	//{
+	//	DirectXSetup->ReadMessage();
+	//
+	//	DirectXSetup->RenderFrame();
+	//}
 }
