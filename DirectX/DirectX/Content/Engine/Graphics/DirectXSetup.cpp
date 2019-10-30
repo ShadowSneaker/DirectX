@@ -73,7 +73,32 @@ HRESULT CDirectXSetup::Initialise()
 	if (FAILED(HR)) return HR;
 
 
+	ID3D11Texture2D* BackBufferTexture;
+	HR = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&BackBufferTexture);
+
+	if (FAILED(HR)) return HR;
+
+	HR = Device->CreateRenderTargetView(BackBufferTexture, NULL, &BackBuffer);
+
+	BackBufferTexture->Release();
+
+	DeviceContext->OMSetRenderTargets(1, &BackBuffer, NULL);
+
+	D3D11_VIEWPORT Viewport;
+	Viewport.TopLeftX = 0;
+	Viewport.TopLeftY = 0;
+	Viewport.Width = (FLOAT)Width;
+	Viewport.Height = (FLOAT)Height;
+	Viewport.MinDepth = 0.0f;
+	Viewport.MaxDepth = 1.0f;
+
+	DeviceContext->RSSetViewports(1, &Viewport);
+
 	return S_OK;
 }
 
 
+void CDirectXSetup::ClearView()
+{
+	DeviceContext->ClearRenderTargetView(BackBuffer, ClearColour);
+}

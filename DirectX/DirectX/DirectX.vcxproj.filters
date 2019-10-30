@@ -135,6 +135,9 @@
     <ClInclude Include="Content\Engine\Graphics\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Content\Engine\Graphics\Meshes\Primitives\Cube.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\Engine\Core\Source.cpp">
@@ -242,5 +245,12 @@
     <ClCompile Include="Content\Engine\Graphics\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Content\Engine\Graphics\Meshes\Primitives\Cube.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Content\Assets\Shaders\Shaders.hlsl" />
+    <FxCompile Include="TestShader.hlsl" />
   </ItemGroup>
 </Project>
