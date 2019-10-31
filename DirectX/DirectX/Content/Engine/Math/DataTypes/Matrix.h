@@ -157,7 +157,7 @@ public:
 	// Sets this matrix to the identity matrix.
 	// Note, the last number in the matrix will always be 1.0f.
 	// @param Value - The number that will be assigned along the diagonal.
-	inline void SetToIdentity(float Value = 1.0f);
+	inline void Identity(float Value = 1.0f);
 
 	// Moves the position of the matrix by the inputted amount.
 	// Note: If the 'W' component = 0.0f, then the matrix will be set to the location instead of move in the direction.
@@ -333,6 +333,7 @@ public:
 	// @return - Returns the transformed matrix.
 	inline SMatrix<4, 4> Transform(const SVector4& Location, const SQuaternion& Rotation, const SVector4& InScale) const;
 
+	// 
 	inline SMatrix<4, 4> Transform(const SVector4 & Location, const SVector4 & Rotation, const SVector4 & InScale) const;
 
 	// Scales, rotates and translates the matrix by an inputted transform.
@@ -445,7 +446,7 @@ public:
 	static SMatrix<Columns, Rows> Indentity()
 	{
 		SMatrix<Columns, Rows> Matrix;
-		Matrix.SetToIdentity();
+		Matrix.Identity();
 		return Matrix;
 	}
 
@@ -814,7 +815,7 @@ inline Vector<Rows> SMatrix< Columns, Rows>::ToVector() const
 
 
 template <uint Columns, uint Rows>
-inline void SMatrix<Columns, Rows>::SetToIdentity(float Value)
+inline void SMatrix<Columns, Rows>::Identity(float Value)
 {
 	ASSERT(Columns == 4 && Rows == 4, "The matrix must be a 4x4 matrix in order to be translated.");
 	for (uint y = 0; y < Rows; ++y)
@@ -833,7 +834,7 @@ inline SMatrix<4, 4> SMatrix<Columns, Rows>::Translate(const SVector4& Location)
 {
 	ASSERT(Columns == 4 && Rows == 4, "The matrix must be a 4x4 matrix in order to be translated.");
 	SMatrix<4, 4> Matrix;
-	Matrix.SetToIdentity();
+	Matrix.Identity();
 
 	for (uint i = 0; i < 4; ++i)
 	{
@@ -862,7 +863,7 @@ inline SMatrix<4, 4> SMatrix<Columns, Rows>::SetTranslate(const SVector4& Locati
 {
 	ASSERT(Columns == 4 && Rows == 4, "The matrix must be a 4x4 matrix in order to be translated.");
 	SMatrix<4, 4> Matrix;
-	Matrix.SetToIdentity();
+	Matrix.Identity();
 
 	for (uint i = 0; i < 4; ++i)
 	{
@@ -894,7 +895,7 @@ inline SMatrix<4, 4> SMatrix<Columns, Rows>::RotatePitch(const float& Angle) con
 	// Rotates along the X axis.
 
 	SMatrix<4, 4> Result;
-	Result.SetToIdentity();
+	Result.Identity();
 
 	Result[1][1] = TMath::Cos(Angle);
 	Result[1][2] = TMath::Sin(Angle);
@@ -912,7 +913,7 @@ inline SMatrix<4, 4> SMatrix<Columns, Rows>::RotateYaw(const float& Angle) const
 	// Rotates along the Y axis.
 
 	SMatrix<4, 4> Result;
-	Result.SetToIdentity();
+	Result.Identity();
 
 	Result[0][0] = TMath::Cos(Angle);
 	Result[0][2] = -TMath::Sin(Angle);
@@ -930,7 +931,7 @@ inline SMatrix<4, 4> SMatrix<Columns, Rows>::RotateRoll(const float& Angle) cons
 	// Rotate along the Z axis.
 
 	SMatrix<4, 4> Result;
-	Result.SetToIdentity();
+	Result.Identity();
 
 	Result[0][0] = TMath::Cos(Angle);
 	Result[0][1] = TMath::Sin(Angle);

@@ -7,25 +7,16 @@
 #include "DirectXSetup.h"
 #include "../Core/Systems/FileReader.h"
 #include "Meshes/StaticMesh.h"
+#include "../Math/DataTypes/Matrix.h"
 
 
-
-
-
-//struct SObjectCluster
-//{
-//	/// Properties
-//
-//	// A reference to the mesh to be drawn.
-//	class CStaticMesh* Mesh{ nullptr };
-//
-//	// The file path to this shader.
-//	// Used as the key for getting the shader.
-//	//SFilePath FilePath;
-//
-//	// The shader this object uses.
-//	SShader* Shader;
-//};
+struct CBuffer
+{
+	SMatrix4 ViewMatrix;
+	float RedFactor;
+	float Scale;
+	SVector2 Packing;
+};
 
 
 
@@ -48,6 +39,11 @@ private:
 
 
 	std::vector<CStaticMesh*> Objects;
+
+
+	ID3D11Buffer* VertexBuffer;
+
+
 
 
 

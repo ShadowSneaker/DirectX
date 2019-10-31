@@ -1,3 +1,12 @@
+cbuffer CBuffer
+{
+	matrix ViewMatrix;
+	float RedFactor;
+	float Scale;
+	float2 Packing;
+}
+
+
 struct VOut
 {
 	float4 Position : SV_POSITION;
@@ -8,7 +17,8 @@ struct VOut
 VOut VShader(float4 Position : POSITION, float4 Colour : COLOUR)
 {
 	VOut Output;
-	Output.Position = Position;
+	Colour.r *= RedFactor;
+	Output.Position = mul(ViewMatrix, Position);
 	Output.Colour = Colour;
 	return Output;
 }

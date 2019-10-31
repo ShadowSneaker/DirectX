@@ -76,14 +76,24 @@ SShader CRenderer::SetShader(CStaticMesh* Mesh, std::string FilePath, bool UseDe
 	BufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	BufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-	HR = Setup->GetDevice()->CreateBuffer(&BufferDesc, NULL, &Shader.VertexBuffer);
-
+	HR = Setup->GetDevice()->CreateBuffer(&BufferDesc, NULL, &VertexBuffer);
 	if (FAILED(HR)) return Shader;
 
+
+	D3D11_BUFFER_DESC CBuffer;
+	ZeroMemory(&CBuffer, sizeof(CBuffer));
+	CBuffer.Usage = D3D11_USAGE_DEFAULT;
+	CBuffer.ByteWidth = 80;
+	CBuffer.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+
+	HR = Setup->GetDevice()->CreateBuffer(&CBuffer, NULL, &Shader.ConstantBuffer);
+
+
+
 	D3D11_MAPPED_SUBRESOURCE MS;
-	Setup->GetDeviceContext()->Map(Shader.VertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &MS);
+	Setup->GetDeviceContext()->Map(VertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &MS);
 	memcpy(MS.pData, Mesh->GetVertices(), sizeof(Mesh->GetVertices()[0]) * Mesh->GetVertexCount());
-	Setup->GetDeviceContext()->Unmap(Shader.VertexBuffer, NULL);
+	Setup->GetDeviceContext()->Unmap(VertexBuffer, NULL);
 
 
 	ID3DBlob* VS;
@@ -144,15 +154,35 @@ void CRenderer::DrawAll()
 	/// Actual Draw stuff.
 	Setup->ClearView();
 
+
+	SMatrix4 World;
+	World.Identity();
+
+	SMatrix4 View;
+	SMatrix4 Projection;
+	View.Indentity();
+
+	SVector2i Size = Window->GetWindowSize();
+	World.SetTranslate(0.0f, 0.0f, 5.0f);
+	// This needs to change to get the window information.
+	Projection = SMatrix4::PersepctiveFovLH(TO_RADIAN(45.0f), Size[X] / Size[Y], 1.0f, 100.0f);
+
+
+	CBuffer CBValues;
+	CBValues.RedFactor = 0.0f;
+	CBValues.ViewMatrix = World * View * Projection;
+
 	ID3D11Buffer* Buffer;
 	for (uint i = 0; i < Objects.size(); ++i)
 	{
-		Buffer = Objects[i]->GetShader().VertexBuffer;
+		Buffer = Objects[i]->GetShader().ConstantBuffer;
+		Setup->GetDeviceContext()->UpdateSubresource(Buffer, 0, 0, &CBValues, 0, 0);
+		Setup->GetDeviceContext()->VSSetConstantBuffers(0, 1, &Buffer);
 	
 		//uint Stride = sizeof(SModelVertex);
 		uint Stride = sizeof(SVertexBase);
 		uint Offset = 0;
-		Setup->GetDeviceContext()->IASetVertexBuffers(0, 1, &Buffer, &Stride, &Offset);
+		Setup->GetDeviceContext()->IASetVertexBuffers(0, 1, &VertexBuffer, &Stride, &Offset);
 		Setup->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	
 	

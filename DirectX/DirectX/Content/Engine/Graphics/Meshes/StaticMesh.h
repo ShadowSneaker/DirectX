@@ -13,7 +13,7 @@ struct SShader
 	/// Properties
 
 	// A reference to the vertex buffer.
-	ID3D11Buffer* VertexBuffer;
+	ID3D11Buffer* ConstantBuffer;
 
 	// A reference to the pixel shader.
 	ID3D11PixelShader* PixelShader;
@@ -27,7 +27,7 @@ struct SShader
 
 	void Clear()
 	{
-		if (VertexBuffer) VertexBuffer->Release();
+		if (ConstantBuffer) ConstantBuffer->Release();
 		if (InputLayout) InputLayout->Release();
 		if (VertexShader) VertexShader->Release();
 		if (PixelShader) PixelShader->Release();

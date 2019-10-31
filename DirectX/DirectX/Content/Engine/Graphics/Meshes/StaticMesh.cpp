@@ -14,6 +14,7 @@ CStaticMesh::CStaticMesh(class CRenderer* InRenderer)
 CStaticMesh::~CStaticMesh()
 {
 	Shader.Clear();
+	delete[] Vertices;
 }
 
 
