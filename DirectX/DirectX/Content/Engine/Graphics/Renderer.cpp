@@ -155,26 +155,49 @@ void CRenderer::DrawAll()
 	Setup->ClearView();
 
 
-	SMatrix4 World;
-	World.Identity();
-
-	SMatrix4 View;
-	SMatrix4 Projection;
-	View.Indentity();
-
-	SVector2i Size = Window->GetWindowSize();
-	World.SetTranslate(0.0f, 0.0f, 5.0f);
-	// This needs to change to get the window information.
-	Projection = SMatrix4::PersepctiveFovLH(TO_RADIAN(45.0f), Size[X] / Size[Y], 1.0f, 100.0f);
+	
 
 
-	CBuffer CBValues;
-	CBValues.RedFactor = 0.0f;
-	CBValues.ViewMatrix = World * View * Projection;
+
 
 	ID3D11Buffer* Buffer;
 	for (uint i = 0; i < Objects.size(); ++i)
 	{
+		SMatrix4 World;
+
+		SMatrix4 Scale;
+		SMatrix4 Rotation;
+		SMatrix4 Position;
+
+		TempRotation += 0.01f;
+
+		Scale.SetScale(Objects[i]->Transform.GetWorldScale());
+		Rotation.SetRotate(Objects[i]->Transform.GetWorldRotation());
+		Position.SetTranslate(Objects[i]->Transform.GetWorldLocation());
+
+
+		//Scale.SetScale(1.0f, 1.0f, 1.0f);
+		//Rotation.SetRotate(TO_RADIAN(0.0f), TO_RADIAN(0.0f), TO_RADIAN(0.0f));
+		//Position.SetTranslate(0.0f, 0.0f, 5.0f);
+
+
+		World = Scale * Rotation * Position;
+
+		SMatrix4 View;
+		SMatrix4 Projection;
+		View.Identity();
+
+		SVector2i Size = Window->GetWindowSize();
+		//World.SetTranslate(0.0f, 0.0f, 5.0f);
+		Projection = SMatrix4::PersepctiveFovLH(TO_RADIAN(45.0f), (float)Size[X] / (float)Size[Y], 0.0001f, 1000.0f);
+
+
+
+		CBuffer CBValues;
+		CBValues.RedFactor = 1.0f;
+		CBValues.ViewMatrix = World * View * Projection;
+
+
 		Buffer = Objects[i]->GetShader().ConstantBuffer;
 		Setup->GetDeviceContext()->UpdateSubresource(Buffer, 0, 0, &CBValues, 0, 0);
 		Setup->GetDeviceContext()->VSSetConstantBuffers(0, 1, &Buffer);

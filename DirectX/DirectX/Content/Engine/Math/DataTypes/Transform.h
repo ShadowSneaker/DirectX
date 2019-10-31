@@ -16,13 +16,13 @@ private:
 
 public:
 	// The Transform's Position Component.
-	SVector Location;
+	SVector Location{ 0.0f };
 
 	// The Transform's Rotation Component.
-	SQuaternion Rotation;
+	SQuaternion Rotation{ 0.0f };
 
 	// The Transform's Scale Component.
-	SVector Scale;
+	SVector Scale{ 1.0f };
 
 
 public:

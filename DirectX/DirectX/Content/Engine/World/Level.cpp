@@ -35,7 +35,13 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 	}
 
 
-	SpawnObject<CTestObject>();
+	CTestObject* Test = SpawnObject<CTestObject>();
+	Test->Transform.Location = SVector{ 0.0f, 0.0f, 5.0f };
+	Test->Transform.Scale = 0.5f;
+
+	Test = SpawnObject<CTestObject>();
+	Test->Transform.Location = SVector{ 1.0f, 0.0f, 5.0f };
+	Test->Transform.Scale = 0.8f;
 }
 
 
@@ -47,7 +53,10 @@ CLevel::~CLevel()
 
 void CLevel::Update()
 {
-
+	for (uint i = 0; i < Objects.size(); ++i)
+	{
+		Objects[i]->Update();
+	}
 }
 
 

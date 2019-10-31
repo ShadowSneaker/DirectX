@@ -1,5 +1,6 @@
 #pragma once
 #include "../../Math/DataTypes/Vertex.h"
+#include "../../Math/DataTypes/Transform.h"
 
 #include <D3D11.h>
 #include <DXGI.h>
@@ -49,6 +50,9 @@ protected:
 	uint VertexCount;
 
 	SShader Shader;
+
+public:
+	STransform Transform;
 
 
 public:

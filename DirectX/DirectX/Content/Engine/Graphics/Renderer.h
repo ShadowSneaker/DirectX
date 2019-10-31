@@ -49,8 +49,7 @@ private:
 
 	/// temp
 
-	//ID3D11Buffer* VertexBuffer;
-	//SShader Shader;
+	float TempRotation{ 0.0f };
 
 	// TODO:
 	// MOVE TO INPUT CLASS

@@ -443,7 +443,7 @@ public:
 	}
 
 
-	static SMatrix<Columns, Rows> Indentity()
+	static SMatrix<Columns, Rows> MatrixIndentity()
 	{
 		SMatrix<Columns, Rows> Matrix;
 		Matrix.Identity();
@@ -867,7 +867,7 @@ inline SMatrix<4, 4> SMatrix<Columns, Rows>::SetTranslate(const SVector4& Locati
 
 	for (uint i = 0; i < 4; ++i)
 	{
-		Matrix[W][i] = Location[i];
+		Matrix[EAxis::W][i] = Location[i];
 	}
 	*this = Matrix;
 	return *this;
@@ -1006,6 +1006,7 @@ template <uint Columns, uint Rows>
 inline SMatrix<4, 4> SMatrix<Columns, Rows>::SetRotate(const SQuaternion& Rotation)
 {
 	ASSERT(Columns == 4 && Rows == 4, "The matrix must be a 4x4 matrix in order to be rotated.");
+	Identity();
 
 	*this *= RotatePitch(Rotation.X);
 	*this *= RotateYaw(Rotation.Y);

@@ -10,6 +10,8 @@ CDirectXSetup::CDirectXSetup(CWindow* InWindow)
 
 CDirectXSetup::~CDirectXSetup()
 {
+	
+	if (ZBuffer) ZBuffer->Release();
 	if (SwapChain) SwapChain->Release();
 	if (DeviceContext) DeviceContext->Release();
 	if (Device) Device->Release();
@@ -82,7 +84,32 @@ HRESULT CDirectXSetup::Initialise()
 
 	BackBufferTexture->Release();
 
-	DeviceContext->OMSetRenderTargets(1, &BackBuffer, NULL);
+
+	D3D11_TEXTURE2D_DESC Texture2DDesc;
+	ZeroMemory(&Texture2DDesc, sizeof(Texture2DDesc));
+	Texture2DDesc.Width = Width;
+	Texture2DDesc.Height = Height;
+	Texture2DDesc.ArraySize = 1;
+	Texture2DDesc.MipLevels = 1;
+	Texture2DDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	Texture2DDesc.SampleDesc.Count = SwapChainDesc.SampleDesc.Count;
+	Texture2DDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	Texture2DDesc.Usage = D3D11_USAGE_DEFAULT;
+
+	ID3D11Texture2D* ZBufferTexture;
+	HR = Device->CreateTexture2D(&Texture2DDesc, NULL, &ZBufferTexture);
+
+	if (FAILED(HR)) return HR;
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC DSVDesc;
+	ZeroMemory(&DSVDesc, sizeof(DSVDesc));
+	DSVDesc.Format = Texture2DDesc.Format;
+	DSVDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+
+	Device->CreateDepthStencilView(ZBufferTexture, &DSVDesc, &ZBuffer);
+	ZBufferTexture->Release();
+
+	DeviceContext->OMSetRenderTargets(1, &BackBuffer, ZBuffer);
 
 	D3D11_VIEWPORT Viewport;
 	Viewport.TopLeftX = 0;
@@ -101,4 +128,5 @@ HRESULT CDirectXSetup::Initialise()
 void CDirectXSetup::ClearView()
 {
 	DeviceContext->ClearRenderTargetView(BackBuffer, ClearColour);
+	DeviceContext->ClearDepthStencilView(ZBuffer, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 }

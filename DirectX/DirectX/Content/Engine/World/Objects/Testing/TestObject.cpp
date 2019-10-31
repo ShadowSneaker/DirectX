@@ -8,5 +8,14 @@ CTestObject::CTestObject(SObjectBase Core)
 {
 	Cube = new CCube{ GetRenderer() };
 	Cube->SetShader("Shaders.hlsl");
+	Cube->Transform.SetParent(&Transform);
 	GetRenderer()->AddMesh(Cube);
+}
+
+
+void CTestObject::Update()
+{
+	TempRotate += 0.01f;
+
+	Transform.Rotation = SQuaternion{ TO_RADIAN(TempRotate), TO_RADIAN(TempRotate / 2.0f), TO_RADIAN(TempRotate) };
 }

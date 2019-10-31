@@ -17,6 +17,8 @@ class CDirectXSetup
 
 	ID3D11RenderTargetView* BackBuffer{ NULL };
 
+	ID3D11DepthStencilView* ZBuffer;
+
 
 	CWindow* Window;
 
