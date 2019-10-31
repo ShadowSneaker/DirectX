@@ -1,6 +1,7 @@
 #pragma once
 #include "../Core/Systems/FileReader.h"
 #include "Objects/WorldObject.h"
+#include "World.h"
 
 #include <vector>
 
@@ -21,9 +22,6 @@ private:
 
 	// A list of all the stored objects in this level.
 	std::vector<class CWorldObject*> Objects;
-
-	// A reference to the world object.
-	class CWorld* World;
 
 
 
@@ -49,7 +47,7 @@ public:
 	/// Getters
 
 	// 
-	inline class CWorld* GetWorld() const { return World; }
+	//inline class CWorld* GetWorld() const { return World; }
 
 	// 
 	inline std::string GetLevelName() const { return FilePath.FileName; }
@@ -171,7 +169,9 @@ Type* CLevel::SpawnObject(SVector Location, SQuaternion Rotation, SVector Scale)
 template <typename Type>
 Type* CLevel::SpawnObject(STransform Transform)
 {
-	Type* NewObject = new Type{};
+	SObjectBase Core = GetWorld()->GetCore();
+	Core.Transform = Transform;
+	Type* NewObject = new Type{ Core };
 	if (NewObject)
 	{
 		Objects.push_back(NewObject);

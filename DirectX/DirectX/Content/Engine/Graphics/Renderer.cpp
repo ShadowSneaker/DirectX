@@ -26,58 +26,28 @@ CRenderer::CRenderer(HINSTANCE HandleInstance, int CommandShow)
 
 CRenderer::~CRenderer()
 {
-	DeleteShaders();
+	
 }
 
 
 HRESULT CRenderer::Initialise()
 {
 	//AddCluster(new CCube{ this }, "Shaders.hlsl");
-	CCube* Cube = new CCube{ this };
-	Cube->SetShader("Shaders.hlsl");
-	Objects.push_back(Cube);
-	
-
+	//CCube* Cube = new CCube{ this };
+	//Cube->SetShader("Shaders.hlsl");
+	//Objects.push_back(Cube);
 
 	return S_OK;
+
 }
 
 
-void CRenderer::DeleteShaders()
+void CRenderer::AddMesh(CStaticMesh* Mesh)
 {
-	//for (auto Index = Shaders.begin(); Index != Shaders.end(); ++Index)
-	//{
-	//	Index->second.InputLayout->Release();
-	//	Index->second.PixelShader->Release();
-	//	Index->second.VertexShader->Release();
-	//}
-}
-
-
-void CRenderer::AddCluster(class CStaticMesh* Mesh, std::string ShaderFilePath, bool UseDefaultPath)
-{
-	//SObjectCluster Cluster;
-	//Cluster.Mesh = Mesh;
-	//if (UseDefaultPath)
-	//{
-	//	Cluster.FilePath.FileName = ShaderFilePath;
-	//	Cluster.FilePath.FilePath = DefaultFilePath;
-	//}
-	//else
-	//{
-	//	Cluster.FilePath = SFilePath::GetFileName(ShaderFilePath);
-	//}
-	//
-	//
-	//// Check if the used shader doesn't exists.
-	//if (!Shaders.count(Cluster.FilePath.GetFilePath()))
-	//{
-	//	// Create Shader.
-	//	SShader Shader = CreateShader(Cluster.FilePath.GetFilePath());
-	//}
-	//
-	//
-	//Objects.push_back(Cluster);
+	if (Mesh)
+	{
+		Objects.push_back(Mesh);
+	}
 }
 
 
@@ -96,26 +66,23 @@ SShader CRenderer::SetShader(CStaticMesh* Mesh, std::string FilePath, bool UseDe
 
 
 	HRESULT HR = S_OK;
-	SShader Shader;
+	SShader Shader{};
 
 	D3D11_BUFFER_DESC BufferDesc;
 	ZeroMemory(&BufferDesc, sizeof(BufferDesc));
 	BufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	//BufferDesc.ByteWidth = sizeof(SModelVertex) * Mesh->GetVertexCount();
-	BufferDesc.ByteWidth = sizeof(SVertexBase) * Mesh->GetVertexCount();
+	BufferDesc.ByteWidth = sizeof(Mesh->GetVertices()[0]) * Mesh->GetVertexCount();
 	BufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	BufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 	HR = Setup->GetDevice()->CreateBuffer(&BufferDesc, NULL, &Shader.VertexBuffer);
 
-	if (FAILED(HR)) Shader;
+	if (FAILED(HR)) return Shader;
 
 	D3D11_MAPPED_SUBRESOURCE MS;
-
 	Setup->GetDeviceContext()->Map(Shader.VertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &MS);
-
-	memcpy(MS.pData, Mesh->GetVertices(), sizeof(Mesh->GetVertices()));
-
+	memcpy(MS.pData, Mesh->GetVertices(), sizeof(Mesh->GetVertices()[0]) * Mesh->GetVertexCount());
 	Setup->GetDeviceContext()->Unmap(Shader.VertexBuffer, NULL);
 
 
@@ -178,19 +145,19 @@ void CRenderer::DrawAll()
 	Setup->ClearView();
 
 	ID3D11Buffer* Buffer;
-
 	for (uint i = 0; i < Objects.size(); ++i)
 	{
 		Buffer = Objects[i]->GetShader().VertexBuffer;
-
+	
 		//uint Stride = sizeof(SModelVertex);
 		uint Stride = sizeof(SVertexBase);
 		uint Offset = 0;
 		Setup->GetDeviceContext()->IASetVertexBuffers(0, 1, &Buffer, &Stride, &Offset);
 		Setup->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-
+	
+	
 		Setup->GetDeviceContext()->Draw(Objects[i]->GetVertexCount(), 0);
 	}
+
 	Setup->GetSwapChain()->Present(0, 0);
 }

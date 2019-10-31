@@ -23,7 +23,7 @@ struct SObjectBase
 	//class CCamera* Camera;
 
 	// A reference to the image manager.
-	//class CImageManager* ImageManager;
+	class CRenderer* Renderer;
 
 	// A reference to the input manager.
 	//class CInputManager* InputManager;
@@ -44,6 +44,9 @@ private:
 	bool Enable{ true };
 
 	SObjectBase Base;
+
+public:
+	bool UpdateBeforeBegin{ false };
 
 
 public:
@@ -95,7 +98,7 @@ public:
 	//inline SVector2i GetWindowSize() const { return Base.WindowSize; }
 
 	// Returns a reference to the Image manager.
-	//inline class CImageManager* GetImageManager() const { return Base.ImageManager; }
+	inline class CRenderer* GetRenderer() const { return Base.Renderer; }
 
 	// Returns a reference to the timer manager.
 	inline CTimerManager* GetTimerManager() const { return Base.TimerManager; }

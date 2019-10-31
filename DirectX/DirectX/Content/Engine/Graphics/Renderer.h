@@ -50,6 +50,12 @@ private:
 	std::vector<CStaticMesh*> Objects;
 
 
+
+	/// temp
+
+	//ID3D11Buffer* VertexBuffer;
+	//SShader Shader;
+
 	// TODO:
 	// MOVE TO INPUT CLASS
 	MSG Message{ 0 };
@@ -73,20 +79,15 @@ public:
 private:
 	HRESULT Initialise();
 	
-	void DeleteShaders();
 
 
 public:
 
-	// A safe way to add clusters to the renderer.
-	// Creates a cluster while making sure that the shader has been created.
-	// If the shader does not exist, then it will be created here.
-	// @param Mesh - The static mesh that should be drawn.
-	// @param ShaderFilePath - The file location for the shader this object will use.
-	// @param UseDefaultPath - Should this use the default file path to find the shader.
-	void AddCluster(CStaticMesh* Mesh, std::string ShaderFilePath, bool UseDefaultPath = true);
+	void AddMesh(CStaticMesh* Mesh);
 
 	SShader SetShader(CStaticMesh* Mesh, std::string FilePath, bool UseDefaultPath = true);
+
+
 
 	void DrawAll();
 };

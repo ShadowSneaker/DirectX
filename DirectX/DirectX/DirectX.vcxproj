@@ -183,6 +183,7 @@
     <ClInclude Include="Content\Engine\World\Objects\ObjectBase.h" />
     <ClInclude Include="Content\Engine\World\ObjectPool.h" />
     <ClInclude Include="Content\Engine\World\Objects\Puppet.h" />
+    <ClInclude Include="Content\Engine\World\Objects\Testing\TestObject.h" />
     <ClInclude Include="Content\Engine\World\Objects\WorldObject.h" />
     <ClInclude Include="Content\Engine\World\World.h" />
   </ItemGroup>
@@ -221,6 +222,7 @@
     <ClCompile Include="Content\Engine\World\Objects\Character.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\ObectBase.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Puppet.cpp" />
+    <ClCompile Include="Content\Engine\World\Objects\Testing\TestObject.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\WorldObject.cpp" />
     <ClCompile Include="Content\Engine\World\World.cpp" />
   </ItemGroup>

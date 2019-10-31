@@ -1,7 +1,10 @@
 #include "World.h"
 #include "ObjectPool.h"
-#include "..//Graphics/Renderer.h"
+#include "../Graphics/Renderer.h"
 #include "../Math/Physics/Physics.h"
+#include "../Core/Systems/TimerManager.h"
+
+#include "Level.h"
 
 
 CWorld::CWorld(HINSTANCE HandleInstance, int CommandShow)
@@ -13,6 +16,10 @@ CWorld::CWorld(HINSTANCE HandleInstance, int CommandShow)
 	Physics = new CPhysics{};
 
 	ObjectPool = new CObjectPool{ this };
+
+	TimerManager = new CTimerManager{};
+
+	LoadLevel("");
 }
 
 
@@ -83,6 +90,15 @@ void CWorld::LoadLevel(std::string File, bool UseDefaultFilePath)
 }
 
 
+std::string CWorld::GetLevelName() const
+{
+	 if (!Levels.empty()) 
+	 { 
+		 return Levels[0]->GetLevelName(); 
+	 } 
+}
+
+
 CLevel* CWorld::GetLevelByName(std::string Name) const
 {
 	for (uint i = 0; i < Levels.size(); ++i)
@@ -93,6 +109,17 @@ CLevel* CWorld::GetLevelByName(std::string Name) const
 		}
 	}
 	return nullptr;
+}
+
+
+SObjectBase CWorld::GetCore()
+{
+	SObjectBase Base;
+	Base.Physics = Physics;
+	Base.Renderer = Renderer;
+	Base.TimerManager = TimerManager;
+	Base.World = this;
+	return Base;
 }
 
 
@@ -121,4 +148,58 @@ void CWorld::DeleteObject(CWorldObject* Object, CLevel* Level)
 			Levels[0]->DeleteObject(Object);
 		}
 	}
+}
+
+
+
+template <typename Type>
+Type* CWorld::SpawnObject(CLevel* Level)
+{
+	return SpawnObject<Type>(STransform{ 0.0f, 0.0f, 1.0f }, Level);
+}
+
+
+template <typename Type>
+Type* CWorld::SpawnObject(SVector Location, CLevel* Level)
+{
+	return SpawnObject<Type>(STransform{ Location, 0.0f, 1.0f }, Level);
+}
+
+
+template <typename Type>
+Type* CWorld::SpawnObject(SVector Location, SQuaternion Rotation, CLevel* Level)
+{
+	return SpawnObject<Type>(STransform{ Location, Rotation, 1.0f }, Level);
+}
+
+
+template <typename Type>
+Type* CWorld::SpawnObject(SQuaternion Rotation, SVector Scale, CLevel* Level)
+{
+	return SpawnObject<Type>(STransform{ 0.0f, Rotation, Scale }, Level);
+}
+
+
+template <typename Type>
+Type* CWorld::SpawnObject(SVector Location, SVector Scale, CLevel* Level)
+{
+	return SpawnObject<Type>(STransform{ Location, 0.0f, Scale }, Level);
+}
+
+
+template <typename Type>
+Type* CWorld::SpawnObject(SVector Location, SQuaternion Rotation, SVector Scale, CLevel* Level)
+{
+	return SpawnObject<Type>(STransform{ Location, Rotation, Scale }, Level);
+}
+
+
+template <typename Type>
+Type* CWorld::SpawnObject(STransform Transform, CLevel* Level)
+{
+	if (Level)
+	{
+		Level->SpawnObject<Type>(Transform);
+	}
+	Levels[0]->SpawnObject<Type>(Transform);
 }

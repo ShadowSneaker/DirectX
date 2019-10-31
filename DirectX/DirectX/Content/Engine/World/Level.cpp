@@ -1,5 +1,6 @@
 #include "Level.h"
 #include "World.h"
+#include "Objects/Testing/TestObject.h"
 
 
 const std::string CLevel::DefaultFilePath{ "Content/Assets/Levels/" };
@@ -32,6 +33,9 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 		// Debug->LogError("Error: Could not open level: " + FilePath.GetFilePath());
 		delete this;
 	}
+
+
+	SpawnObject<CTestObject>();
 }
 
 
