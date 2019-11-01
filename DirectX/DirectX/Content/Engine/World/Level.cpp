@@ -1,6 +1,7 @@
 #include "Level.h"
 #include "World.h"
 #include "Objects/Testing/TestObject.h"
+#include "Objects/Testing/TestPlayer.h"
 
 
 const std::string CLevel::DefaultFilePath{ "Content/Assets/Levels/" };
@@ -36,12 +37,14 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 
 
 	CTestObject* Test = SpawnObject<CTestObject>();
-	Test->Transform.Location = SVector{ 0.0f, 0.0f, 5.0f };
+	Test->Transform.Location = SVector{ -1.5f, 0.0f, 5.0f };
 	Test->Transform.Scale = 0.5f;
 
 	Test = SpawnObject<CTestObject>();
 	Test->Transform.Location = SVector{ 1.0f, 0.0f, 5.0f };
 	Test->Transform.Scale = 0.8f;
+
+	SpawnObject<CTestPlayer>();
 }
 
 

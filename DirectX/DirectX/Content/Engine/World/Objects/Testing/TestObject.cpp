@@ -13,6 +13,12 @@ CTestObject::CTestObject(SObjectBase Core)
 }
 
 
+CTestObject::~CTestObject()
+{
+	GetRenderer()->DeleteMesh(Cube);
+}
+
+
 void CTestObject::Update()
 {
 	TempRotate += 0.01f;

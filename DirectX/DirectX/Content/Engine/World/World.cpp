@@ -3,6 +3,7 @@
 #include "../Graphics/Renderer.h"
 #include "../Math/Physics/Physics.h"
 #include "../Core/Systems/TimerManager.h"
+#include "../Core/Systems/InputManager.h"
 
 #include "Level.h"
 
@@ -14,10 +15,12 @@ CWorld::CWorld(HINSTANCE HandleInstance, int CommandShow)
 	if (!Renderer) exit(0);
 
 	Physics = new CPhysics{};
-
 	ObjectPool = new CObjectPool{ this };
-
 	TimerManager = new CTimerManager{};
+	InputManager = new CInputManager{};
+
+
+
 
 	LoadLevel("");
 }
@@ -35,7 +38,7 @@ CWorld::~CWorld()
 
 void CWorld::Play()
 {
-	while (Playing && Renderer->GetMsg().message != WM_QUIT)
+	while (Playing && InputManager->GetMsg().message != WM_QUIT)
 	{
 		Inputs();
 		Update();
@@ -46,7 +49,7 @@ void CWorld::Play()
 
 void CWorld::Inputs()
 {
-	
+	InputManager->Update();
 }
 
 
@@ -121,6 +124,7 @@ SObjectBase CWorld::GetCore()
 	Base.Physics = Physics;
 	Base.Renderer = Renderer;
 	Base.TimerManager = TimerManager;
+	Base.InputManager =InputManager;
 	Base.World = this;
 	return Base;
 }

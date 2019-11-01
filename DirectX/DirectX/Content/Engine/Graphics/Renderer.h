@@ -44,7 +44,7 @@ private:
 	ID3D11Buffer* VertexBuffer;
 
 
-
+	class CCamera* SelectedCamera{ nullptr };
 
 
 	/// temp
@@ -53,9 +53,9 @@ private:
 
 	// TODO:
 	// MOVE TO INPUT CLASS
-	MSG Message{ 0 };
+	//MSG Message{ 0 };
 public:
-	inline MSG GetMsg() const { return Message; }
+	//inline MSG GetMsg() const { return Message; }
 
 public:
 	/// Constructors.
@@ -74,14 +74,22 @@ public:
 private:
 	HRESULT Initialise();
 	
-
+	void DeleteAllMeshes();
 
 public:
 
 	void AddMesh(CStaticMesh* Mesh);
 
+	void DeleteMesh(CStaticMesh* Mesh);
+
+
+	/// Setters 
+
 	SShader SetShader(CStaticMesh* Mesh, std::string FilePath, bool UseDefaultPath = true);
 
+	// Sets a specified camera to be the view camera.
+	// @param Camera - The camera to view from.
+	inline void SetCamera(class CCamera* Camera) { SelectedCamera = Camera; }
 
 
 	void DrawAll();

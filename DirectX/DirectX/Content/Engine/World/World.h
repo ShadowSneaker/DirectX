@@ -22,6 +22,8 @@ class CWorld
 
 	class CTimerManager* TimerManager;
 
+	class CInputManager* InputManager;
+
 
 	// A list of all the objects in the world. - this will likely change to hold all the levels.
 	// The level class will hold all the objects.

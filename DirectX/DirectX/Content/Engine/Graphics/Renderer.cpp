@@ -1,5 +1,6 @@
 #include "Renderer.h"
 #include "Meshes/Primitives/Cube.h"
+#include "Camera.h"
 
 
 CRenderer::CRenderer(HINSTANCE HandleInstance, int CommandShow)
@@ -38,7 +39,16 @@ HRESULT CRenderer::Initialise()
 	//Objects.push_back(Cube);
 
 	return S_OK;
+}
 
+
+void CRenderer::DeleteAllMeshes()
+{
+	while (!Objects.empty())
+	{
+		delete Objects[Objects.size() - 1];
+		Objects.pop_back();
+	}
 }
 
 
@@ -47,6 +57,23 @@ void CRenderer::AddMesh(CStaticMesh* Mesh)
 	if (Mesh)
 	{
 		Objects.push_back(Mesh);
+	}
+}
+
+
+void CRenderer::DeleteMesh(CStaticMesh* Mesh)
+{
+	if (Mesh)
+	{
+		for (uint i = 0; i < Objects.size(); ++i)
+		{
+			if (Objects[i] == Mesh)
+			{
+				Objects.erase(Objects.begin() + i);
+				break;
+			}
+		}
+		delete Mesh;
 	}
 }
 
@@ -63,7 +90,7 @@ SShader CRenderer::SetShader(CStaticMesh* Mesh, std::string FilePath, bool UseDe
 	{
 		File = SFilePath::GetFileName(FilePath);
 	}
-
+	
 
 	HRESULT HR = S_OK;
 	SShader Shader{};
@@ -144,11 +171,11 @@ void CRenderer::DrawAll()
 {
 	// TODO:
 	// TEMPORARY, MOVE TO INPUT CLASS
-	if (PeekMessage(&Message, NULL, 0, 0, PM_REMOVE))
-	{
-		TranslateMessage(&Message);
-		DispatchMessage(&Message);
-	}
+	//if (PeekMessage(&Message, NULL, 0, 0, PM_REMOVE))
+	//{
+	//	TranslateMessage(&Message);
+	//	DispatchMessage(&Message);
+	//}
 
 
 	/// Actual Draw stuff.
@@ -185,13 +212,22 @@ void CRenderer::DrawAll()
 
 		SMatrix4 View;
 		SMatrix4 Projection;
-		View.Identity();
+		
+		
+		if (SelectedCamera)
+		{
+			View = SelectedCamera->GetViewMatrix();
+		}
+		else
+		{
+			View.Identity();
+		}
 
 		SVector2i Size = Window->GetWindowSize();
 		//World.SetTranslate(0.0f, 0.0f, 5.0f);
 		Projection = SMatrix4::PersepctiveFovLH(TO_RADIAN(45.0f), (float)Size[X] / (float)Size[Y], 0.0001f, 1000.0f);
 
-
+		
 
 		CBuffer CBValues;
 		CBValues.RedFactor = 1.0f;

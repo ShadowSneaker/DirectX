@@ -152,10 +152,12 @@
     <ClInclude Include="Content\Engine\Components\Colliders\SphereComponent.h" />
     <ClInclude Include="Content\Engine\Components\Component.h" />
     <ClInclude Include="Content\Engine\Core\Systems\FileReader.h" />
+    <ClInclude Include="Content\Engine\Core\Systems\InputManager.h" />
     <ClInclude Include="Content\Engine\Core\Systems\Time.h" />
     <ClInclude Include="Content\Engine\Core\Systems\TimerManager.h" />
     <ClInclude Include="Content\Engine\Font\Font.h" />
     <ClInclude Include="Content\Engine\Core\EngineSetup.h" />
+    <ClInclude Include="Content\Engine\Graphics\Camera.h" />
     <ClInclude Include="Content\Engine\Graphics\DirectXSetup.h" />
     <ClInclude Include="Content\Engine\Graphics\Meshes\Primitives\Cube.h" />
     <ClInclude Include="Content\Engine\Graphics\Meshes\StaticMesh.h" />
@@ -184,6 +186,7 @@
     <ClInclude Include="Content\Engine\World\ObjectPool.h" />
     <ClInclude Include="Content\Engine\World\Objects\Puppet.h" />
     <ClInclude Include="Content\Engine\World\Objects\Testing\TestObject.h" />
+    <ClInclude Include="Content\Engine\World\Objects\Testing\TestPlayer.h" />
     <ClInclude Include="Content\Engine\World\Objects\WorldObject.h" />
     <ClInclude Include="Content\Engine\World\World.h" />
   </ItemGroup>
@@ -197,10 +200,12 @@
     <ClCompile Include="Content\Engine\Components\Component.cpp" />
     <ClCompile Include="Content\Engine\Core\EngineSetup.cpp" />
     <ClCompile Include="Content\Engine\Core\Systems\FileReader.cpp" />
+    <ClCompile Include="Content\Engine\Core\Systems\InputManager.cpp" />
     <ClCompile Include="Content\Engine\Core\Systems\Time.cpp" />
     <ClCompile Include="Content\Engine\Core\Systems\TimerManager.cpp" />
     <ClCompile Include="Content\Engine\Font\Font.cpp" />
     <ClCompile Include="Content\Engine\Core\Source.cpp" />
+    <ClCompile Include="Content\Engine\Graphics\Camera.cpp" />
     <ClCompile Include="Content\Engine\Graphics\DirectXSetup.cpp" />
     <ClCompile Include="Content\Engine\Graphics\Meshes\Primitives\Cube.cpp" />
     <ClCompile Include="Content\Engine\Graphics\Meshes\StaticMesh.cpp" />
@@ -223,6 +228,7 @@
     <ClCompile Include="Content\Engine\World\Objects\ObectBase.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Puppet.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Testing\TestObject.cpp" />
+    <ClCompile Include="Content\Engine\World\Objects\Testing\TestPlayer.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\WorldObject.cpp" />
     <ClCompile Include="Content\Engine\World\World.cpp" />
   </ItemGroup>

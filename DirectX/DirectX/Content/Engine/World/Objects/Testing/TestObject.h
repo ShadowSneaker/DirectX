@@ -13,6 +13,7 @@ class CTestObject :public CWorldObject
 public:
 	CTestObject(SObjectBase Core);
 
+	~CTestObject();
 
 
 	virtual void Update() override;

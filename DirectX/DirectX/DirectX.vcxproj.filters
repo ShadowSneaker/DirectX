@@ -141,6 +141,15 @@
     <ClInclude Include="Content\Engine\World\Objects\Testing\TestObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Content\Engine\Graphics\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Engine\Core\Systems\InputManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Engine\World\Objects\Testing\TestPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\Engine\Core\Source.cpp">
@@ -252,6 +261,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Content\Engine\World\Objects\Testing\TestObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Engine\Graphics\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Engine\Core\Systems\InputManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Engine\World\Objects\Testing\TestPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

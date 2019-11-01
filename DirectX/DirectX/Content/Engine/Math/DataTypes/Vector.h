@@ -416,7 +416,7 @@ public:
 		ASSERT(Size >= 2, "Vector size is too small");
 		Vector<Size, Element> Vec;
 		Vec = (Element)0.0f;
-		Vec[Y] = (Element)-1.0f;
+		Vec[EAxis::Y] = (Element)-1.0f;
 		return Vec;
 	}
 
@@ -428,7 +428,7 @@ public:
 		ASSERT(Size >= 1, "Vector size is too small");
 		Vector<Size, Element> Vec;
 		Vec = (Element)0.0f;
-		Vec[X] = (Element)-1.0f;
+		Vec[EAxis::X] = (Element)-1.0f;
 		return Vec;
 	}
 
@@ -440,7 +440,7 @@ public:
 		ASSERT(Size >= 1, "Vector size is too small");
 		Vector<Size, Element> Vec;
 		Vec = (Element)0.0f;
-		Vec[X] = (Element)1.0f;
+		Vec[EAxis::X] = (Element)1.0f;
 		return Vec;
 	}
 
@@ -452,7 +452,7 @@ public:
 		ASSERT(Size >= 3, "Vector size is too small");
 		Vector<Size, Element> Vec;
 		Vec = (Element)0.0f;
-		Vec[Z] = (Element)1.0f;
+		Vec[EAxis::Z] = (Element)1.0f;
 		return Vec;
 	}
 
@@ -464,7 +464,7 @@ public:
 		ASSERT(Size >= 3, "Vector size is too small");
 		Vector<Size, Element> Vec;
 		Vec = (Element)0.0f;
-		Vec[Z] = (Element)-1.0f;
+		Vec[EAxis::Z] = (Element)-1.0f;
 		return Vec;
 	}
 

@@ -26,7 +26,7 @@ struct SObjectBase
 	class CRenderer* Renderer;
 
 	// A reference to the input manager.
-	//class CInputManager* InputManager;
+	class CInputManager* InputManager;
 
 	// A reference to the timer manager.
 	CTimerManager* TimerManager{ nullptr };
@@ -104,5 +104,5 @@ public:
 	inline CTimerManager* GetTimerManager() const { return Base.TimerManager; }
 
 	// Returns a reference to the input manager.
-	//inline class CInputManager* GetInputManager() const { return Base.InputManager; }
+	inline class CInputManager* GetInputManager() const { return Base.InputManager; }
 };
