@@ -169,16 +169,6 @@ SShader CRenderer::SetShader(CStaticMesh* Mesh, std::string FilePath, bool UseDe
 
 void CRenderer::DrawAll()
 {
-	// TODO:
-	// TEMPORARY, MOVE TO INPUT CLASS
-	//if (PeekMessage(&Message, NULL, 0, 0, PM_REMOVE))
-	//{
-	//	TranslateMessage(&Message);
-	//	DispatchMessage(&Message);
-	//}
-
-
-	/// Actual Draw stuff.
 	Setup->ClearView();
 
 

@@ -8,6 +8,7 @@ private:
 	/// Properties
 
 	class CCamera* Camera;
+	float TempRotate{ 0.0f };
 
 public:
 	/// Constructors.
@@ -26,4 +27,6 @@ public:
 	void MoveSideways(float Axis);
 
 	void MoveUp(float Axis);
+
+	void Turn(float Axis);
 };

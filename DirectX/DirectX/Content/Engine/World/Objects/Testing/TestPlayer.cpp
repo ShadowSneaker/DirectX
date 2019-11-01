@@ -21,12 +21,15 @@ CTestPlayer::~CTestPlayer()
 
 void CTestPlayer::SetupInput(CInputManager* Input)
 {
-	Input->BindAxis("MoveForward", EKey::IE_F11, std::bind(&CTestPlayer::MoveForward, this, std::placeholders::_1));
-	Input->BindAxis("MoveForward", EKey::IE_Decimal, -1.0f);
-	Input->BindAxis("MoveSideways", EKey::IE_F7, std::bind(&CTestPlayer::MoveSideways, this, std::placeholders::_1));
-	Input->BindAxis("MoveSideways", EKey::IE_F10, -1.0f);
-	Input->BindAxis("MoveUp", EKey::IE_NumLock, std::bind(&CTestPlayer::MoveUp, this, std::placeholders::_1));
-	Input->BindAxis("MoveUp", EKey::IE_Numpad3, -1.0f);
+	Input->BindAxis("MoveForward", EKey::IE_W, std::bind(&CTestPlayer::MoveForward, this, std::placeholders::_1));
+	Input->BindAxis("MoveForward", EKey::IE_S, -1.0f);
+	Input->BindAxis("MoveSideways", EKey::IE_D, std::bind(&CTestPlayer::MoveSideways, this, std::placeholders::_1));
+	Input->BindAxis("MoveSideways", EKey::IE_A, -1.0f);
+	Input->BindAxis("MoveUp", EKey::IE_E, std::bind(&CTestPlayer::MoveUp, this, std::placeholders::_1));
+	Input->BindAxis("MoveUp", EKey::IE_Q, -1.0f);
+
+	Input->BindAxis("Turn", EKey::IE_Right, std::bind(&CTestPlayer::Turn, this, std::placeholders::_1));
+	Input->BindAxis("Turn", EKey::IE_Left, -1.0f);
 }
 
 
@@ -53,5 +56,15 @@ void CTestPlayer::MoveUp(float Value)
 	if (Value != 0.0f)
 	{
 		Camera->MoveUp(Value / 1000.0f);
+	}
+}
+
+
+void CTestPlayer::Turn(float Value)
+{
+	if (Value != 0.0f)
+	{
+		//TempRotate += Value / 10000.0f;
+		Camera->Rotate(Value / 100.0f);
 	}
 }

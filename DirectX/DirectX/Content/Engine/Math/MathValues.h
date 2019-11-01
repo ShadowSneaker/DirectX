@@ -4,6 +4,8 @@
 #define ASSERT static_assert
 #define INLINE __forceinline
 
+#define DEPRECATED(Message) [[deprecated(Message)]]
+
 
 #define MICRO_NUMBER (1.e-8f)
 #define SMALL_NUMBER (1.e-4f)

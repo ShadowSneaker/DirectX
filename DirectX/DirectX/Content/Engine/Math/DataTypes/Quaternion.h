@@ -1,13 +1,19 @@
 #pragma once
 #include "Vector.h"
-
-//#define TO_RADIAN(x) { (float) ((x) * PI / 180.0f) }
+#include "../MathStatics.h"
 
 
 
 // Quaternion
 struct SQuaternion
 {
+public:
+	/// Static Properties
+
+	// Identity quaternion.
+	static const SQuaternion Identity;
+
+
 public:
 	/// Properties
 
@@ -31,9 +37,12 @@ public:
 	/// Constructors
 
 	// Constructor, Default.
-	SQuaternion() 
+	SQuaternion()
 		:X{ 0.0f }, Y{ 0.0f }, Z{ 0.0f }, W{ 0.0f }
 	{}
+
+	// Copy Consturctor, Initiates the quaternion using another quaternion.
+	inline SQuaternion(const SQuaternion& Quaternion);
 
 	// Constructor, Initiates all properties with the same floating point value.
 	// @param InF - The floating value used to initiate all properties with.
@@ -117,6 +126,160 @@ public:
 
 
 	/// Functions
+
+	// Checks to see if this quaternion is an identity quaternion.
+	// @param Tolerance - Determines how close this quaternion can be to register as an indentity quaternion.
+	// @return - Returns true if this quaternion is an indentity quaternion.
+	inline bool IsIdentity(float Tolerance = SMALL_NUMBER) const;
+
+	// Checks to see if thsi quaternion is almost the same value as another quaternion.
+	// @param Other - The other quaternion to compare against.
+	// @param Tolerance - Determines how close this quaternion can be to the other quaternion.
+	// @return - Returns true if theis quaternion is within range of the other quaternion.
+	inline bool NearlyEqual(SQuaternion Other, float Tolerance = MICRO_NUMBER) const;
+
+	// Converts this quaternion to Euler angles (degrees).
+	SVector Euler() const;
+
+	// Normalizes this quaternion if it is large enough.
+	// If this quaternion is too small, it will return an identity quaternion.
+	// @param Tolerance - The minimum squared length of this quaternion for normalization.
+	inline void Normalize(float Tolerance = SMALL_NUMBER);
+
+	// 
+	inline float NormalizeAxis(float Axis) const;
+
+	// Rotates a vector by this quaternion.
+	// @param V - The vector to be rotated.
+	// @return - The vector after the rotation.
+	SVector RotateVector(SVector V) const;
+
+	// Rotates a vector by the inverse of this quaternion
+	// @param V - The vector to be rotated.
+	// @return - The vector after the rotation by the inverse of this quaternion.
+	SVector UnrotateVector(SVector V) const;
+
+	// @return - Returns this quaternion with W = 0.0f and V = theta * v.
+	SQuaternion Log() const;
+
+	// @note - Exp should only be used after Log().
+	SQuaternion Exp() const;
+
+	// Returns the inverse of this quaternion.
+	inline SQuaternion Inverse() const;
+
+	// Enforce that the delta between this quaternion and another one represents the shortest possible rotation angle.
+	void EnforceShortestArcWidth(const SQuaternion& Other);
+
+	// Utility check to make sure there aren't any non-finite values (NaN or Infinity) in this quaternion.
+	// @return - Returns true if there are no non-finite values in this quaternion, otherwise false.
+	bool ContainsNaN() const;
+
+	// 
+	inline float ClampAxis(float Angle) const;
+
+
+	/// Getters
+
+	// Gets a normalized copy of this quaternion.
+	// If this quaternion is too small it will return an identity quaternion.
+	// @param Tolerance - The minimum squared length of this quaternion for normalization.
+	// @return - The normalized copy of this quaternion.
+	inline SQuaternion GetNormalized(float Tolerance = SMALL_NUMBER) const;
+
+	// Returns true if this quaternion is normalized.
+	bool IsNormalized() const;
+
+	// Returns the legnth of this quaternion.
+	inline float Size() const;
+
+	// Returns the squared length of this quaternion.
+	inline float SizeSquared() const;
+
+	// Returns the angle of this quaternion.
+	inline float GetAngle() const;
+
+	// Gets the axis and angle of rotation of this quaternion.
+	// @param Axis [out] - vector of axis of the quaternion.
+	// @param Angle [out] - Angle of the quaternion.
+	// @warning - Assumes normalized quaternions.
+	void ToAxisAndAngle(SVector& Axis, float& Angle) const;
+
+	// Gets the swing and twist decomposition for a specified axis.
+	// @param InTwistAxis - Axis to use for decomposition.
+	// @param Swing [out] - Swing component quaternion.
+	// @param Twist [out] - Twist component quaternion.
+	// @warning - Assumes normalized quaternion and twist axis.
+	void ToSwingTwist(const SVector& InTwistAxis, SQuaternion& Swing, SQuaternion& Twist) const;
+
+	// Returns the right direction (X axis) after it has been rotated by this quaternion.
+	inline SVector GetAxisX() const;
+
+	// Returns the up direction (Y axis) after it has been rotated by this quaternion.
+	inline SVector GetAxisY() const;
+
+	// Returns the forward direction (Z axis) after it has been rotated by this quaternion.
+	inline SVector GetAxisZ() const;
+
+	// Returns the right direction (X axis) after it has been rotated by this quaternion.
+	inline SVector GetRightVector() const;
+
+	// Returns the up direction (Y axis) after it has been rotated by this quaternion.
+	inline SVector GetUpVector() const;
+
+	// Returns the forward direction (Z axis) after it has been rotated by this quaternion.
+	inline SVector GetForwardVector() const;
+
+	// Converts a rotation into a unit vector facing in it's direction. Equivalent to GetForwardVector().
+	inline SVector Vector() const;
+
+	// Returns the axis of rotation of the quaternion.
+	// This is the axis around which the rotation occurs to transform the canonical coordinate system to the target orientation.
+	// For the identity quaternion whihc has no such rotation, FVector(1.0f, 1.0f, 1.0f) is returned.
+	inline SVector GetRotationAxis() const;
+
+	// Find the angular distance between two rotation quaternions (in radians).
+	inline float AngularDistance(const SQuaternion& Quaternion) const;
+
+
+
+
+
+	/// Statics
+
+	inline static bool NearlyEqual(SQuaternion A, SQuaternion B, float Tolerance = MICRO_NUMBER)
+	{
+		return A.NearlyEqual(B, Tolerance);
+	}
+
+
+	// Converts a float vector of Euler angles (degrees) into a Quaternion.
+	// @param Vector - A vector of Eular angles.
+	// @return - The constructor quaternion.
+	static SQuaternion Euler(const SVector& Vector)
+	{
+		const float DivideBy2 = (TMath::Pi / 180.0f) / 2;
+
+		float SPitch;
+		float SYaw;
+		float SRoll;
+
+		float CPitch;
+		float CYaw;
+		float CRoll;
+
+		TMath::SinCos(&SPitch, &CPitch, Vector[EAxis::X] * DivideBy2);
+		TMath::SinCos(&SYaw, &CYaw, Vector[EAxis::Y] * DivideBy2);
+		TMath::SinCos(&SRoll, &CRoll, Vector[EAxis::Z] * DivideBy2);
+
+		SQuaternion Result;
+		Result.X = (CRoll * SPitch * SYaw) - (SRoll * CPitch * CYaw);
+		Result.Y = (-CRoll * SPitch * CYaw) - (SRoll * CPitch * SYaw);
+		Result.Z = (CRoll * CPitch * SYaw) - (SRoll * SPitch * CYaw);
+		Result.W = (CRoll * CPitch * CYaw) + (SRoll * SPitch * SYaw);
+
+		return Result;
+	}
 };
 
 
@@ -344,4 +507,314 @@ inline float& SQuaternion::operator[](const uint& Axis)
 	default:
 		return W;
 	}
+}
+
+
+inline bool SQuaternion::IsIdentity(float Tolerance) const
+{
+}
+
+
+inline bool SQuaternion::NearlyEqual(SQuaternion Other, float Tolerance) const
+{
+	return TMath::Abs(X - Other.X <= Tolerance && TMath::Abs(Y - Other.Y) <= Tolerance && TMath::Abs(Z - Other.Z) <= Tolerance && TMath::Abs(W - Other.W) <= Tolerance)
+		|| (TMath::Abs(X + Other.X) <= Tolerance && TMath::Abs(Y + Other.Y) <= Tolerance && TMath::Abs(Z + Other.Z) <= Tolerance && TMath::Abs(W + Other.W) <= Tolerance);
+}
+
+
+SVector SQuaternion::Euler() const
+{
+	const float SingularityTest{ (Z * X) - (W * Y) };
+	const float YawY{ 2.0f * ((W * Z) + (X * Y)) };
+	const float YawX{ (1.0f - 2.0f * (TMath::Square(Y) + TMath::Square(Z))) };
+
+	const float SingularityThreashold = 0.4999995f;
+	const float RadToDeg{ (180.0f) / TMath::Pi };
+
+	SVector Result;
+
+	if (SingularityTest < -SingularityThreashold)
+	{
+		Result[EAxis::X] = -90.0f;
+		Result[EAxis::Y] = TMath::ATan2(YawY, YawX) * RadToDeg;
+		Result[EAxis::Z] = NormalizeAxis(-Result[EAxis::Y] - (2.0f * TMath::ATan2(X, W) * RadToDeg));
+	}
+	else if (SingularityTest > SingularityThreashold)
+	{
+		Result[EAxis::X] = 90.0f;
+		Result[EAxis::Y] = TMath::ATan2(YawY, YawX) * RadToDeg;
+		Result[EAxis::Z] = NormalizeAxis(Result[EAxis::Y] - (2.0f * TMath::ATan2(X, W) * RadToDeg));
+	}
+	else
+	{
+		Result[EAxis::X] = TMath::FastAsin(2.0f * (SingularityTest)) * RadToDeg;
+		Result[EAxis::Y] = TMath::ATan2(YawY, YawX) * RadToDeg;
+		Result[EAxis::Z] = TMath::ATan2(-2.0f * ((W * X) + (Y * Z)), (1.0f - 2.0f * (TMath::Square(X) + TMath::Square(Y)))) * RadToDeg;
+	}
+	return Result;
+}
+
+
+inline void SQuaternion::Normalize(float Tolerance)
+{
+	const float SquareSum{ (X * X) + (Y * Y) + (Z * Z) + (W * W) };
+	if (SquareSum >= Tolerance)
+	{
+		const float Scale{ TMath::InvSqrt(SquareSum) };
+		X *= Scale;
+		Y *= Scale;
+		Z *= Scale;
+		W *= Scale;
+	}
+	else
+	{
+		*this = SQuaternion::Identity;
+	}
+}
+
+
+inline float SQuaternion::NormalizeAxis(float Angle) const
+{
+	Angle = ClampAxis(Angle);
+
+	if (Angle > 180.0f)
+	{
+		Angle -= 360.0f;
+	}
+	return Angle;
+}
+
+
+inline SVector SQuaternion::RotateVector(SVector V) const
+{
+	// http://people.csail.mit.edu/bkph/articles/Quaternions.pdf
+	// V' = V + 2w(Q x V) + (2Q x (Q x V))
+	// refactor:
+	// V' = V + w(2(Q x V)) + (Q x (2(Q x V)))
+	// T = 2(Q x V);
+	// V' = V + w*(T) + (Q x T)
+
+	const SVector Quat{ X, Y, Z };
+	const SVector T{ SVector::CrossProduct(Quat, V) * 2.0f };
+	return SVector{ V + (T * W) + SVector::CrossProduct(Quat, T) };
+}
+
+
+inline SVector SQuaternion::UnrotateVector(SVector V) const
+{
+	const SVector Quat{ -X, -Y, -Z };
+	const SVector T{ SVector::CrossProduct(Quat, V) * 2.0f };
+	return SVector{ V + (T * W) + SVector::CrossProduct(Quat, T) };
+}
+
+
+SQuaternion SQuaternion::Log() const
+{
+	SQuaternion Result;
+	Result.W = 0.0f;
+
+	if (TMath::Abs(W) < 1.0f)
+	{
+		const float Angle{ TMath::ACos(W) };
+		const float SinAngle{ TMath::Sin(Angle) };
+
+		if (TMath::Abs(SinAngle) >= SMALL_NUMBER)
+		{
+			const float Scale{ Angle / SinAngle };
+			Result.X = Scale * X;
+			Result.Y = Scale * Y;
+			Result.Z = Scale * Z;
+			return Result;
+		}
+	}
+
+	Result.X = X;
+	Result.Y = Y;
+	Result.Z = Z;
+	return Result;
+}
+
+
+SQuaternion SQuaternion::Exp() const
+{
+	const float Angle{ TMath::Sqrt((X * X) + (Y * Y) + (Z * Z)) };
+	const float SinAngle{ TMath::Sin(Angle) };
+
+	SQuaternion Result;
+	Result.W = TMath::Cos(Angle);
+
+	if (TMath::Abs(SinAngle) >= SMALL_NUMBER)
+	{
+		const float Scale{ SinAngle / Angle };
+		Result.X = Scale * X;
+		Result.Y = Scale * Y;
+		Result.Z = Scale * Z;
+		return Result;
+	}
+
+	Result.X = X;
+	Result.Y = Y;
+	Result.Z = Z;
+	return Result;
+}
+
+
+inline SQuaternion SQuaternion::Inverse() const
+{
+	if (IsNormalized())
+	{
+		return SQuaternion{ -X, -Y, -Z, W };
+	}
+	return SQuaternion{};
+}
+
+
+inline void SQuaternion::EnforceShortestArcWidth(const SQuaternion& Other)
+{
+	const float DotResult{ (Other | *this) };
+	const float Bias{ TMath::FloatSelect(DotResult, 1.0f, -1.0f) };
+	X *= Bias;
+	Y *= Bias;
+	Z *= Bias;
+	W *= Bias;
+}
+
+
+inline bool SQuaternion::ContainsNaN() const
+{
+	return
+		(
+			!TMath::IsFinite(X) ||
+			!TMath::IsFinite(Y) ||
+			!TMath::IsFinite(Z) ||
+			!TMath::IsFinite(W)
+			);
+}
+
+
+inline float SQuaternion::ClampAxis(float Angle) const
+{
+	Angle = TMath::FMod(Angle, 360.0f);
+	if (Angle < 0.0f)
+	{
+		Angle += 360.0f;
+	}
+	return Angle;
+}
+
+
+inline SQuaternion SQuaternion::GetNormalized(float Tolerance) const
+{
+	SQuaternion Result{ *this };
+	Result.Normalize(Tolerance);
+	return Result;
+}
+
+
+inline bool SQuaternion::IsNormalized() const
+{
+	return (TMath::Abs(1.0f - SizeSquared()) < 0.01f);
+}
+
+
+inline float SQuaternion::Size() const
+{
+	return TMath::Sqrt((X * X) + (Y * Y) + (Z * Z) + (W * W));
+}
+
+
+inline float SQuaternion::SizeSquared() const
+{
+	return ((X * X) + (Y * Y) + (Z * Z) + (W * W));
+}
+
+
+inline float SQuaternion::GetAngle() const
+{
+	return 2.0f * TMath::ACos(W);
+}
+
+
+inline void SQuaternion::ToAxisAndAngle(SVector& Axis, float& Angle) const
+{
+	Angle = GetAngle();
+	Axis = GetRotationAxis();
+}
+
+
+void SQuaternion::ToSwingTwist(const SVector& TwistAxis, SQuaternion& Swing, SQuaternion& Twist) const
+{
+	SVector Projection{ TwistAxis * SVector::DotProduct(TwistAxis, SVector{ X, Y, Z }) };
+	Twist = SQuaternion{ Projection.X, Projection.Y, Projection.Z, W };
+
+	if (Twist.SizeSquared() == 0.0f)
+	{
+		Twist = SQuaternion::Identity;
+	}
+	else
+	{
+		Twist.Normalize();
+	}
+
+	Swing = *this * Twist.Inverse();
+}
+
+
+inline SVector SQuaternion::GetAxisX() const
+{
+	return RotateVector(SVector::Right());
+}
+
+
+inline SVector SQuaternion::GetAxisY() const
+{
+	return RotateVector(SVector::Up());
+}
+
+
+inline SVector SQuaternion::GetAxisZ() const
+{
+	return RotateVector(SVector::Forward());
+}
+
+
+inline SVector SQuaternion::GetRightVector() const
+{
+	return GetAxisX();
+}
+
+
+inline SVector SQuaternion::GetUpVector() const
+{
+	return GetAxisY();
+}
+
+
+inline SVector SQuaternion::GetForwardVector() const
+{
+	return GetAxisZ();
+}
+
+
+inline SVector SQuaternion::Vector() const
+{
+	return GetAxisX();
+}
+
+
+inline SVector SQuaternion::GetRotationAxis() const
+{
+	const float S{ TMath::Sqrt(TMath::Max(1.0f - (W * W), 0.0f)) };
+	if (S >= 0.0001)
+	{
+		return SVector{ X / S, Y / S, Z / S };
+	}
+	return SVector::Right();
+}
+
+
+float SQuaternion::AngularDistance(const SQuaternion& Quaternion) const
+{
+	float InnerProd{ (X * Quaternion.X) + (Y * Quaternion.Y) + (Z * Quaternion.Z) + (W * Quaternion.W) };
+	return TMath::ACos((2.0f * InnerProd * InnerProd) - 1.0f);
 }

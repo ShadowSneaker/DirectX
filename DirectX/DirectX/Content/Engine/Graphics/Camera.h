@@ -13,8 +13,8 @@ private:
 	SVector4 Up = SVector4::Up();
 
 
-	float DX;
-	float DZ;
+	float DX{ 0.0f };
+	float DZ{ 0.0f };
 	float Rot{ 0.0f };
 
 

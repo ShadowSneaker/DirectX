@@ -22,7 +22,7 @@ class CDirectXSetup
 
 	CWindow* Window;
 
-	float ClearColour[4] = { 0.1f, 0.2f, 0.6f, 1.0f };
+	float ClearColour[4] = { 0.3f, 0.3f, 0.3f, 1.0f };
 
 
 public:
