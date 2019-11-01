@@ -447,7 +447,7 @@ public:
 
 	// Shorthand way of typing Vector{ 0, 0, 1 }.
 	// Vector size must have a Z component.
-	static inline Vector<Size, Element> Front()
+	static inline Vector<Size, Element> Forward()
 	{
 		ASSERT(Size >= 3, "Vector size is too small");
 		Vector<Size, Element> Vec;
@@ -459,7 +459,7 @@ public:
 
 	// Shorthand way of typing Vector{ 0, 0, -1 }.
 	// Vector size must have a Z component.
-	static inline Vector<Size, Element> Back()
+	static inline Vector<Size, Element> Backward()
 	{
 		ASSERT(Size >= 3, "Vector size is too small");
 		Vector<Size, Element> Vec;

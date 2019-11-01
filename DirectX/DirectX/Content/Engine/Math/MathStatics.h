@@ -1,6 +1,7 @@
 #pragma once
 #include "MathValues.h"
 
+#include <float.h>
 #include <math.h>
 
 
@@ -253,7 +254,7 @@ public:
 	template <class Type>
 	static inline Type Max(const Type A, const Type B)
 	{
-		return (A >= B) ? A : B
+		return (A >= B) ? A : B;
 	}
 
 
