@@ -10,7 +10,7 @@ CDirectXSetup::CDirectXSetup(CWindow* InWindow)
 
 CDirectXSetup::~CDirectXSetup()
 {
-	
+	if (BackBuffer) BackBuffer->Release();
 	if (ZBuffer) ZBuffer->Release();
 	if (SwapChain) SwapChain->Release();
 	if (DeviceContext) DeviceContext->Release();

@@ -47,4 +47,9 @@ public:
 
 	SMatrix4 GetViewMatrix();
 
+
+	/// Getters
+
+	
+
 };

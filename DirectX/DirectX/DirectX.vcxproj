@@ -159,6 +159,8 @@
     <ClInclude Include="Content\Engine\Core\EngineSetup.h" />
     <ClInclude Include="Content\Engine\Graphics\Camera.h" />
     <ClInclude Include="Content\Engine\Graphics\DirectXSetup.h" />
+    <ClInclude Include="Content\Engine\Graphics\Lighting\DirectionalLight.h" />
+    <ClInclude Include="Content\Engine\Graphics\Lighting\LightBase.h" />
     <ClInclude Include="Content\Engine\Graphics\Meshes\Primitives\Cube.h" />
     <ClInclude Include="Content\Engine\Graphics\Meshes\StaticMesh.h" />
     <ClInclude Include="Content\Engine\Graphics\Renderer.h" />
@@ -207,6 +209,8 @@
     <ClCompile Include="Content\Engine\Core\Source.cpp" />
     <ClCompile Include="Content\Engine\Graphics\Camera.cpp" />
     <ClCompile Include="Content\Engine\Graphics\DirectXSetup.cpp" />
+    <ClCompile Include="Content\Engine\Graphics\Lighting\DirectionalLight.cpp" />
+    <ClCompile Include="Content\Engine\Graphics\Lighting\LightBase.cpp" />
     <ClCompile Include="Content\Engine\Graphics\Meshes\Primitives\Cube.cpp" />
     <ClCompile Include="Content\Engine\Graphics\Meshes\StaticMesh.cpp" />
     <ClCompile Include="Content\Engine\Graphics\Renderer.cpp" />

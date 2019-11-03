@@ -19,7 +19,7 @@ public:
 	SVector Location{ 0.0f };
 
 	// The Transform's Rotation Component.
-	SQuaternion Rotation{ 0.0f };
+	SQuaternion Rotation{ 0.0f, 0.0f, 0.0, 1.0f };
 
 	// The Transform's Scale Component.
 	SVector Scale{ 1.0f };
@@ -53,22 +53,22 @@ private:
 public:
 
 	// Gets the forward pointing vector relative to this object.
-	inline SVector Forward() const;
+	inline SVector Forward() const { return Rotation.GetForwardVector(); }
 
 	// Gets the backward pointing vector relative to this object.
-	inline SVector Backward() const;
+	inline SVector Backward() const { return -Rotation.GetForwardVector(); }
 
 	// Gets the right pointing vector relative to this object.
-	inline SVector Right() const;
+	inline SVector Right() const { return Rotation.GetRightVector(); }
 
 	// Gets the left pointing vector relative to this object.
-	inline SVector Left() const;
+	inline SVector Left() const { return -Rotation.GetRightVector(); }
 
 	// Gets the up pointing vector relative to this object.
-	inline SVector Up() const;
+	inline SVector Up() const { return Rotation.GetUpVector(); }
 
 	// Gets the down pointing vector relative to this object.
-	inline SVector Down() const;
+	inline SVector Down() const { return -Rotation.GetUpVector(); }
 
 
 	/// Getters

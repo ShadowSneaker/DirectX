@@ -111,3 +111,5 @@ float SQuaternion::AngularDistance(const SQuaternion& Quaternion) const
 	float InnerProd{ (X * Quaternion.X) + (Y * Quaternion.Y) + (Z * Quaternion.Z) + (W * Quaternion.W) };
 	return TMath::ACos((2.0f * InnerProd * InnerProd) - 1.0f);
 }
+
+

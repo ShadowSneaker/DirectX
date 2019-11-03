@@ -5,11 +5,11 @@
 #include "../DataTypes/Vector.h"
 
 
-struct SVertexBase
-{
-	SVector Position;
-	SVector4 Colour;
-};
+//struct SVertexBase
+//{
+//	SVector Position;
+//	SVector4 Colour;
+//};
 
 
 //struct SModelVertex

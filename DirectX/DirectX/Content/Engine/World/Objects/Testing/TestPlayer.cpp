@@ -65,6 +65,7 @@ void CTestPlayer::Turn(float Value)
 	if (Value != 0.0f)
 	{
 		//TempRotate += Value / 10000.0f;
-		Camera->Rotate(Value / 100.0f);
+		Camera->Rotate(TO_RADIAN(Value / 100.0f));
+		//Camera->Transform.Rotation.X += (TMath::ToRadians(Value / 100.0f));
 	}
 }

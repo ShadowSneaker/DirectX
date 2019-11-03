@@ -4,62 +4,62 @@
 
 CCamera::CCamera()
 {
-	DX = TMath::Sin(TO_RADIAN(Transform.GetWorldRotation().Y));
-	DZ = TMath::Cos(TO_RADIAN(Transform.GetWorldRotation().Y));
+	DX = TMath::Sin(Transform.Rotation.Y);
+	DZ = TMath::Cos(Transform.Rotation.Y);
 }
 
 
 void CCamera::Rotate(float Angle)
 {
-	Rot += Angle;
-	DX = TMath::Sin(TO_RADIAN(Rot));
-	DZ = TMath::Cos(TO_RADIAN(Rot));
+	Transform.Rotation.Y += Angle;
+	DX = TMath::Sin(Transform.Rotation.Y);
+	DZ = TMath::Cos(Transform.Rotation.Y);
 }
 
 
 void CCamera::MoveForward(float Distance)
 {
+	//Transform.Location += Transform.Forward() * Distance;
+
 	Transform.Location[X] += DX * Distance;
 	Transform.Location[Z] += DZ * Distance;
-	//Transform.Location[X] += TMath::Sin(TO_RADIAN(Transform.GetWorldRotation().Y)) * Distance;
-	//Transform.Location[Z] += TMath::Cos(TO_RADIAN(Transform.GetWorldRotation().Y)) * Distance;
 }
 
 
 void CCamera::MoveUp(float Distance) 
 {
 	Transform.Location[Y] += Distance;
+	//Transform.Location += Transform.Up() * Distance;
 }
 
 
 void CCamera::MoveRight(float Distance)
 {
-	SVector Q(TO_RADIAN(Rot), TO_RADIAN(Rot), TO_RADIAN(Rot));
-	SVector V = SVector::Right();
+	//Transform.Location += Transform.Right() * Distance;
 
-	SVector T = SVector::CrossProduct(Q, V) * 2.0f;
-	SVector Result = V + (T * 1.0f) + SVector::CrossProduct(Q, T);
-	Transform.Location += Result * Distance;
+	SVector Quat = Transform.Rotation.Euler();
+	SVector T = SVector::CrossProduct(Quat, SVector::Right());
+	//SVector Temp0 = Quat * T + SVector::Right();
+	//SVector Temp1 = SVector::CrossProduct(Quat, T);
+	//SVector Result = Temp0 + Temp1;
+	
+	SVector Result = SVector::Right() + (T * Transform.Rotation.W) + SVector::CrossProduct(Quat, T);
+	
+	Transform.Location[X] += Result[X] * Distance;
+	Transform.Location[Z] += Result[Z] * Distance;
+	
 
-	//SVector4 Direction = 2.0f * SVector4::CrossProduct(LookAt.Normalize(), SVector4::Up());
+	//SVector4 Direction = SVector4::CrossProduct(LookAt, SVector4::Up()).Normalize();
 	//Transform.Location[X] += Direction[X] * Distance;
 	//Transform.Location[Z] += Direction[Z] * Distance;
-
-	//Transform.Location[X] -= Distance;
 }
 
 
 SMatrix4 CCamera::GetViewMatrix()
 {
-	//SVector Location{ Transform.GetWorldLocation() };
-	//
-	//Offset = SVector4{ Location, 0.0f };
-	//LookAt = SVector4{ Location[X] + TMath::Sin(TO_RADIAN(Transform.GetWorldRotation().Y)), Location[Y], Location[Z] + TMath::Cos(TO_RADIAN(Transform.GetWorldRotation().Y)), 0.0f };
-	//Up = SVector4::Up();
-
-	Offset = SVector4(Transform.Location[X], Transform.Location[Y], Transform.Location[Z], 0.0f);
-	LookAt = SVector4(Transform.Location[X] + DX, Transform.Location[Y], Transform.Location[Z] + DZ, 0.0f);
-	Up = SVector4::Up();
+	Offset = SVector4{ Transform.Location[X], Transform.Location[Y], Transform.Location[Z], 0.0f };
+	LookAt = SVector4{ Transform.Location[X] + DX, Transform.Location[Y], Transform.Location[Z] + DZ, 0.0f };
+	Up = SVector4{ SVector4::Up() };
 
 	return SMatrix4::LookAt(Offset, LookAt, Up);
 }

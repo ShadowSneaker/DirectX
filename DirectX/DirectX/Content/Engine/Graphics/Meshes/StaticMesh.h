@@ -36,6 +36,9 @@ struct SShader
 };
 
 
+typedef ID3D11ShaderResourceView STexture;
+
+
 class CStaticMesh
 {
 private:
@@ -45,11 +48,13 @@ private:
 protected:
 
 	//SModelVertex* Vertices;
-	SVertexBase* Vertices;
+	SVertex* Vertices;
 
 	uint VertexCount;
 
 	SShader Shader;
+
+	STexture* Texture{ NULL };
 
 public:
 	STransform Transform;
@@ -69,13 +74,19 @@ public:
 
 	void SetShader(std::string FilePath, bool UseDefaultPath = true);
 
+	void SetTexture(std::string FileName, bool UseDefaultPath = true);
+
+	void SetColour(float Red, float Green, float Blue, float Alpha);
+
 
 	/// Getters
 
 	inline uint GetVertexCount() const { return VertexCount; }
 
 	//inline SModelVertex* GetVertices() const { return Vertices; }
-	inline SVertexBase* GetVertices() const { return Vertices; }
+	inline SVertex* GetVertices() const { return Vertices; }
 
 	SShader GetShader() const;
+
+	ID3D11ShaderResourceView* GetTexture() { return Texture; }
 };

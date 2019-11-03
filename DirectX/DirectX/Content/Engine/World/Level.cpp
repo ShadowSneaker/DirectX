@@ -3,6 +3,8 @@
 #include "Objects/Testing/TestObject.h"
 #include "Objects/Testing/TestPlayer.h"
 
+#include "../Graphics/Meshes/Primitives/Cube.h"
+
 
 const std::string CLevel::DefaultFilePath{ "Content/Assets/Levels/" };
 
@@ -39,6 +41,8 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 	CTestObject* Test = SpawnObject<CTestObject>();
 	Test->Transform.Location = SVector{ -1.5f, 0.0f, 5.0f };
 	Test->Transform.Scale = 0.5f;
+	Test->Transform.Scale[X] = 1.0f;
+	Test->GetCube()->SetTexture("Texture.bmp");
 
 	Test = SpawnObject<CTestObject>();
 	Test->Transform.Location = SVector{ 1.0f, 0.0f, 5.0f };

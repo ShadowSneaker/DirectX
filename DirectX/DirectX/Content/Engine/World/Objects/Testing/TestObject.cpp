@@ -9,6 +9,7 @@ CTestObject::CTestObject(SObjectBase Core)
 	Cube = new CCube{ GetRenderer() };
 	Cube->SetShader("Shaders.hlsl");
 	Cube->Transform.SetParent(&Transform);
+	Cube->SetColour(1.0f, 1.0f, 1.0f, 1.0f);
 	GetRenderer()->AddMesh(Cube);
 }
 

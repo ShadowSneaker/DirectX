@@ -13,9 +13,9 @@
 struct CBuffer
 {
 	SMatrix4 ViewMatrix;
-	float RedFactor;
-	float Scale;
-	SVector2 Packing;
+	SVector4 DirectionalLight;
+	SVector4 LightColour;
+	SVector4 AmbiantLight;
 };
 
 
@@ -26,8 +26,12 @@ class CRenderer
 private:
 	/// Properties
 
-	const std::string DefaultFilePath{ "Content/Assets/Shaders/" };
-	
+	const std::string ModelFilePath{ "Content/Assets/Shaders/" };
+	const std::string TextureFilePath{ "Content/Assets/Images/" };
+
+
+	std::map<std::string, STexture*> Textures;
+
 
 	CWindow* Window;
 	CDirectXSetup* Setup;
@@ -35,13 +39,19 @@ private:
 	// A list of all the shaders loaded.
 	//std::map<std::string, CStaticMesh> Meshes;
 
+	// The name of the aplicatoin window.
 	std::string WindowName{ "Name" };
 
 
+	// A list of static meshes to render.
 	std::vector<CStaticMesh*> Objects;
+
+	// A list of all lights in the world.
+	std::vector<class CLightBase*> Lights;
 
 
 	ID3D11Buffer* VertexBuffer;
+	ID3D11SamplerState* Sampler;
 
 
 	class CCamera* SelectedCamera{ nullptr };
@@ -49,13 +59,14 @@ private:
 
 	/// temp
 
-	float TempRotation{ 0.0f };
+	class CDirectionalLight* DirectionalLight;
 
-	// TODO:
-	// MOVE TO INPUT CLASS
-	//MSG Message{ 0 };
 public:
-	//inline MSG GetMsg() const { return Message; }
+
+	// The amount of light that is equally applied to all faces.
+	SVector4 AmbiantColour{ 1.0f, 1.0f, 1.0f, 1.0f };
+	float AmbiantLightStregth{ 0.1f };
+
 
 public:
 	/// Constructors.
@@ -74,7 +85,11 @@ public:
 private:
 	HRESULT Initialise();
 	
+	// Safely deletes all static meshes in memory.
 	void DeleteAllMeshes();
+
+	// Safely deletes all textures in memory.
+	void DeleteAllTextures();
 
 public:
 
@@ -86,6 +101,12 @@ public:
 	/// Setters 
 
 	SShader SetShader(CStaticMesh* Mesh, std::string FilePath, bool UseDefaultPath = true);
+
+	STexture* SetTexture(std::string FilePath, bool UseDefaultPath = true);
+
+private:
+	bool AddTexture(SFilePath File);
+public:
 
 	// Sets a specified camera to be the view camera.
 	// @param Camera - The camera to view from.

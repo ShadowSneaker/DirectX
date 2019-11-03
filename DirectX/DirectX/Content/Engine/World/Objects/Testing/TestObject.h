@@ -18,4 +18,6 @@ public:
 
 	virtual void Update() override;
 
+
+	inline class CCube* GetCube() const { return Cube; }
 };

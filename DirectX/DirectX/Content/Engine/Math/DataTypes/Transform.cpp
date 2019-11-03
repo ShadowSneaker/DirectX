@@ -35,45 +35,6 @@ inline void STransform::RemoveFromParent()
 }
 
 
-inline SVector STransform::Forward() const
-{
-	// Fix
-	return SVector();
-}
-
-
-inline SVector STransform::Backward() const
-{
-	return -Forward();
-}
-
-
-inline SVector STransform::Right() const
-{
-	// Fix
-	return SVector();
-}
-
-
-inline SVector STransform::Left() const
-{
-	return -Right();
-}
-
-
-inline SVector STransform::Up() const
-{
-	// Fix
-	return SVector();
-}
-
-
-inline SVector STransform::Down() const
-{
-	return -Up();
-}
-
-
 inline void STransform::SetParent(STransform* Transform)
 {
 	// Make sure children don't snap to the local position of their new parent

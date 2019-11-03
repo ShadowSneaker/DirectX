@@ -238,7 +238,7 @@ public:
 	// Find the angular distance between two rotation quaternions (in radians).
 	inline float AngularDistance(const SQuaternion& Quaternion) const;
 
-
+	inline SVector4 GetAsVector() const;
 
 
 
@@ -564,7 +564,7 @@ inline SVector SQuaternion::RotateVector(SVector V) const
 	// V' = V + w*(T) + (Q x T)
 
 	const SVector Quat{ X, Y, Z };
-	const SVector T{ SVector::CrossProduct(Quat, V) * 2.0f };
+	SVector T{ SVector::CrossProduct(Quat, V) * 2.0f };
 	return SVector{ V + (T * W) + SVector::CrossProduct(Quat, T) };
 }
 
@@ -710,4 +710,10 @@ inline SVector SQuaternion::GetRotationAxis() const
 		return SVector{ X / S, Y / S, Z / S };
 	}
 	return SVector::Right();
+}
+
+
+inline SVector4 SQuaternion::GetAsVector() const
+{
+	return SVector4{ X, Y, Z, W };
 }
