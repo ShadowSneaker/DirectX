@@ -151,7 +151,7 @@
     <ClInclude Include="Content\Engine\Components\Colliders\PolygonComponent.h" />
     <ClInclude Include="Content\Engine\Components\Colliders\SphereComponent.h" />
     <ClInclude Include="Content\Engine\Components\Component.h" />
-    <ClInclude Include="Content\Engine\Core\Systems\FileReader.h" />
+    <ClInclude Include="Content\Engine\Core\Systems\FileManager.h" />
     <ClInclude Include="Content\Engine\Core\Systems\InputManager.h" />
     <ClInclude Include="Content\Engine\Core\Systems\Time.h" />
     <ClInclude Include="Content\Engine\Core\Systems\TimerManager.h" />
@@ -201,7 +201,7 @@
     <ClCompile Include="Content\Engine\Components\Colliders\SphereComponent.cpp" />
     <ClCompile Include="Content\Engine\Components\Component.cpp" />
     <ClCompile Include="Content\Engine\Core\EngineSetup.cpp" />
-    <ClCompile Include="Content\Engine\Core\Systems\FileReader.cpp" />
+    <ClCompile Include="Content\Engine\Core\Systems\FileManager.cpp" />
     <ClCompile Include="Content\Engine\Core\Systems\InputManager.cpp" />
     <ClCompile Include="Content\Engine\Core\Systems\Time.cpp" />
     <ClCompile Include="Content\Engine\Core\Systems\TimerManager.cpp" />

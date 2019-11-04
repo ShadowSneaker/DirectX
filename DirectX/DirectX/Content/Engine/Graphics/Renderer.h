@@ -5,7 +5,7 @@
 
 #include "../Math/DataTypes/Vertex.h"
 #include "DirectXSetup.h"
-#include "../Core/Systems/FileReader.h"
+#include "../Core/Systems/FileManager.h"
 #include "Meshes/StaticMesh.h"
 #include "../Math/DataTypes/Matrix.h"
 

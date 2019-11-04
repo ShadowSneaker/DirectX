@@ -69,9 +69,6 @@
     <ClInclude Include="Content\Engine\World\Level.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Content\Engine\Core\Systems\FileReader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Content\Engine\Math\Physics\Physics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -156,6 +153,9 @@
     <ClInclude Include="Content\Engine\Graphics\Lighting\LightBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Content\Engine\Core\Systems\FileManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\Engine\Core\Source.cpp">
@@ -195,9 +195,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Content\Engine\World\Level.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Content\Engine\Core\Systems\FileReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Content\Engine\Math\Physics\Physics.cpp">
@@ -282,6 +279,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Content\Engine\Graphics\Lighting\LightBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Engine\Core\Systems\FileManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
