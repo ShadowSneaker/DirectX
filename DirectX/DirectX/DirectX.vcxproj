@@ -96,7 +96,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;d3dx11d.lib;d3dx9d.lib;dxerr.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dinput8.lib;dxguid.lib;d3dx11d.lib;d3dx9d.lib;dxerr.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -124,7 +124,7 @@
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;d3dx11.lib;d3dx9.lib;dxerr.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;d3dcompiler.lib;dinput8.lib;dxguid.lib;d3dx11.lib;d3dx9.lib;dxerr.lib;legacy_stdio_definitions.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -151,6 +151,9 @@
     <ClInclude Include="Content\Engine\Components\Colliders\PolygonComponent.h" />
     <ClInclude Include="Content\Engine\Components\Colliders\SphereComponent.h" />
     <ClInclude Include="Content\Engine\Components\Component.h" />
+    <ClInclude Include="Content\Engine\Components\Graphics\Camera\CameraComponent.h" />
+    <ClInclude Include="Content\Engine\Components\Graphics\Lighting\DirectionalLightComponent.h" />
+    <ClInclude Include="Content\Engine\Components\Graphics\Meshes\StaticMeshComponent.h" />
     <ClInclude Include="Content\Engine\Core\Systems\FileManager.h" />
     <ClInclude Include="Content\Engine\Core\Systems\InputManager.h" />
     <ClInclude Include="Content\Engine\Core\Systems\Time.h" />
@@ -200,6 +203,9 @@
     <ClCompile Include="Content\Engine\Components\Colliders\PolygonComponent.cpp" />
     <ClCompile Include="Content\Engine\Components\Colliders\SphereComponent.cpp" />
     <ClCompile Include="Content\Engine\Components\Component.cpp" />
+    <ClCompile Include="Content\Engine\Components\Graphics\Camera\CameraComponent.cpp" />
+    <ClCompile Include="Content\Engine\Components\Graphics\Lighting\DirectionalLightComponent.cpp" />
+    <ClCompile Include="Content\Engine\Components\Graphics\Meshes\StaticMeshComponent.cpp" />
     <ClCompile Include="Content\Engine\Core\EngineSetup.cpp" />
     <ClCompile Include="Content\Engine\Core\Systems\FileManager.cpp" />
     <ClCompile Include="Content\Engine\Core\Systems\InputManager.cpp" />

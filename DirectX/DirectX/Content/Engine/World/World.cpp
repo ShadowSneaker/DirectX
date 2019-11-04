@@ -17,7 +17,7 @@ CWorld::CWorld(HINSTANCE HandleInstance, int CommandShow)
 	Physics = new CPhysics{};
 	ObjectPool = new CObjectPool{ this };
 	TimerManager = new CTimerManager{};
-	InputManager = new CInputManager{};
+	InputManager = new CInputManager{ Renderer->GetWindow() };
 
 
 

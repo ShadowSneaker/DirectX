@@ -70,6 +70,9 @@ public:
 	// Gets the down pointing vector relative to this object.
 	inline SVector Down() const { return -Rotation.GetUpVector(); }
 
+	// Rotates this transform to look at another transform's position.
+	inline void LookAt(STransform Other);
+
 
 	/// Getters
 
@@ -107,3 +110,7 @@ public:
 };
 
 
+inline void STransform::LookAt(STransform Other)
+{
+	Rotation.Y = TO_DEGREES(TMath::ATan2(Other.Location[X] - Location[X], Other.Location[Z] - Location[Z]));
+}

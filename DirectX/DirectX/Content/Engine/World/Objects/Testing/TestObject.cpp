@@ -29,6 +29,5 @@ CTestObject::~CTestObject()
 void CTestObject::Update()
 {
 	TempRotate += 0.01f;
-
 	Transform.Rotation = SQuaternion{ TO_RADIAN(TempRotate), TO_RADIAN(TempRotate / 2.0f), TO_RADIAN(TempRotate) };
 }

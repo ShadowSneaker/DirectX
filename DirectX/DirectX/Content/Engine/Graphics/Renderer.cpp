@@ -80,7 +80,7 @@ void CRenderer::AddMesh(CStaticMesh* Mesh)
 }
 
 
-void CRenderer::DeleteMesh(CStaticMesh* Mesh)
+void CRenderer::RemoveMesh(CStaticMesh* Mesh)
 {
 	if (Mesh)
 	{
@@ -89,10 +89,90 @@ void CRenderer::DeleteMesh(CStaticMesh* Mesh)
 			if (Objects[i] == Mesh)
 			{
 				Objects.erase(Objects.begin() + i);
-				break;
+				return;
 			}
 		}
+	}
+}
+
+
+void CRenderer::DeleteMesh(CStaticMesh* Mesh)
+{
+	if (Mesh)
+	{
+		RemoveMesh(Mesh);
 		delete Mesh;
+	}
+}
+
+
+void CRenderer::AddCamera(CCamera* Camera)
+{
+	if (Camera)
+	{
+		Cameras.push_back(Camera);
+		if (Cameras.size() == 1)
+		{
+			SelectedCamera = Camera;
+		}
+	}
+}
+
+
+void CRenderer::RemoveCamera(CCamera* Camera)
+{
+	if (Camera)
+	{
+		for (uint i = 0; i < Cameras.size(); ++i)
+		{
+			if (Cameras[i] == Camera)
+			{
+				Cameras.erase(Cameras.begin() + i);
+				return;
+			}
+		}
+	}
+}
+
+
+void CRenderer::DeleteCamera(CCamera* Camera)
+{
+	if (Camera)
+	{
+		RemoveCamera(Camera);
+		delete Camera;
+	}
+}
+
+
+void CRenderer::AddLight(CLightBase* Light)
+{
+	if (Light)
+	{
+		Lights.push_back(Light);
+	}
+}
+
+
+void CRenderer::RemoveLight(CLightBase* Light)
+{
+	if (Light)
+	{
+		for (uint i = 0; i < Lights.size(); ++i)
+		{
+			Lights.erase(Lights.begin() + i);
+			return;
+		}
+	}
+}
+
+
+void CRenderer::DeleteLight(CLightBase* Light)
+{
+	if (Light)
+	{
+		RemoveLight(Light);
+		delete Light;
 	}
 }
 

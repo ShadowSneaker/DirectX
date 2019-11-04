@@ -34,6 +34,9 @@ public:
 	// Constructor, Default.
 	CComponent(SComponentInfo Info);
 
+	// Destructor.
+	~CComponent();
+
 
 	/// Functions
 

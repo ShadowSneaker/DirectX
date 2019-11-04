@@ -1,8 +1,39 @@
 #include "InputManager.h"
+#include <debugapi.h>
+#include "../../Graphics/Window.h"
 
 
-CInputManager::CInputManager()
-{}
+CInputManager::CInputManager(class CWindow* Window)
+{
+	HRESULT HR;
+	
+	HR = DirectInput8Create(Window->GetHandle(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&Input, NULL);
+	if (FAILED(HR)) DebugBreak();
+
+	HR = Input->CreateDevice(GUID_SysKeyboard, &KeyboardDevice, NULL);
+	if (FAILED(HR)) DebugBreak();
+
+	HR = KeyboardDevice->SetDataFormat(&c_dfDIKeyboard);
+	if (FAILED(HR)) DebugBreak();
+
+	HR = KeyboardDevice->SetCooperativeLevel(Window->GetWindowHandle(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+	if (FAILED(HR)) DebugBreak();
+
+	HR = KeyboardDevice->Acquire();
+	if (FAILED(HR)) DebugBreak();
+}
+
+
+CInputManager::~CInputManager()
+{
+	if (KeyboardDevice)
+	{
+		KeyboardDevice->Unacquire();
+		KeyboardDevice->Release();
+	}
+
+	if (Input) Input->Release();
+}
 
 
 void CInputManager::AxisUpdate()
@@ -22,6 +53,16 @@ void CInputManager::Update()
 		DispatchMessage(&Message);
 	}
 
+
+	HRESULT HR;
+	HR = KeyboardDevice->GetDeviceState(sizeof(ActionBinds), &ActionBinds);
+	if (FAILED(HR))
+	{
+		if ((HR == DIERR_INPUTLOST) || (HR == DIERR_NOTACQUIRED))
+		{
+			KeyboardDevice->Acquire();
+		}
+	}
 	
 
 	if (Message.message == WM_KEYDOWN)

@@ -53,6 +53,8 @@ private:
 	// A list of all lights in the world.
 	std::vector<class CLightBase*> Lights;
 
+	// A list of all camera references in the world.
+	std::vector<class CCamera*> Cameras;
 
 	// A reference to the camera the world should be viewd through.
 	class CCamera* SelectedCamera{ nullptr };
@@ -101,9 +103,44 @@ public:
 	// @param Mesh - The static mesh reference to add.
 	void AddMesh(CStaticMesh* Mesh);
 
+	// Removes a static mesh object from this class.
+	// @note - Mesh referance is not deleted from memory.
+	// @param Mesh - A reference to the static mesh to be removed.
+	void RemoveMesh(CStaticMesh* Mesh);
+
 	// Safely deletes the reference of a static mesh and removes it from this class if applicable.
 	// @param Mesh - A referance to the static mesh to be deleted.
 	void DeleteMesh(CStaticMesh* Mesh);
+
+	// Adds a camera to this renderer.
+	// @param Camera - A reference to the camera to add to this class.
+	void AddCamera(class CCamera* Camera);
+
+	// Removes a camera from this renderer.
+	// @note - Camera reference is not deleted from memory.
+	// @param Camera - The camera reference to remove from this class.
+	void RemoveCamera(class CCamera* Camera);
+
+	// Safely deletes the reference of a camera and removes it from this class if applicable.
+	// @param Camera - The camera reference to delete.
+	void DeleteCamera(class CCamera* Camera);
+
+	// Adds a light to this renderer.
+	// @param Light - A reference to the light to be added to this class.
+	void AddLight(class CLightBase* Light);
+
+	// Removes a light from this renderer.
+	// @note - Light reference is not deleted from memory.
+	// @param Light - The light reference to be removed.
+	void RemoveLight(class CLightBase* Light);
+
+	// Deletes a light from this renderer.
+	// @param Light - The light reference to be deleted.
+	void DeleteLight(class CLightBase* Light);
+
+	// Draws all the objects stored within this class.
+	// Note: does not draw disabled objects.
+	void DrawAll();
 
 
 	/// Setters 
@@ -133,7 +170,9 @@ public:
 	// @param Camera - The camera to view from.
 	inline void SetCamera(class CCamera* Camera) { SelectedCamera = Camera; }
 
-	// Draws all the objects stored within this class.
-	// Note: does not draw disabled objects.
-	void DrawAll();
+	
+
+	/// Getters
+
+	inline CWindow* GetWindow() const { return Window; }
 };

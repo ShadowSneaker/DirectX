@@ -37,6 +37,7 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 		delete this;
 	}
 
+	CTestPlayer* Player = SpawnObject<CTestPlayer>();
 
 	CTestObject* Test = SpawnObject<CTestObject>();
 	Test->Transform.Location = SVector{ -1.5f, 0.0f, 5.0f };
@@ -44,11 +45,10 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 	Test->Transform.Scale[X] = 1.0f;
 	Test->GetMesh()->SetTexture("Texture.bmp");
 
-	Test = SpawnObject<CTestObject>();
-	Test->Transform.Location = SVector{ 1.0f, 0.0f, 5.0f };
-	Test->Transform.Scale = 0.8f;
+	CTestObject* Test2 = SpawnObject<CTestObject>();
+	Test2->Transform.Location = SVector{ 1.0f, 0.0f, 5.0f };
+	Test2->Transform.Scale = 0.8f;
 
-	SpawnObject<CTestPlayer>();
 }
 
 
