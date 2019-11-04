@@ -33,6 +33,12 @@ struct SFilePath
 	String FilePath;
 
 
+	/// Operators
+
+	// Used to get this object to return the file name without requring to access the file name directly.
+	inline operator String() const { return FileName; }
+
+
 	/// Getters
 
 	// Gets the full file path of this file, including the path and the name.
@@ -63,12 +69,21 @@ struct SFilePath
 struct SFileInfo
 {
 	// The amount of lines the file has.
-	int32 Size;
+	long Size{ 0 };
 
 	// The contents of the file.
-	char* Contents;
+	char* Contents{ nullptr };
 
-	uint ActualSize;
+	uint ActualSize{ 0 };
+
+
+	/// Functions
+	
+	// Cleans up any references this object has.
+	void Clear()
+	{
+		delete[] Contents;
+	}
 };
 
 
@@ -103,13 +118,13 @@ public:
 	// Reads an inputted file and returns all of the files contents.
 	// @param FilePath - The file location of the file to read.
 	// @return - Returns a copy of every line in the file.
-	static SFileInfo ReadFile(char* FilePath)
+	static SFileInfo ReadFile(String FilePath)
 	{
 		FILE* File;
-		fopen_s(&File, FilePath, "r");
+		fopen_s(&File, FilePath.c_str(), "r");
 		if (File == NULL)
 		{
-			LOG_ERROR("Failed to open model file!", FilePath);
+			LOG_ERROR("Failed to open model file!", FilePath.c_str());
 			return SFileInfo{};
 		}
 		
@@ -123,7 +138,7 @@ public:
 		if (FileInfo.Contents == NULL)
 		{
 			fclose(File);
-			LOG_ERROR("Failed to allocate memory for model file!", FilePath);
+			LOG_ERROR("Failed to allocate memory for model file!", FilePath.c_str());
 			return SFileInfo{};
 		}
 
@@ -132,7 +147,7 @@ public:
 		if (FileInfo.ActualSize == 0)
 		{
 			fclose(File);
-			LOG_ERROR("Failed to read file!", FilePath);
+			LOG_ERROR("Failed to read file!", FilePath.c_str());
 			return SFileInfo{};
 		}
 		

@@ -1,6 +1,7 @@
 #pragma once
 #include "../../Math/DataTypes/Vertex.h"
 #include "../../Math/DataTypes/Transform.h"
+#include "../../Core/Systems/FileManager.h"
 
 #include <D3D11.h>
 #include <DXGI.h>
@@ -45,6 +46,19 @@ private:
 	/// Properties
 	class CRenderer* Renderer;
 
+	SFilePath FileName;
+
+
+	// TEMP
+	uint TokenPtr;
+	std::vector<SVector> PositionList;
+	std::vector<SVector> NormalList;
+	std::vector<SVector2> TexCoordList;
+	std::vector<int> PIndices;
+	std::vector<int> TIndices;
+	std::vector<int> NIndices;
+
+
 protected:
 
 	//SModelVertex* Vertices;
@@ -70,11 +84,25 @@ public:
 	~CStaticMesh();
 
 
+
+private:
+	void SetupVertices(SFileInfo FileInfo);
+
+	bool GetNextToken(SFileInfo File, int& Start, int& Length);
+
+	bool GetNextLine(SFileInfo File);
+
+
+public:
+
+
 	/// Setters
 
-	void SetShader(std::string FilePath, bool UseDefaultPath = true);
+	void SetShader(String FilePath, bool UseDefaultPath = true);
 
-	void SetTexture(std::string FileName, bool UseDefaultPath = true);
+	void SetTexture(String FilePath, bool UseDefaultPath = true);
+
+	void SetMesh(String FilePath, bool UseDefaultPath = true);
 
 	void SetColour(float Red, float Green, float Blue, float Alpha);
 

@@ -6,17 +6,23 @@
 CTestObject::CTestObject(SObjectBase Core)
 	:CWorldObject::CWorldObject{ Core }
 {
-	Cube = new CCube{ GetRenderer() };
-	Cube->SetShader("Shaders.hlsl");
-	Cube->Transform.SetParent(&Transform);
-	Cube->SetColour(1.0f, 1.0f, 1.0f, 1.0f);
-	GetRenderer()->AddMesh(Cube);
+	//Cube = new CCube{ GetRenderer() };
+	//Cube->SetShader("Shaders.hlsl");
+	//Cube->Transform.SetParent(&Transform);
+	//Cube->SetColour(1.0f, 1.0f, 1.0f, 1.0f);
+	//GetRenderer()->AddMesh(Cube);
+
+	Mesh = new CStaticMesh{ GetRenderer() };
+	Mesh->SetMesh("Cube.obj");
+	Mesh->SetShader("Shaders.hlsl");
+	Mesh->Transform.SetParent(&Transform);
+	GetRenderer()->AddMesh(Mesh);
 }
 
 
 CTestObject::~CTestObject()
 {
-	GetRenderer()->DeleteMesh(Cube);
+	//GetRenderer()->DeleteMesh(Cube);
 }
 
 

@@ -5,7 +5,8 @@
 
 class CTestObject :public CWorldObject
 {
-	class CCube* Cube;
+	//class CCube* Cube;
+	class CStaticMesh* Mesh;
 
 	float TempRotate{ 0.0f };
 
@@ -19,5 +20,6 @@ public:
 	virtual void Update() override;
 
 
-	inline class CCube* GetCube() const { return Cube; }
+	//inline class CCube* GetCube() const { return Cube; }
+	inline class CStaticMesh* GetMesh() const { return Mesh; }
 };

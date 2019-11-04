@@ -26,22 +26,26 @@ class CRenderer
 private:
 	/// Properties
 
-	const std::string ModelFilePath{ "Content/Assets/Shaders/" };
-	const std::string TextureFilePath{ "Content/Assets/Images/" };
 
-
+	// A list of textures that this renderer has created.
+	// This is used to allow multiple objects to use the same texture without needing to create multiple copies of the texture.
 	std::map<std::string, STexture*> Textures;
 
+	// A reference to the created window.
+	CWindow* Window{ nullptr };
 
-	CWindow* Window;
-	CDirectXSetup* Setup;
+	// A reference to the created DirectX setup.
+	CDirectXSetup* Setup{ nullptr };
 
-	// A list of all the shaders loaded.
-	//std::map<std::string, CStaticMesh> Meshes;
+	// A reference to the created vertex buffer.
+	ID3D11Buffer* VertexBuffer{ nullptr };
+
+	// A reference to the created sampler state.
+	ID3D11SamplerState* Sampler{ nullptr };
+
 
 	// The name of the aplicatoin window.
 	std::string WindowName{ "Name" };
-
 
 	// A list of static meshes to render.
 	std::vector<CStaticMesh*> Objects;
@@ -50,16 +54,16 @@ private:
 	std::vector<class CLightBase*> Lights;
 
 
-	ID3D11Buffer* VertexBuffer;
-	ID3D11SamplerState* Sampler;
-
-
+	// A reference to the camera the world should be viewd through.
 	class CCamera* SelectedCamera{ nullptr };
 
 
 	/// temp
 
-	class CDirectionalLight* DirectionalLight;
+	// TEMPORARY
+	// A reference to the created directiona light
+	// This should be removed into a component for world objects so I could have more than one directional light.
+	class CDirectionalLight* DirectionalLight{ nullptr };
 
 public:
 
@@ -83,6 +87,7 @@ public:
 	/// Functions
 
 private:
+	DEPRECATED("This is not a nessisarry function.")
 	HRESULT Initialise();
 	
 	// Safely deletes all static meshes in memory.
@@ -92,19 +97,35 @@ private:
 	void DeleteAllTextures();
 
 public:
-
+	// Adds a created static mesh object to this class.
+	// @param Mesh - The static mesh reference to add.
 	void AddMesh(CStaticMesh* Mesh);
 
+	// Safely deletes the reference of a static mesh and removes it from this class if applicable.
+	// @param Mesh - A referance to the static mesh to be deleted.
 	void DeleteMesh(CStaticMesh* Mesh);
 
 
 	/// Setters 
 
+	// Sets a specified shader onto the inputted object.
+	// @param Mesh - The static mesh that the shader should be applied on.
+	// @param FilePath - The location in files to the specific shader.
+	// @param UseDefaultPath - Should the file path start at the default path for shaders.
+	// @return - Returns the compiled shader.
 	SShader SetShader(CStaticMesh* Mesh, std::string FilePath, bool UseDefaultPath = true);
 
+	// Creates and returns a reference to a texture for an object.
+	// Note - There will only be one version of the texture created in this class.
+	// @param FilePath - The location in files to the specific texture.
+	// @param UseDefaultPath - Should the file path start at the default path for textures.
+	// @return - A reference to the created texture.
 	STexture* SetTexture(std::string FilePath, bool UseDefaultPath = true);
 
 private:
+	// Creates a texture and stores it within this class if the texture doesn't already exist.
+	// @param File - The file path information to the texture.
+	// @return - Returns true if the file was created.
 	bool AddTexture(SFilePath File);
 public:
 
@@ -112,6 +133,7 @@ public:
 	// @param Camera - The camera to view from.
 	inline void SetCamera(class CCamera* Camera) { SelectedCamera = Camera; }
 
-
+	// Draws all the objects stored within this class.
+	// Note: does not draw disabled objects.
 	void DrawAll();
 };

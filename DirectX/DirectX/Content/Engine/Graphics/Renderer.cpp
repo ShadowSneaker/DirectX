@@ -19,10 +19,10 @@ CRenderer::CRenderer(HINSTANCE HandleInstance, int CommandShow)
 		exit(0);
 	}
 
-	if (FAILED(Initialise()))
-	{
-		exit(0);
-	}
+	//if (FAILED(Initialise()))
+	//{
+	//	exit(0);
+	//}
 
 
 	// TEMP
@@ -36,9 +36,6 @@ CRenderer::~CRenderer()
 
 	DeleteAllMeshes();
 	DeleteAllTextures();
-	// Delete all meshes.
-	// Delete all textures.
-	// Delete all lights.
 	delete DirectionalLight; // temp delete.
 
 	delete Setup;
@@ -49,10 +46,6 @@ CRenderer::~CRenderer()
 
 HRESULT CRenderer::Initialise()
 {
-	//AddCluster(new CCube{ this }, "Shaders.hlsl");
-	//CCube* Cube = new CCube{ this };
-	//Cube->SetShader("Shaders.hlsl");
-	//Objects.push_back(Cube);
 
 	return S_OK;
 }
@@ -110,7 +103,7 @@ SShader CRenderer::SetShader(CStaticMesh* Mesh, std::string FilePath, bool UseDe
 	if (UseDefaultPath)
 	{
 		File.FileName = FilePath;
-		File.FilePath = ModelFilePath;
+		File.FilePath = TFileManager::ShaderFilePath;
 	}
 	else
 	{
@@ -124,7 +117,6 @@ SShader CRenderer::SetShader(CStaticMesh* Mesh, std::string FilePath, bool UseDe
 	D3D11_BUFFER_DESC BufferDesc;
 	ZeroMemory(&BufferDesc, sizeof(BufferDesc));
 	BufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	//BufferDesc.ByteWidth = sizeof(SModelVertex) * Mesh->GetVertexCount();
 	BufferDesc.ByteWidth = sizeof(Mesh->GetVertices()[0]) * Mesh->GetVertexCount();
 	BufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	BufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -205,17 +197,17 @@ SShader CRenderer::SetShader(CStaticMesh* Mesh, std::string FilePath, bool UseDe
 }
 
 
-STexture* CRenderer::SetTexture(std::string FileName, bool UseDefaultPath)
+STexture* CRenderer::SetTexture(std::string FilePath, bool UseDefaultPath)
 {
 	SFilePath File;
 	if (UseDefaultPath)
 	{
-		File.FileName = FileName;
-		File.FilePath = TextureFilePath;
+		File.FileName = FilePath;
+		File.FilePath = TFileManager::TextureFilePath;
 	}
 	else
 	{
-		File = SFilePath::GetFileName(FileName);
+		File = SFilePath::GetFileName(FilePath);
 	}
 
 
