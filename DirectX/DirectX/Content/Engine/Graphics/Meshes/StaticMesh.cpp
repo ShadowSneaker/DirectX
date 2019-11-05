@@ -5,10 +5,9 @@
 
 
 
-CStaticMesh::CStaticMesh(class CRenderer* InRenderer)
-	:Renderer{ InRenderer }
+CStaticMesh::CStaticMesh()
 {
-	SetTexture("NoTexture.png");
+	
 }
 
 
@@ -25,6 +24,8 @@ CStaticMesh::~CStaticMesh()
 
 void CStaticMesh::SetupVertices(SFileInfo FileInfo)
 {
+	if (VertexCount > 0) delete[] Vertices;
+
 	TokenPtr = 0;
 
 	int TokenStart;
@@ -206,18 +207,6 @@ bool CStaticMesh::GetNextLine(SFileInfo File)
 	++TokenPtr;
 
 	return (TokenPtr < File.ActualSize);
-}
-
-
-void CStaticMesh::SetShader(String FilePath, bool UseDefaultPath)
-{
-	Shader = Renderer->SetShader(this, FilePath, UseDefaultPath);
-}
-
-
-void CStaticMesh::SetTexture(String FilePath, bool UseDefaultPath)
-{
-	Texture = Renderer->SetTexture(FilePath, UseDefaultPath);
 }
 
 

@@ -1,5 +1,5 @@
 #include "TestPlayer.h"
-#include "../../../Graphics/Camera.h"
+#include "../../../Components/Graphics/Camera/CameraComponent.h"
 #include "../../../Core/Systems/InputManager.h"
 #include "../../../Graphics/Renderer.h"
 
@@ -8,14 +8,13 @@ CTestPlayer::CTestPlayer(SObjectBase Core)
 	:CCharacter::CCharacter{ Core }
 {
 	SetupInput(GetInputManager());
-	Camera = new CCamera{};
-	GetRenderer()->SetCamera(Camera);
+	Camera = CreateComponent<CCameraComponent>();
+	Camera->Transform.SetParent(&Transform);
 }
 
 
 CTestPlayer::~CTestPlayer()
 {
-	delete Camera;
 }
 
 

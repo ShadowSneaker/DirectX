@@ -27,7 +27,7 @@ public:
 	CWorldObject(SObjectBase Core);
 
 	// Destructor.
-	~CWorldObject();
+	virtual ~CWorldObject();
 
 
 	/// Overridables
@@ -70,14 +70,14 @@ public:
 template <typename Type>
 Type* CWorldObject::CreateComponent()
 {
-	//Type* NewComponent = new Type{ SComponentInfo{ SObjectBase{ STransform{}, GetWorld(), GetPhysics(), GetTimerManager() }, this} };
-	//if (NewComponent)
-	//{
-	//	Components.push_back(NewComponent);
-	//	return NewComponent;
-	//}
-	//
-	//delete NewComponent;
+	Type* NewComponent = new Type{ SComponentInfo{ SObjectBase{ STransform{}, GetWorld(), GetPhysics(), GetRenderer(), GetInputManager(), GetTimerManager() }, this} };
+	if (NewComponent)
+	{
+		Components.push_back(NewComponent);
+		return NewComponent;
+	}
+	
+	delete NewComponent;
 	return nullptr;
 }
 

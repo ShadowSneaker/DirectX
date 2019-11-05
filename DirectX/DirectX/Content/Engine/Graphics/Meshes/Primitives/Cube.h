@@ -11,7 +11,7 @@ public:
 
 
 public:
-	CCube(class CRenderer* InRenderer);
+	CCube();
 
 	~CCube();
 

@@ -7,7 +7,7 @@ class CTestPlayer :public CCharacter
 private:
 	/// Properties
 
-	class CCamera* Camera;
+	class CCameraComponent* Camera;
 	float TempRotate{ 0.0f };
 
 public:

@@ -1,11 +1,9 @@
 #include "Cube.h"
 
 
-CCube::CCube(class CRenderer* InRenderer)
-	:CStaticMesh::CStaticMesh{ InRenderer }
+CCube::CCube()
 {
 	VertexCount = 36;
-	//Vertices = new SModelVertex[VertexCount];
 	Vertices = new SVertex[VertexCount];
 
 	// Back face.

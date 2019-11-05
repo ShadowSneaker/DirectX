@@ -6,7 +6,7 @@
 class CTestObject :public CWorldObject
 {
 	//class CCube* Cube;
-	class CStaticMesh* Mesh;
+	class CStaticMeshComponent* Mesh;
 
 	float TempRotate{ 0.0f };
 
@@ -14,12 +14,12 @@ class CTestObject :public CWorldObject
 public:
 	CTestObject(SObjectBase Core);
 
-	~CTestObject();
+	virtual ~CTestObject() override;
 
 
 	virtual void Update() override;
 
 
 	//inline class CCube* GetCube() const { return Cube; }
-	inline class CStaticMesh* GetMesh() const { return Mesh; }
+	inline class CStaticMeshComponent* GetMesh() const { return Mesh; }
 };

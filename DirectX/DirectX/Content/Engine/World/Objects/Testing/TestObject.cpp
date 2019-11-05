@@ -1,5 +1,5 @@
 #include "TestObject.h"
-#include "../../../Graphics/Meshes/Primitives/Cube.h"
+#include "../../../Components/Graphics/Meshes/StaticMeshComponent.h"
 #include "../../../Graphics/Renderer.h"
 
 
@@ -12,17 +12,23 @@ CTestObject::CTestObject(SObjectBase Core)
 	//Cube->SetColour(1.0f, 1.0f, 1.0f, 1.0f);
 	//GetRenderer()->AddMesh(Cube);
 
-	Mesh = new CStaticMesh{ GetRenderer() };
+	//Mesh = new CStaticMesh{ GetRenderer() };
+	//Mesh->SetMesh("Cube.obj");
+	//Mesh->SetShader("Shaders.hlsl");
+	//Mesh->Transform.SetParent(&Transform);
+	//GetRenderer()->AddMesh(Mesh);
+
+	Mesh = CreateComponent<CStaticMeshComponent>();
 	Mesh->SetMesh("Cube.obj");
 	Mesh->SetShader("Shaders.hlsl");
 	Mesh->Transform.SetParent(&Transform);
-	GetRenderer()->AddMesh(Mesh);
 }
 
 
 CTestObject::~CTestObject()
 {
 	//GetRenderer()->DeleteMesh(Cube);
+	CWorldObject::~CWorldObject();
 }
 
 

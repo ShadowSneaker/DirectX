@@ -38,9 +38,8 @@ void CPhysics::DeleteAllColliders()
 {
 	while (!Colliders.empty())
 	{
-		SColliderInfo Collider{ Colliders.back() };
-		delete Collider.Collider;
-		if (Collider.RigidBody) delete Collider.RigidBody;
+		delete Colliders.back().Collider;
+		delete Colliders.back().RigidBody;
 		Colliders.pop_back();
 	}
 }

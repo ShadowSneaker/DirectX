@@ -3,7 +3,7 @@
 #include "Objects/Testing/TestObject.h"
 #include "Objects/Testing/TestPlayer.h"
 
-#include "../Graphics/Meshes/Primitives/Cube.h"
+#include "../Components/Graphics/Meshes/StaticMeshComponent.h"
 
 
 const std::string CLevel::DefaultFilePath{ "Content/Assets/Levels/" };

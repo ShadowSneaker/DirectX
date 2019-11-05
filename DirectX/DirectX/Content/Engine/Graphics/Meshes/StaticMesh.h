@@ -78,10 +78,10 @@ public:
 	/// Constructors
 
 	// Constructor, Default.
-	CStaticMesh(class CRenderer* InRenderer);
+	CStaticMesh();
 
 	// Destructor.
-	~CStaticMesh();
+	virtual ~CStaticMesh();
 
 
 
@@ -98,9 +98,7 @@ public:
 
 	/// Setters
 
-	void SetShader(String FilePath, bool UseDefaultPath = true);
-
-	void SetTexture(String FilePath, bool UseDefaultPath = true);
+	
 
 	void SetMesh(String FilePath, bool UseDefaultPath = true);
 

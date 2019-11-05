@@ -16,10 +16,18 @@ public:
 	CStaticMeshComponent(SComponentInfo Info);
 
 	// Destructor.
-	~CStaticMeshComponent();
+	virtual ~CStaticMeshComponent() override;
 
 
 
 	/// Functions
 
-}
+
+	/// Setters
+
+	// Sets this mesh to use a specified shader.
+	void SetShader(String FilePath, bool UseDefaultPath = true);
+
+	// Applies an inputted texture onto this mesh.
+	void SetTexture(String FilePath, bool UseDefaultPath = true);
+};

@@ -35,7 +35,7 @@ public:
 	CComponent(SComponentInfo Info);
 
 	// Destructor.
-	~CComponent();
+	virtual ~CComponent();
 
 
 	/// Functions

@@ -10,7 +10,7 @@ CCharacter::CCharacter(SObjectBase Core)
 	//Mesh = CreateComponent<CSkeletalMesh>();
 
 	CharacterComponent = CreateComponent<CCharacterComponent>();
-	CapsuleCollider = CreateComponent<CCapsuleComponent>();
+	//CapsuleCollider = CreateComponent<CCapsuleComponent>();
 }
 
 
