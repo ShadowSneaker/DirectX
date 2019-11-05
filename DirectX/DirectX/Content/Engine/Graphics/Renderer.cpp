@@ -414,6 +414,9 @@ void CRenderer::DrawAll()
 		// The buffer type may not be the problem After using the in-class buffer to initialise MS it still hit the access violation.
 		// The problem looks to be somewhere in the Vertices.
 
+		SVertex* Vertices = Objects[i]->GetVertices();
+		uint VertexCount = Objects[i]->GetVertexCount();
+
 		D3D11_MAPPED_SUBRESOURCE MS;
 		Setup->GetDeviceContext()->Map(Buffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &MS);
 		memcpy(MS.pData, Objects[i]->GetVertices(), sizeof(Objects[i]->GetVertices()[0]) * Objects[i]->GetVertexCount());
