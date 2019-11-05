@@ -3,6 +3,7 @@
 //#define XM_NO_ALIGNMENT
 //#include <xnamath.h>
 #include "../DataTypes/Vector.h"
+#include "../../Core/DataTypes/Colour.h"
 
 
 //struct SVertexBase
@@ -23,7 +24,7 @@
 struct SVertex
 {
 	SVector Position;
-	SVector4 Colour;
+	SColour Colour;
 	SVector2 UV;
 	SVector Normal;
 };

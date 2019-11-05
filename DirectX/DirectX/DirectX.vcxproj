@@ -153,7 +153,9 @@
     <ClInclude Include="Content\Engine\Components\Component.h" />
     <ClInclude Include="Content\Engine\Components\Graphics\Camera\CameraComponent.h" />
     <ClInclude Include="Content\Engine\Components\Graphics\Lighting\DirectionalLightComponent.h" />
+    <ClInclude Include="Content\Engine\Components\Graphics\Meshes\CubeComponent.h" />
     <ClInclude Include="Content\Engine\Components\Graphics\Meshes\StaticMeshComponent.h" />
+    <ClInclude Include="Content\Engine\Core\DataTypes\Colour.h" />
     <ClInclude Include="Content\Engine\Core\Systems\FileManager.h" />
     <ClInclude Include="Content\Engine\Core\Systems\InputManager.h" />
     <ClInclude Include="Content\Engine\Core\Systems\Time.h" />
@@ -190,6 +192,7 @@
     <ClInclude Include="Content\Engine\World\Objects\ObjectBase.h" />
     <ClInclude Include="Content\Engine\World\ObjectPool.h" />
     <ClInclude Include="Content\Engine\World\Objects\Puppet.h" />
+    <ClInclude Include="Content\Engine\World\Objects\Testing\SkyBox.h" />
     <ClInclude Include="Content\Engine\World\Objects\Testing\TestObject.h" />
     <ClInclude Include="Content\Engine\World\Objects\Testing\TestPlayer.h" />
     <ClInclude Include="Content\Engine\World\Objects\WorldObject.h" />
@@ -205,6 +208,7 @@
     <ClCompile Include="Content\Engine\Components\Component.cpp" />
     <ClCompile Include="Content\Engine\Components\Graphics\Camera\CameraComponent.cpp" />
     <ClCompile Include="Content\Engine\Components\Graphics\Lighting\DirectionalLightComponent.cpp" />
+    <ClCompile Include="Content\Engine\Components\Graphics\Meshes\CubeComponent.cpp" />
     <ClCompile Include="Content\Engine\Components\Graphics\Meshes\StaticMeshComponent.cpp" />
     <ClCompile Include="Content\Engine\Core\EngineSetup.cpp" />
     <ClCompile Include="Content\Engine\Core\Systems\FileManager.cpp" />
@@ -237,6 +241,7 @@
     <ClCompile Include="Content\Engine\World\Objects\Character.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\ObectBase.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Puppet.cpp" />
+    <ClCompile Include="Content\Engine\World\Objects\Testing\SkyBox.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Testing\TestObject.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Testing\TestPlayer.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\WorldObject.cpp" />
@@ -244,6 +249,10 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Content\Assets\Shaders\Shaders.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Content\Assets\Shaders\SkyBox.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </FxCompile>

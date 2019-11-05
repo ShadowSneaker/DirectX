@@ -241,9 +241,15 @@ void CStaticMesh::SetMesh(String FilePath, bool UseDefaultPath)
 
 void CStaticMesh::SetColour(float Red, float Green, float Blue, float Alpha)
 {
+	SetColour(SColour{ Red, Green, Blue, Alpha });
+}
+
+
+void CStaticMesh::SetColour(SColour Colour)
+{
 	for (uint i = 0; i < VertexCount; ++i)
 	{
-		Vertices[i].Colour = SVector4{ Red, Green, Blue, Alpha };
+		Vertices[i].Colour = Colour;
 	}
 }
 

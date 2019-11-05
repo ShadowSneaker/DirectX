@@ -273,6 +273,7 @@ SShader CRenderer::SetShader(CStaticMesh* Mesh, std::string FilePath, bool UseDe
 
 	Setup->GetDevice()->CreateSamplerState(&SamplerDesc, &Sampler);
 
+
 	return Shader;
 }
 
@@ -332,6 +333,24 @@ void CRenderer::DrawAll()
 	ID3D11Buffer* Buffer;
 	for (uint i = 0; i < Objects.size(); ++i)
 	{
+		if (Raster) Raster->Release();
+		if (RasterDepth) RasterDepth->Release();
+
+		D3D11_RASTERIZER_DESC Rasterizer;
+		ZeroMemory(&Rasterizer, sizeof(Rasterizer));
+		Rasterizer.FillMode = D3D11_FILL_SOLID;
+		Rasterizer.CullMode = (Objects[i]->InvertFaces) ? D3D11_CULL_FRONT : D3D11_CULL_BACK;
+		Setup->GetDevice()->CreateRasterizerState(&Rasterizer, &Raster);
+
+		D3D11_DEPTH_STENCIL_DESC DSDesc;
+		ZeroMemory(&DSDesc, sizeof(DSDesc));
+		DSDesc.DepthEnable = true;
+		DSDesc.DepthWriteMask = (Objects[i]->InvertFaces) ? D3D11_DEPTH_WRITE_MASK_ZERO : D3D11_DEPTH_WRITE_MASK_ALL;
+		DSDesc.DepthFunc = D3D11_COMPARISON_LESS;
+		Setup->GetDevice()->CreateDepthStencilState(&DSDesc, &RasterDepth);
+
+
+
 		SMatrix4 World;
 
 		SMatrix4 Scale;
@@ -374,7 +393,7 @@ void CRenderer::DrawAll()
 
 		
 		SMatrix4 Transpose{ SMatrix4::Transpose(World) };
-		CBuffer CBValues;
+		SCBuffer CBValues;
 		CBValues.LightColour = DirectionalLight->Colour * DirectionalLight->Strength;
 		CBValues.AmbiantLight = AmbiantColour * AmbiantLightStregth;
 		CBValues.DirectionalLight = Transpose.VectorTransform(Rot);
@@ -385,6 +404,9 @@ void CRenderer::DrawAll()
 
 		
 		// Not sure if it's a good idea to have this here, however, by putting this here I am able to change the colour of objects during runtime.
+		// I have found a possible problem with this here, When I have multiple types of meshes, this reaches an access violation. Not sure why though.
+		// I might have to have a vertex buffer in each static mesh object as I think the Vertex buffer can't handle multiple types of objects.
+
 		D3D11_MAPPED_SUBRESOURCE MS;
 		Setup->GetDeviceContext()->Map(VertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &MS);
 		memcpy(MS.pData, Objects[i]->GetVertices(), sizeof(Objects[i]->GetVertices()[0]) * Objects[i]->GetVertexCount());
@@ -399,11 +421,13 @@ void CRenderer::DrawAll()
 		//uint Stride = sizeof(SModelVertex);
 		uint Stride = sizeof(SVertex);
 		uint Offset = 0;
+
 		Setup->GetDeviceContext()->IASetVertexBuffers(0, 1, &VertexBuffer, &Stride, &Offset);
 		Setup->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		Setup->GetDeviceContext()->PSSetSamplers(0, 1, &Sampler);
 		Setup->GetDeviceContext()->PSSetShaderResources(0, 1, &Texture);
-	
+		Setup->GetDeviceContext()->RSSetState(Raster);
+		Setup->GetDeviceContext()->OMSetDepthStencilState(RasterDepth, 0);
 	
 		Setup->GetDeviceContext()->Draw(Objects[i]->GetVertexCount(), 0);
 	}

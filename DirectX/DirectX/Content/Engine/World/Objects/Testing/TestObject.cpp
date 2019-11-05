@@ -19,7 +19,7 @@ CTestObject::CTestObject(SObjectBase Core)
 	//GetRenderer()->AddMesh(Mesh);
 
 	Mesh = CreateComponent<CStaticMeshComponent>();
-	Mesh->SetMesh("Cube.obj");
+	Mesh->SetMesh("Sphere.obj");
 	Mesh->SetShader("Shaders.hlsl");
 	Mesh->Transform.SetParent(&Transform);
 }

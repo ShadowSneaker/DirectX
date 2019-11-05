@@ -2,8 +2,10 @@
 #include "World.h"
 #include "Objects/Testing/TestObject.h"
 #include "Objects/Testing/TestPlayer.h"
+#include "Objects/Testing/SkyBox.h"
 
 #include "../Components/Graphics/Meshes/StaticMeshComponent.h"
+#include "../Components/Graphics/Camera/CameraComponent.h"
 
 
 const std::string CLevel::DefaultFilePath{ "Content/Assets/Levels/" };
@@ -39,15 +41,22 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 
 	CTestPlayer* Player = SpawnObject<CTestPlayer>();
 
+
 	CTestObject* Test = SpawnObject<CTestObject>();
 	Test->Transform.Location = SVector{ -1.5f, 0.0f, 5.0f };
-	Test->Transform.Scale = 0.5f;
-	Test->Transform.Scale[X] = 1.0f;
-	Test->GetMesh()->SetTexture("Texture.bmp");
+	Test->Transform.Scale = 0.2f;
+	Test->Transform.Scale[X] = 0.4f;
+	Test->GetMesh()->SetColour(SColour::Yellow());
 
 	CTestObject* Test2 = SpawnObject<CTestObject>();
 	Test2->Transform.Location = SVector{ 1.0f, 0.0f, 5.0f };
-	Test2->Transform.Scale = 0.8f;
+	Test2->Transform.Scale = 0.2f;
+	Test2->GetMesh()->SetTexture("Texture.bmp");
+
+
+	CTestSkyBox* Sky = SpawnObject<CTestSkyBox>();
+	//Sky->Transform.SetParent(&Player->GetCamera()->Transform);
+	Sky->Camera = &Player->GetCamera()->Transform;
 
 }
 

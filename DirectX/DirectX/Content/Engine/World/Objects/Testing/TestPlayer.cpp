@@ -36,7 +36,7 @@ void CTestPlayer::MoveForward(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->MoveForward(Value / 1000.0f);
+		Camera->MoveForward(Value / 100.0f);
 	}
 }
 
@@ -45,7 +45,7 @@ void CTestPlayer::MoveSideways(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->MoveRight(Value / 1000.0f);
+		Camera->MoveRight(Value / 100.0f);
 	}
 }
 
@@ -54,7 +54,7 @@ void CTestPlayer::MoveUp(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->MoveUp(Value / 1000.0f);
+		Camera->MoveUp(Value / 100.0f);
 	}
 }
 
@@ -63,8 +63,6 @@ void CTestPlayer::Turn(float Value)
 {
 	if (Value != 0.0f)
 	{
-		//TempRotate += Value / 10000.0f;
-		Camera->Rotate(TO_RADIAN(Value / 100.0f));
-		//Camera->Transform.Rotation.X += (TMath::ToRadians(Value / 100.0f));
+		Camera->Rotate(TO_RADIAN(Value / 10.0f));
 	}
 }

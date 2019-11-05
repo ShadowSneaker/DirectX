@@ -165,6 +165,15 @@
     <ClInclude Include="Content\Engine\Components\Graphics\Meshes\StaticMeshComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Content\Engine\Core\DataTypes\Colour.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Engine\World\Objects\Testing\SkyBox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Engine\Components\Graphics\Meshes\CubeComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\Engine\Core\Source.cpp">
@@ -302,9 +311,16 @@
     <ClCompile Include="Content\Engine\Components\Graphics\Meshes\StaticMeshComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Content\Engine\World\Objects\Testing\SkyBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Engine\Components\Graphics\Meshes\CubeComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Content\Assets\Shaders\Shaders.hlsl" />
     <FxCompile Include="TestShader.hlsl" />
+    <FxCompile Include="Content\Assets\Shaders\SkyBox.hlsl" />
   </ItemGroup>
 </Project>

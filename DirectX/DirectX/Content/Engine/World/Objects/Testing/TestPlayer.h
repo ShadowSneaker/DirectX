@@ -29,4 +29,7 @@ public:
 	void MoveUp(float Axis);
 
 	void Turn(float Axis);
+
+
+	inline class CCameraComponent* GetCamera() const { return Camera; }
 };

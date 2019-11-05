@@ -10,12 +10,18 @@
 #include "../Math/DataTypes/Matrix.h"
 
 
-struct CBuffer
+struct SCBuffer
 {
 	SMatrix4 ViewMatrix;
 	SVector4 DirectionalLight;
 	SVector4 LightColour;
 	SVector4 AmbiantLight;
+};
+
+
+struct SSkyBuffer
+{
+	SMatrix4 WorldMatrix;
 };
 
 
@@ -58,6 +64,11 @@ private:
 
 	// A reference to the camera the world should be viewd through.
 	class CCamera* SelectedCamera{ nullptr };
+
+
+
+	ID3D11RasterizerState* Raster{ nullptr };
+	ID3D11DepthStencilState* RasterDepth{ nullptr };
 
 
 	/// temp
@@ -158,6 +169,8 @@ public:
 	// @param UseDefaultPath - Should the file path start at the default path for textures.
 	// @return - A reference to the created texture.
 	STexture* SetTexture(std::string FilePath, bool UseDefaultPath = true);
+
+	void SetFaceDirection(CStaticMesh* Mesh);
 
 private:
 	// Creates a texture and stores it within this class if the texture doesn't already exist.
