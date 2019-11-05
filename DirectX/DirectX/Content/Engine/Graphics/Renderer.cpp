@@ -333,6 +333,11 @@ void CRenderer::DrawAll()
 	ID3D11Buffer* Buffer;
 	for (uint i = 0; i < Objects.size(); ++i)
 	{
+		Texture = Objects[i]->GetTexture();
+		Buffer = Objects[i]->GetShader().ConstantBuffer;
+
+
+
 		if (Raster) Raster->Release();
 		if (RasterDepth) RasterDepth->Release();
 
@@ -406,15 +411,16 @@ void CRenderer::DrawAll()
 		// Not sure if it's a good idea to have this here, however, by putting this here I am able to change the colour of objects during runtime.
 		// I have found a possible problem with this here, When I have multiple types of meshes, this reaches an access violation. Not sure why though.
 		// I might have to have a vertex buffer in each static mesh object as I think the Vertex buffer can't handle multiple types of objects.
+		// The buffer type may not be the problem After using the in-class buffer to initialise MS it still hit the access violation.
+		// The problem looks to be somewhere in the Vertices.
 
 		D3D11_MAPPED_SUBRESOURCE MS;
-		Setup->GetDeviceContext()->Map(VertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &MS);
+		Setup->GetDeviceContext()->Map(Buffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &MS);
 		memcpy(MS.pData, Objects[i]->GetVertices(), sizeof(Objects[i]->GetVertices()[0]) * Objects[i]->GetVertexCount());
-		Setup->GetDeviceContext()->Unmap(VertexBuffer, NULL);
+		Setup->GetDeviceContext()->Unmap(Buffer, NULL);
 
 
-		Texture = Objects[i]->GetTexture();
-		Buffer = Objects[i]->GetShader().ConstantBuffer;
+		
 		Setup->GetDeviceContext()->UpdateSubresource(Buffer, 0, 0, &CBValues, 0, 0);
 		Setup->GetDeviceContext()->VSSetConstantBuffers(0, 1, &Buffer);
 	
@@ -422,7 +428,7 @@ void CRenderer::DrawAll()
 		uint Stride = sizeof(SVertex);
 		uint Offset = 0;
 
-		Setup->GetDeviceContext()->IASetVertexBuffers(0, 1, &VertexBuffer, &Stride, &Offset);
+		Setup->GetDeviceContext()->IASetVertexBuffers(0, 1, &Buffer, &Stride, &Offset);
 		Setup->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		Setup->GetDeviceContext()->PSSetSamplers(0, 1, &Sampler);
 		Setup->GetDeviceContext()->PSSetShaderResources(0, 1, &Texture);
