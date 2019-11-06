@@ -35,23 +35,10 @@ void CCamera::MoveUp(float Distance)
 
 void CCamera::MoveRight(float Distance)
 {
-	//Transform.Location += Transform.Right() * Distance;
-
-	SVector Quat = Transform.Rotation.Euler();
-	SVector T = SVector::CrossProduct(Quat, SVector::Right());
-	//SVector Temp0 = Quat * T + SVector::Right();
-	//SVector Temp1 = SVector::CrossProduct(Quat, T);
-	//SVector Result = Temp0 + Temp1;
-	
-	SVector Result = SVector::Right() + (T * Transform.Rotation.W) + SVector::CrossProduct(Quat, T);
-	
-	Transform.Location[X] += Result[X] * Distance;
-	Transform.Location[Z] += Result[Z] * Distance;
-	
-
-	//SVector4 Direction = SVector4::CrossProduct(LookAt, SVector4::Up()).Normalize();
-	//Transform.Location[X] += Direction[X] * Distance;
-	//Transform.Location[Z] += Direction[Z] * Distance;
+	SVector4 Look{ DX, 0.0f, DZ, 0.0f };
+	SVector4 Direction = SVector4::CrossProduct(Look, SVector4::Up());
+	Transform.Location[X] += Direction[X] * -Distance;
+	Transform.Location[Z] += Direction[Z] * -Distance;
 }
 
 

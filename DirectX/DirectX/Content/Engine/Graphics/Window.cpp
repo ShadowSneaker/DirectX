@@ -34,7 +34,8 @@ HRESULT CWindow::InitialiseWindow(HINSTANCE HandleInstance, int CommandShow)
 	Rect.bottom = WindowSize[Y];
 
 	AdjustWindowRect(&Rect, WS_OVERLAPPEDWINDOW, FALSE);
-	HWindow = CreateWindow(ApplicationName.c_str(), ApplicationName.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, Rect.right - Rect.left, Rect.bottom - Rect.top, NULL, NULL, HInstance, NULL);
+	//HWindow = CreateWindow(ApplicationName.c_str(), ApplicationName.c_str(), WS_OVERLAPPEDWINDOW, 0, 0, Rect.right - Rect.left, Rect.bottom - Rect.top, NULL, NULL, HInstance, NULL);
+	HWindow = CreateWindow(ApplicationName.c_str(), ApplicationName.c_str(), WS_OVERLAPPEDWINDOW, 0, 0, Rect.right - Rect.left, Rect.bottom - Rect.top, NULL, NULL, HInstance, NULL);
 
 	if (!HWindow) return E_FAIL;
 

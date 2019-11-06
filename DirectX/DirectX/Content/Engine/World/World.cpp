@@ -47,6 +47,12 @@ void CWorld::Play()
 }
 
 
+void CWorld::Quit()
+{
+	Playing = false;
+}
+
+
 void CWorld::Inputs()
 {
 	InputManager->Update();

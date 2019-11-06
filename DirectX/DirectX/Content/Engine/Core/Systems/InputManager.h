@@ -195,7 +195,7 @@ enum EKey
 
 	IE_LControl = 0xA2,
 	IE_LMenu = 0xA4,
-	IE_LShift = 0xA0,
+	IE_LShift = 0x2A,
 	IE_LWin = 0x5B,
 
 	IE_RControl = 0xA3,

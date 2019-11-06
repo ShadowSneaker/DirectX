@@ -39,8 +39,12 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 		delete this;
 	}
 
+	
 	CTestPlayer* Player = SpawnObject<CTestPlayer>();
 
+	CTestSkyBox* Sky = SpawnObject<CTestSkyBox>();
+	//Sky->Transform.SetParent(&Player->GetCamera()->Transform);
+	Sky->Camera = &Player->GetCamera()->Transform;
 
 	CTestObject* Test = SpawnObject<CTestObject>();
 	Test->Transform.Location = SVector{ -1.5f, 0.0f, 5.0f };
@@ -54,9 +58,6 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 	Test2->GetMesh()->SetTexture("Texture.bmp");
 
 
-	CTestSkyBox* Sky = SpawnObject<CTestSkyBox>();
-	//Sky->Transform.SetParent(&Player->GetCamera()->Transform);
-	//Sky->Camera = &Player->GetCamera()->Transform;
 
 }
 

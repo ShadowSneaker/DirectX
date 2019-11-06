@@ -48,6 +48,8 @@ public:
 
 	void Play();
 
+	void Quit();
+
 private:
 	void Inputs();
 	void Update();

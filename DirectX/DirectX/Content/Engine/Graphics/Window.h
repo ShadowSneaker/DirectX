@@ -23,7 +23,7 @@ private:
 	// The name that will be displayed at the top of the window.
 	std::string ApplicationName{ "Name" };
 
-	SVector2i WindowSize{ 640, 480 };
+	SVector2i WindowSize{ 1920, 1080 };
 
 
 

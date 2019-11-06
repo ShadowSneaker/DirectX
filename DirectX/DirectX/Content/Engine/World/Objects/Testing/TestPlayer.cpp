@@ -1,7 +1,8 @@
 #include "TestPlayer.h"
 #include "../../../Components/Graphics/Camera/CameraComponent.h"
-#include "../../../Core/Systems/InputManager.h"
+
 #include "../../../Graphics/Renderer.h"
+#include "..//..//World.h"
 
 
 CTestPlayer::CTestPlayer(SObjectBase Core)
@@ -29,6 +30,11 @@ void CTestPlayer::SetupInput(CInputManager* Input)
 
 	Input->BindAxis("Turn", EKey::IE_Right, std::bind(&CTestPlayer::Turn, this, std::placeholders::_1));
 	Input->BindAxis("Turn", EKey::IE_Left, -1.0f);
+
+	Input->BindAction("Close", EInputMode::Pressed, EKey::IE_Escape, std::bind(&CTestPlayer::CloseGame, this, std::placeholders::_1));
+
+	Input->BindAction("SpeedUp", EInputMode::Pressed, EKey::IE_LShift, std::bind(&CTestPlayer::SpeedUp, this, std::placeholders::_1));
+	Input->BindAction("SpeedUp", EInputMode::Released, EKey::IE_LShift);
 }
 
 
@@ -36,7 +42,7 @@ void CTestPlayer::MoveForward(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->MoveForward(Value / 100.0f);
+		Camera->MoveForward(Value / 500.0f);
 	}
 }
 
@@ -45,7 +51,7 @@ void CTestPlayer::MoveSideways(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->MoveRight(Value / 100.0f);
+		Camera->MoveRight(Value / 500.0f);
 	}
 }
 
@@ -54,7 +60,7 @@ void CTestPlayer::MoveUp(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->MoveUp(Value / 100.0f);
+		Camera->MoveUp(Value / 500.0f);
 	}
 }
 
@@ -63,6 +69,25 @@ void CTestPlayer::Turn(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->Rotate(TO_RADIAN(Value / 10.0f));
+		Camera->Rotate(TO_RADIAN(Value / 50.0f));
+	}
+}
+
+
+void CTestPlayer::CloseGame(EInputMode InputMode)
+{
+	GetWorld()->Quit();
+}
+
+
+void CTestPlayer::SpeedUp(EInputMode InputMode)
+{
+	if (InputMode == EInputMode::Pressed)
+	{
+		Speed = 100.0f;
+	}
+	else if (InputMode == EInputMode::Released)
+	{
+		Speed = 500.0f;
 	}
 }

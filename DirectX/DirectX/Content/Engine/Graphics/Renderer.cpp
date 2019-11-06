@@ -326,7 +326,7 @@ void CRenderer::DrawAll()
 
 	
 
-
+	uint VertexCount{ 0 };
 
 
 	STexture* Texture;
@@ -334,6 +334,8 @@ void CRenderer::DrawAll()
 	ID3D11Buffer* VBuffer;
 	for (uint i = 0; i < Objects.size(); ++i)
 	{
+		VertexCount += Objects[i]->GetVertexCount();
+
 		Texture = Objects[i]->GetTexture();
 		Buffer = Objects[i]->GetShader().ConstantBuffer;
 		VBuffer = Objects[i]->GetShader().VertexBuffer;
@@ -445,5 +447,6 @@ void CRenderer::DrawAll()
 		Setup->GetDeviceContext()->Draw(Objects[i]->GetVertexCount(), 0);
 	}
 
+	//Setup->GetDeviceContext()->Draw(VertexCount, 0);
 	Setup->GetSwapChain()->Present(0, 0);
 }

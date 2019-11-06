@@ -1,5 +1,6 @@
 #pragma once
 #include "../Character.h"
+#include "../../../Core/Systems/InputManager.h"
 
 
 class CTestPlayer :public CCharacter
@@ -9,6 +10,7 @@ private:
 
 	class CCameraComponent* Camera;
 	float TempRotate{ 0.0f };
+	float Speed{ 500.0f };
 
 public:
 	/// Constructors.
@@ -30,6 +32,9 @@ public:
 
 	void Turn(float Axis);
 
+	void CloseGame(EInputMode InputMode);
+
+	void SpeedUp(EInputMode InputMode);
 
 	inline class CCameraComponent* GetCamera() const { return Camera; }
 };

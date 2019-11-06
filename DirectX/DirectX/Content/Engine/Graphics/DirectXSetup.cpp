@@ -10,11 +10,13 @@ CDirectXSetup::CDirectXSetup(CWindow* InWindow)
 
 CDirectXSetup::~CDirectXSetup()
 {
+	SwapChain->SetFullscreenState(FALSE, NULL);
 	if (BackBuffer) BackBuffer->Release();
 	if (ZBuffer) ZBuffer->Release();
 	if (SwapChain) SwapChain->Release();
 	if (DeviceContext) DeviceContext->Release();
 	if (Device) Device->Release();
+	
 }
 
 
@@ -24,8 +26,8 @@ HRESULT CDirectXSetup::Initialise()
 
 	RECT Rect;
 	GetClientRect(Window->GetWindowHandle(), &Rect);
-	UINT Width = Rect.right - Rect.left;
-	UINT Height = Rect.bottom - Rect.top;
+	//UINT Width = Rect.right - Rect.left;
+	//UINT Height = Rect.bottom - Rect.top;
 
 	UINT CreateDeviceFlags = 0;
 
@@ -53,8 +55,8 @@ HRESULT CDirectXSetup::Initialise()
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc;
 	ZeroMemory(&SwapChainDesc, sizeof(SwapChainDesc));
 	SwapChainDesc.BufferCount = 1;
-	SwapChainDesc.BufferDesc.Width = Width;
-	SwapChainDesc.BufferDesc.Height = Height;
+	SwapChainDesc.BufferDesc.Width = Window->GetWindowSize()[X];
+	SwapChainDesc.BufferDesc.Height = Window->GetWindowSize()[Y];
 	SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	SwapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
 	SwapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
@@ -63,6 +65,7 @@ HRESULT CDirectXSetup::Initialise()
 	SwapChainDesc.SampleDesc.Count = 1;
 	SwapChainDesc.SampleDesc.Quality = 0;
 	SwapChainDesc.Windowed = true;
+	SwapChainDesc.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 	for (uint i = 0; i < NumDriverTypes; ++i)
 	{
@@ -78,6 +81,8 @@ HRESULT CDirectXSetup::Initialise()
 	ID3D11Texture2D* BackBufferTexture;
 	HR = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&BackBufferTexture);
 
+	SwapChain->SetFullscreenState(TRUE, NULL);
+
 	if (FAILED(HR)) return HR;
 
 	HR = Device->CreateRenderTargetView(BackBufferTexture, NULL, &BackBuffer);
@@ -87,8 +92,8 @@ HRESULT CDirectXSetup::Initialise()
 
 	D3D11_TEXTURE2D_DESC Texture2DDesc;
 	ZeroMemory(&Texture2DDesc, sizeof(Texture2DDesc));
-	Texture2DDesc.Width = Width;
-	Texture2DDesc.Height = Height;
+	Texture2DDesc.Width = Window->GetWindowSize()[X];
+	Texture2DDesc.Height = Window->GetWindowSize()[Y];
 	Texture2DDesc.ArraySize = 1;
 	Texture2DDesc.MipLevels = 1;
 	Texture2DDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -114,8 +119,8 @@ HRESULT CDirectXSetup::Initialise()
 	D3D11_VIEWPORT Viewport;
 	Viewport.TopLeftX = 0;
 	Viewport.TopLeftY = 0;
-	Viewport.Width = (FLOAT)Width;
-	Viewport.Height = (FLOAT)Height;
+	Viewport.Width = (FLOAT)Window->GetWindowSize()[X];
+	Viewport.Height = (FLOAT)Window->GetWindowSize()[Y];
 	Viewport.MinDepth = 0.0f;
 	Viewport.MaxDepth = 1.0f;
 
