@@ -18,7 +18,8 @@ HRESULT CWindow::InitialiseWindow(HINSTANCE HandleInstance, int CommandShow)
 	WCex.style = CS_HREDRAW | CS_VREDRAW;
 	WCex.lpfnWndProc = WindowProc;
 	WCex.hInstance = HandleInstance;
-	WCex.hCursor = LoadCursor(NULL, IDC_ARROW);
+	//WCex.hCursor = LoadCursor(NULL, IDC_ARROW);
+	WCex.hCursor = 0;
 	//WCex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 	WCex.lpszClassName = ApplicationName.c_str();
 

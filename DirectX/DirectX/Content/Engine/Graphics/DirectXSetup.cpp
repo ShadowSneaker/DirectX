@@ -81,7 +81,9 @@ HRESULT CDirectXSetup::Initialise()
 	ID3D11Texture2D* BackBufferTexture;
 	HR = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&BackBufferTexture);
 
-	SwapChain->SetFullscreenState(TRUE, NULL);
+	
+	// Fullscreen
+	//SwapChain->SetFullscreenState(TRUE, NULL);
 
 	if (FAILED(HR)) return HR;
 
