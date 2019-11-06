@@ -48,15 +48,18 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 
 	CTestObject* Test = SpawnObject<CTestObject>();
 	Test->Transform.Location = SVector{ -1.5f, 0.0f, 5.0f };
-	Test->Transform.Scale = 0.2f;
+	//Test->Transform.Scale = 0.2f;
 	Test->Transform.Scale[X] = 0.4f;
 	Test->GetMesh()->SetColour(SColour::Yellow());
+	Test->GetMesh()->SetTexture("skybox01.dds");
+	Test->GetMesh()->SetShader("SkyBox.hlsl");
+	Test->GetMesh()->InvertFaces = true;
 
 	CTestObject* Test2 = SpawnObject<CTestObject>();
 	Test2->Transform.Location = SVector{ 1.0f, 0.0f, 5.0f };
 	Test2->Transform.Scale = 0.2f;
 	Test2->GetMesh()->SetTexture("Texture.bmp");
-
+	Test2->GetMesh()->InvertFaces = true;
 
 
 }

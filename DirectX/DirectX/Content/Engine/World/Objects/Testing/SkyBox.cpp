@@ -11,7 +11,7 @@ CTestSkyBox::CTestSkyBox(SObjectBase Base)
 
 
 	Mesh->SetShader("SkyBox.hlsl");
-	Mesh->SetTexture("skybox02.dds");
+	Mesh->SetTexture("SkyBox.dds");
 	Mesh->InvertFaces = true;
 	Mesh->Transform.SetParent(&Transform);
 	Mesh->Transform.Scale = 3.0f;
