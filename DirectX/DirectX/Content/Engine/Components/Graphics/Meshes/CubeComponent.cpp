@@ -14,7 +14,7 @@ CCubeComponent::~CCubeComponent()
 {
 	GetRenderer()->RemoveMesh(this);
 	CComponent::~CComponent();
-	CCube::~CCube();
+	//CCube::~CCube();
 }
 
 

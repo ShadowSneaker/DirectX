@@ -44,7 +44,7 @@ private:
 	CDirectXSetup* Setup{ nullptr };
 
 	// A reference to the created vertex buffer.
-	ID3D11Buffer* VertexBuffer{ nullptr };
+	//ID3D11Buffer* VertexBuffer{ nullptr };
 
 	// A reference to the created sampler state.
 	ID3D11SamplerState* Sampler{ nullptr };

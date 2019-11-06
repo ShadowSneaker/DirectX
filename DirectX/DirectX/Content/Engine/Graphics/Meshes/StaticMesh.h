@@ -16,6 +16,8 @@ struct SShader
 {
 	/// Properties
 
+	ID3D11Buffer* VertexBuffer{ nullptr };
+
 	// A reference to the vertex buffer.
 	ID3D11Buffer* ConstantBuffer{ nullptr };
 
@@ -31,6 +33,7 @@ struct SShader
 
 	void Clear()
 	{
+		if (VertexBuffer) VertexBuffer->Release();
 		if (ConstantBuffer) ConstantBuffer->Release();
 		if (InputLayout) InputLayout->Release();
 		if (VertexShader) VertexShader->Release();

@@ -32,7 +32,7 @@ CRenderer::CRenderer(HINSTANCE HandleInstance, int CommandShow)
 
 CRenderer::~CRenderer()
 {
-	if (VertexBuffer) VertexBuffer->Release();
+	//if (VertexBuffer) VertexBuffer->Release();
 
 	DeleteAllMeshes();
 	DeleteAllTextures();
@@ -201,7 +201,7 @@ SShader CRenderer::SetShader(CStaticMesh* Mesh, std::string FilePath, bool UseDe
 	BufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	BufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-	HR = Setup->GetDevice()->CreateBuffer(&BufferDesc, NULL, &VertexBuffer);
+	HR = Setup->GetDevice()->CreateBuffer(&BufferDesc, NULL, &Shader.VertexBuffer);
 	if (FAILED(HR)) return Shader;
 
 
@@ -216,9 +216,9 @@ SShader CRenderer::SetShader(CStaticMesh* Mesh, std::string FilePath, bool UseDe
 
 
 	D3D11_MAPPED_SUBRESOURCE MS;
-	Setup->GetDeviceContext()->Map(VertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &MS);
+	Setup->GetDeviceContext()->Map(Shader.VertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &MS);
 	memcpy(MS.pData, Mesh->GetVertices(), sizeof(Mesh->GetVertices()[0]) * Mesh->GetVertexCount());
-	Setup->GetDeviceContext()->Unmap(VertexBuffer, NULL);
+	Setup->GetDeviceContext()->Unmap(Shader.VertexBuffer, NULL);
 
 
 	ID3DBlob* VS;
@@ -331,11 +331,12 @@ void CRenderer::DrawAll()
 
 	STexture* Texture;
 	ID3D11Buffer* Buffer;
+	ID3D11Buffer* VBuffer;
 	for (uint i = 0; i < Objects.size(); ++i)
 	{
 		Texture = Objects[i]->GetTexture();
 		Buffer = Objects[i]->GetShader().ConstantBuffer;
-
+		VBuffer = Objects[i]->GetShader().VertexBuffer;
 
 
 		if (Raster) Raster->Release();
@@ -418,9 +419,9 @@ void CRenderer::DrawAll()
 		uint VertexCount = Objects[i]->GetVertexCount();
 
 		D3D11_MAPPED_SUBRESOURCE MS;
-		Setup->GetDeviceContext()->Map(Buffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &MS);
+		Setup->GetDeviceContext()->Map(VBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &MS);
 		memcpy(MS.pData, Objects[i]->GetVertices(), sizeof(Objects[i]->GetVertices()[0]) * Objects[i]->GetVertexCount());
-		Setup->GetDeviceContext()->Unmap(Buffer, NULL);
+		Setup->GetDeviceContext()->Unmap(VBuffer, NULL);
 
 
 		
@@ -431,7 +432,10 @@ void CRenderer::DrawAll()
 		uint Stride = sizeof(SVertex);
 		uint Offset = 0;
 
-		Setup->GetDeviceContext()->IASetVertexBuffers(0, 1, &Buffer, &Stride, &Offset);
+		Setup->GetDeviceContext()->IASetInputLayout(Objects[i]->GetShader().InputLayout);
+		Setup->GetDeviceContext()->VSSetShader(Objects[i]->GetShader().VertexShader, 0, 0);
+		Setup->GetDeviceContext()->PSSetShader(Objects[i]->GetShader().PixelShader, 0, 0);
+		Setup->GetDeviceContext()->IASetVertexBuffers(0, 1, &VBuffer, &Stride, &Offset);
 		Setup->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		Setup->GetDeviceContext()->PSSetSamplers(0, 1, &Sampler);
 		Setup->GetDeviceContext()->PSSetShaderResources(0, 1, &Texture);

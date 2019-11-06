@@ -56,7 +56,7 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 
 	CTestSkyBox* Sky = SpawnObject<CTestSkyBox>();
 	//Sky->Transform.SetParent(&Player->GetCamera()->Transform);
-	Sky->Camera = &Player->GetCamera()->Transform;
+	//Sky->Camera = &Player->GetCamera()->Transform;
 
 }
 
