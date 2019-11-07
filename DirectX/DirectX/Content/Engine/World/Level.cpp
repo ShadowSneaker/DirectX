@@ -2,12 +2,7 @@
 #include "World.h"
 #include "../Core/Systems/FileManager.h"
 
-#include "Objects/Testing/TestObject.h"
-#include "Objects/Testing/TestPlayer.h"
-#include "Objects/Testing/SkyBox.h"
-
-#include "../Components/Graphics/Meshes/StaticMeshComponent.h"
-#include "../Components/Graphics/Camera/CameraComponent.h"
+#include "Objects/Game/Floor.h"
 
 
 const std::string CLevel::DefaultFilePath{ "Content/Assets/Levels/" };
@@ -91,18 +86,27 @@ void CLevel::Update()
 
 void CLevel::LoadObjects()
 {
-	SFileInfo Info = TFileManager::ReadFile(FilePath.GetFilePath());
+	SStringBlock Contents = TFileManager::ReadFileAlt(FilePath.GetFilePath());
 
-	String Con{ Info.Contents };
-	SStringBlock Contents = TFileManager::LineToWord(Con);
 	for (uint i = 0; i < Contents.size(); ++i)
 	{
-		if (Contents[i] == "Floor")
-		{
-			for (uint i = 0; i < Contents.size() - 1; ++i)
-			{
+		SStringBlock Line{ TFileManager::LineToWord(Contents[i]) };
+		STransform Transform;
 
-			}
+		if (Line[0] == "Floor")
+		{
+			Transform.Location[X] = TFileManager::GetValue<float>(Line[1]);
+			Transform.Location[Y] = TFileManager::GetValue<float>(Line[2]);
+			Transform.Location[Z] = TFileManager::GetValue<float>(Line[3]);
+
+			Transform.Rotation.X = TFileManager::GetValue<float>(Line[4]);
+			Transform.Rotation.Y = TFileManager::GetValue<float>(Line[5]);
+			Transform.Rotation.Z = TFileManager::GetValue<float>(Line[6]);
+
+			Transform.Scale[X] = TFileManager::GetValue<float>(Line[7]);
+			Transform.Scale[Y] = TFileManager::GetValue<float>(Line[8]);
+			Transform.Scale[Z] = TFileManager::GetValue<float>(Line[9]);
+			SpawnObject<CFloor>(Transform);
 		}
 	}
 }

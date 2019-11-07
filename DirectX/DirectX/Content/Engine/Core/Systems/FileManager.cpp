@@ -1,4 +1,5 @@
 #include "FileManager.h"
+#include <fstream>
 
 
 const String TFileManager::DefaultFilePath{ "Content/Assets/" };
@@ -7,6 +8,29 @@ const String TFileManager::TextureFilePath{ TFileManager::DefaultFilePath + "Ima
 const String TFileManager::ShaderFilePath{ TFileManager::DefaultFilePath + "Shaders/" };
 const String TFileManager::FontFilePath{ TFileManager::DefaultFilePath + "Fonts/" };
 const String TFileManager::LevelFilePath{ TFileManager::DefaultFilePath + "Levels/" };
+
+
+SStringBlock TFileManager::ReadFileAlt(String File)
+{
+	SStringBlock Contents;
+	std::ifstream OpenFile;
+	OpenFile.open(File.c_str());
+
+	if (OpenFile.bad())
+	{
+		return Contents;
+	}
+
+	while (!OpenFile.eof())
+	{
+		String Line;
+		std::getline(OpenFile, Line);
+		Contents.push_back(Line);
+	}
+
+	OpenFile.close();
+	return Contents;
+}
 
 
 SStringBlock TFileManager::LineToWord(String Data)
@@ -51,4 +75,11 @@ Vector<Size, Type> TFileManager::ReadVector(String DataLine)
 		}
 		LastWord = Word;
 	}
+}
+
+
+template <typename Type>
+Type TFileManager::GetValue(String Data)
+{
+	return (Type)atoi(Data.c_str());
 }

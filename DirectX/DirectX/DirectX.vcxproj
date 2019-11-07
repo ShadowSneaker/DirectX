@@ -189,6 +189,7 @@
     <ClInclude Include="Content\Engine\Math\Physics\RigidBody.h" />
     <ClInclude Include="Content\Engine\World\Level.h" />
     <ClInclude Include="Content\Engine\World\Objects\Character.h" />
+    <ClInclude Include="Content\Engine\World\Objects\Game\Floor.h" />
     <ClInclude Include="Content\Engine\World\Objects\ObjectBase.h" />
     <ClInclude Include="Content\Engine\World\ObjectPool.h" />
     <ClInclude Include="Content\Engine\World\Objects\Puppet.h" />
@@ -239,6 +240,7 @@
     <ClCompile Include="Content\Engine\World\Level.cpp" />
     <ClCompile Include="Content\Engine\World\ObjectPool.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Character.cpp" />
+    <ClCompile Include="Content\Engine\World\Objects\Game\Floor.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\ObectBase.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Puppet.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Testing\SkyBox.cpp" />

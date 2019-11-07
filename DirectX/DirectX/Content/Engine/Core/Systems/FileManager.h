@@ -176,10 +176,15 @@ public:
 	}
 
 
+	static SStringBlock ReadFileAlt(String FilePath);
+
 	static SStringBlock LineToWord(String Data);
 
 	template <uint Size, typename Type>
-	Vector<Size, Type> ReadVector(String DataLine);
+	static Vector<Size, Type> ReadVector(String DataLine);
+
+	template <typename Type>
+	static Type GetValue(String Data);
 };
 
 
