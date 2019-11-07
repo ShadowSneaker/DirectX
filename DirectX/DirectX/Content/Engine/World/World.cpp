@@ -22,7 +22,7 @@ CWorld::CWorld(HINSTANCE HandleInstance, int CommandShow)
 
 
 
-	LoadLevel("");
+	LoadLevel("lvl_Level1.txt");
 }
 
 

@@ -85,6 +85,8 @@ public:
 	// Should the mesh's faces be looking inwards (false for outwards (default)).
 	bool InvertFaces{ false };
 
+	bool Reflect{ false };
+
 
 
 public:

@@ -98,7 +98,7 @@ public:
 	// Returns how many objects are created with the inputted key.
 	// @param Key - What object type to get the amount of objects from.
 	// @return - The total amount of objects created.
-	inline uint GetObjectCount(const char* Key) const { if (Objects.count(Key)) return Objects.at(Key).size(); else return 0; }
+	INLINE uint GetObjectCount(const char* Key) const { if (Objects.count(Key)) return Objects.at(Key).size(); else return 0; }
 };
 
 

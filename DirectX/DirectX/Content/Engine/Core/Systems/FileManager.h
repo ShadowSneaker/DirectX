@@ -1,8 +1,10 @@
 #pragma once
 #include "../../Math/MathValues.h"
+#include "../../Math/DataTypes/Vector.h"
 
 #include <string>
 #include <vector>
+#include <sstream>
 
 #include <stdio.h>
 #include <D3D11.h>
@@ -110,6 +112,9 @@ public:
 	// The default location for fonts.
 	static const String FontFilePath;
 
+	// The default location for levels.
+	static const String LevelFilePath;
+
 
 
 	/// Static Functions
@@ -155,6 +160,26 @@ public:
 		fclose(File);
 		return FileInfo;
 	}
+
+
+	static bool DoesFileExist(String FilePath)
+	{
+		FILE* File;
+		fopen_s(&File, FilePath.c_str(), "r");
+
+		if (File != NULL)
+		{
+			fclose(File);
+			return true;
+		}
+		return false;
+	}
+
+
+	static SStringBlock LineToWord(String Data);
+
+	template <uint Size, typename Type>
+	Vector<Size, Type> ReadVector(String DataLine);
 };
 
 

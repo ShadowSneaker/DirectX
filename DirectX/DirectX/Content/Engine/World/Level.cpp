@@ -1,5 +1,7 @@
 #include "Level.h"
 #include "World.h"
+#include "../Core/Systems/FileManager.h"
+
 #include "Objects/Testing/TestObject.h"
 #include "Objects/Testing/TestPlayer.h"
 #include "Objects/Testing/SkyBox.h"
@@ -31,35 +33,42 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 		}
 	}
 
+
 	// Make sure the file exists.
-	if (!true) // if the file does not exist then delete this level.
+	if (!TFileManager::DoesFileExist(File))
 	{
 		// Log error
 		// Debug->LogError("Error: Could not open level: " + FilePath.GetFilePath());
 		delete this;
 	}
+	else
+	{
+		LoadObjects();
 
-	
-	CTestPlayer* Player = SpawnObject<CTestPlayer>();
+	}
 
-	CTestSkyBox* Sky = SpawnObject<CTestSkyBox>();
-	//Sky->Transform.SetParent(&Player->GetCamera()->Transform);
-	Sky->Camera = &Player->GetCamera()->Transform;
 
-	CTestObject* Test = SpawnObject<CTestObject>();
-	Test->Transform.Location = SVector{ -1.5f, 0.0f, 5.0f };
-	//Test->Transform.Scale = 0.2f;
-	Test->Transform.Scale[X] = 0.4f;
-	Test->GetMesh()->SetColour(SColour::Yellow());
-	Test->GetMesh()->SetTexture("skybox01.dds");
-	Test->GetMesh()->SetShader("SkyBox.hlsl");
-	Test->GetMesh()->InvertFaces = true;
-
-	CTestObject* Test2 = SpawnObject<CTestObject>();
-	Test2->Transform.Location = SVector{ 1.0f, 0.0f, 5.0f };
-	Test2->Transform.Scale = 0.2f;
-	Test2->GetMesh()->SetTexture("Texture.bmp");
-	Test2->GetMesh()->InvertFaces = true;
+	//SFileInfo Info{ TFileManager::ReadFile(File) };
+	//
+	//CTestPlayer* Player = SpawnObject<CTestPlayer>();
+	//
+	//CTestSkyBox* Sky = SpawnObject<CTestSkyBox>();
+	////Sky->Transform.SetParent(&Player->GetCamera()->Transform);
+	//Sky->Camera = &Player->GetCamera()->Transform;
+	//
+	//CTestObject* Test = SpawnObject<CTestObject>();
+	//Test->Transform.Location = SVector{ -1.5f, 0.0f, 5.0f };
+	////Test->Transform.Scale = 0.2f;
+	//Test->Transform.Scale = 0.1f;
+	//Test->GetMesh()->SetShader("ReflectShader.hlsl");
+	//Test->GetMesh()->Reflect = true;
+	//
+	//CTestObject* Test2 = SpawnObject<CTestObject>();
+	//Test2->Transform.Location = SVector{ 1.0f, 0.0f, 5.0f };
+	//Test2->Transform.Scale = 0.2f;
+	//Test2->GetMesh()->SetTexture("Texture.bmp");
+	//Test2->GetMesh()->SetShader("ReflectShader.hlsl");
+	//Test2->GetMesh()->Reflect = true;
 
 
 }
@@ -76,6 +85,25 @@ void CLevel::Update()
 	for (uint i = 0; i < Objects.size(); ++i)
 	{
 		Objects[i]->Update();
+	}
+}
+
+
+void CLevel::LoadObjects()
+{
+	SFileInfo Info = TFileManager::ReadFile(FilePath.GetFilePath());
+
+	String Con{ Info.Contents };
+	SStringBlock Contents = TFileManager::LineToWord(Con);
+	for (uint i = 0; i < Contents.size(); ++i)
+	{
+		if (Contents[i] == "Floor")
+		{
+			for (uint i = 0; i < Contents.size() - 1; ++i)
+			{
+
+			}
+		}
 	}
 }
 

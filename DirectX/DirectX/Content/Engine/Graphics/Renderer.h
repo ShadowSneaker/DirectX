@@ -19,8 +19,9 @@ struct SCBuffer
 };
 
 
-struct SSkyBuffer
+struct SReflectBuffer
 {
+	SMatrix4 ViewMatrix;
 	SMatrix4 WorldMatrix;
 };
 
@@ -100,8 +101,6 @@ public:
 	/// Functions
 
 private:
-	DEPRECATED("This is not a nessisarry function.")
-	HRESULT Initialise();
 	
 	// Safely deletes all static meshes in memory.
 	void DeleteAllMeshes();

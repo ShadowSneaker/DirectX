@@ -20,6 +20,10 @@ public:
 	// Constructor, Default.
 	CCylinderCollider();
 
+	// Constructor, Initialises a default size based on the vertices of the mesh this collider is on.
+	// @param Mesh - The reference to the mesh to create the default collider size.
+	CCylinderCollider(class CStaticMesh* Mesh);
+
 	// Constructor, Initiates this collider's transform.
 	// @param InOwner - The object that this collider is bound to.
 	// @param InTransform - The location, rotation and scale of this collider.

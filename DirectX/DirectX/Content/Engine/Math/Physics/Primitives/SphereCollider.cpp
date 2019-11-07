@@ -3,6 +3,7 @@
 #include "CylinderCollider.h"
 #include "CapsuleCollider.h"
 #include "PolygonCollider.h"
+#include "../../../Graphics/Meshes/StaticMesh.h"
 
 
 CSphereCollider::CSphereCollider()

@@ -19,11 +19,6 @@ CRenderer::CRenderer(HINSTANCE HandleInstance, int CommandShow)
 		exit(0);
 	}
 
-	//if (FAILED(Initialise()))
-	//{
-	//	exit(0);
-	//}
-
 
 	// TEMP
 	DirectionalLight = new CDirectionalLight{};
@@ -41,13 +36,6 @@ CRenderer::~CRenderer()
 	delete Setup;
 	if (Sampler) Sampler->Release();
 	delete Window;
-}
-
-
-HRESULT CRenderer::Initialise()
-{
-
-	return S_OK;
 }
 
 
@@ -274,7 +262,7 @@ SShader CRenderer::SetShader(CStaticMesh* Mesh, std::string FilePath, bool UseDe
 	Setup->GetDevice()->CreateSamplerState(&SamplerDesc, &Sampler);
 
 
-	return Shader;
+	RETURN(Shader)
 }
 
 
@@ -401,21 +389,30 @@ void CRenderer::DrawAll()
 
 		
 		SMatrix4 Transpose{ SMatrix4::Transpose(World) };
-		SCBuffer CBValues;
-		CBValues.LightColour = DirectionalLight->Colour * DirectionalLight->Strength;
-		CBValues.AmbiantLight = AmbiantColour * AmbiantLightStregth;
-		CBValues.DirectionalLight = Transpose.VectorTransform(Rot);
-		CBValues.DirectionalLight = Rot.Normalize();
-		
-		
-		CBValues.ViewMatrix = World * View * Projection;
 
+		if (Objects[i]->Reflect)
+		{ 
+			SReflectBuffer RBValues;
+			RBValues.WorldMatrix = World * View;
+			RBValues.ViewMatrix = World * View * Projection;
+			Setup->GetDeviceContext()->UpdateSubresource(Buffer, 0, 0, &RBValues, 0, 0);
+
+		}
+		else
+		{
+			SCBuffer CBValues;
+			CBValues.LightColour = DirectionalLight->Colour * DirectionalLight->Strength;
+			CBValues.AmbiantLight = AmbiantColour * AmbiantLightStregth;
+			CBValues.DirectionalLight = Transpose.VectorTransform(Rot);
+			CBValues.DirectionalLight = Rot.Normalize();
+
+
+			CBValues.ViewMatrix = World * View * Projection;
+			Setup->GetDeviceContext()->UpdateSubresource(Buffer, 0, 0, &CBValues, 0, 0);
+		}
 		
+
 		// Not sure if it's a good idea to have this here, however, by putting this here I am able to change the colour of objects during runtime.
-		// I have found a possible problem with this here, When I have multiple types of meshes, this reaches an access violation. Not sure why though.
-		// I might have to have a vertex buffer in each static mesh object as I think the Vertex buffer can't handle multiple types of objects.
-		// The buffer type may not be the problem After using the in-class buffer to initialise MS it still hit the access violation.
-		// The problem looks to be somewhere in the Vertices.
 
 		SVertex* Vertices = Objects[i]->GetVertices();
 		uint VertexCount = Objects[i]->GetVertexCount();
@@ -427,7 +424,6 @@ void CRenderer::DrawAll()
 
 
 		
-		Setup->GetDeviceContext()->UpdateSubresource(Buffer, 0, 0, &CBValues, 0, 0);
 		Setup->GetDeviceContext()->VSSetConstantBuffers(0, 1, &Buffer);
 	
 		//uint Stride = sizeof(SModelVertex);

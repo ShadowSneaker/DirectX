@@ -11,6 +11,8 @@
 #define SMALL_NUMBER (1.e-4f)
 #define LARGE_NUMBER (3.4e+38f)
 
+#define RETURN(x) return x;
+
 
 
 typedef unsigned int uint;

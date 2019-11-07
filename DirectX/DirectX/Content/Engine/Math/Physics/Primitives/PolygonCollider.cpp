@@ -3,10 +3,18 @@
 #include "CylinderCollider.h"
 #include "CapsuleCollider.h"
 #include "PolygonCollider.h"
+#include "../../../Graphics/Meshes/StaticMesh.h"
 
 
 CPolygonCollider::CPolygonCollider()
 	:CCollider::CCollider{}
+{
+
+}
+
+
+CPolygonCollider::CPolygonCollider(class CStaticMesh* Mesh)
+	:CCollider::CCollider{ Mesh }
 {
 
 }

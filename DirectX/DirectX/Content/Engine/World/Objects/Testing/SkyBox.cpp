@@ -11,11 +11,12 @@ CTestSkyBox::CTestSkyBox(SObjectBase Base)
 
 
 	Mesh->SetShader("SkyBox.hlsl");
-	Mesh->SetTexture("SkyBox.dds");
+	Mesh->SetTexture("skybox02.dds");
 	Mesh->InvertFaces = true;
 	Mesh->Transform.SetParent(&Transform);
 	Mesh->Transform.Scale = 3.0f;
 	Mesh->SetColour(SColour::White());
+	Mesh->Reflect = true;
 
 }
 

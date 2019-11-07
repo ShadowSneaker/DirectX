@@ -61,7 +61,9 @@ public:
 
 private:
 
+	void LoadObjects();
 	void DeleteAllObjects();
+
 
 public:
 

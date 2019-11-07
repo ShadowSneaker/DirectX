@@ -11,32 +11,34 @@ class CWorld
 {
 	/// Properties
 
-
+	// A reference to the created renderer object.
 	class CRenderer* Renderer;
 
-
+	// A reference to the created physics object.
 	class CPhysics* Physics;
 
-
+	// A reference to the created object pool object.
 	class CObjectPool* ObjectPool;
 
+	// A reference to the created timer manager object.
 	class CTimerManager* TimerManager;
 
+	// A reference to the created input manager object.
 	class CInputManager* InputManager;
-
 
 	// A list of all the objects in the world. - this will likely change to hold all the levels.
 	// The level class will hold all the objects.
 	// Level 0 is considered the root level.
 	std::vector<class CLevel*> Levels;
 
+	// Represents when this program is running.
 	bool Playing{ true };
 
 
 public:
 	/// Constructors
 
-	// Constructor, 
+	// Constructor, Default.
 	CWorld(HINSTANCE HandleInstance, int CommandShow);
 
 	// Destructor.
@@ -45,22 +47,27 @@ public:
 
 	/// Functions
 
-
+	// Starts the game.
 	void Play();
 
+	// Closes the game.
 	void Quit();
 
 private:
+	// Updates all the inputs in the game.
 	void Inputs();
+
+	// Updates all the objects in the game.
 	void Update();
+
+	// Updates all the graphics in the game.
 	void Graphics();
 
 
 	// Closes all open levels in the world.
 	void CloseAllLevels();
+
 public:
-
-
 	// Closes the currently opened level(s) and opens the inputted level.
 	void LoadLevel(std::string File, bool UseDefaultPath = true);
 
@@ -69,7 +76,6 @@ public:
 
 	// Returns the name of the current open level.
 	inline std::string GetLevelName() const;
-
 
 	// Returns a list of all open level names.
 	inline std::vector<std::string> GetAllLevelNames() const;
@@ -82,8 +88,8 @@ public:
 	// @param Name - The name of the level to find.
 	CLevel* GetLevelByName(std::string Name) const;
 
+	// Gets all the core infor for an object to be created.
 	SObjectBase GetCore();
-
 
 
 	/// Spawning

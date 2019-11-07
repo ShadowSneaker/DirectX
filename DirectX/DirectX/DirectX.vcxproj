@@ -248,6 +248,9 @@
     <ClCompile Include="Content\Engine\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Content\Assets\Shaders\ReflectShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="Content\Assets\Shaders\Shaders.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
