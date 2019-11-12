@@ -3,6 +3,8 @@
 #include "../Math/DataTypes/Matrix.h"
 
 
+
+
 class CCamera
 {
 private:
@@ -27,6 +29,8 @@ public:
 	// Determines how far objects can get before they start dissapearing (This cannot be lower than the NearClipPlane).
 	float FarClipPlane{ 1000.0f };
 
+	bool UseLegacyControls{ true };
+
 
 public:
 	/// Constructors
@@ -37,12 +41,24 @@ public:
 	/// Functions
 
 
-	void Rotate(float Angle);
+#ifndef USE_LEGACY_CONTROLS
+	DEPRECATED("Rotate function is deprecated, Define 'USE_LEGACY_CONTROLS' to enable")
+#endif
+	void Rotate(float X, float Y, float Z);
 
+#ifndef USE_LEGACY_CONTROLS
+	DEPRECATED("MoveForward function is deprecated, Define 'USE_LEGACY_CONTROLS' to enable")
+#endif
 	void MoveForward(float Distance);
 
+#ifndef USE_LEGACY_CONTROLS
+	DEPRECATED("MoveUp function is deprecated, Define 'USE_LEGACY_CONTROLS' to enable")
+#endif
 	void MoveUp(float Distance);
 
+#ifndef USE_LEGACY_CONTROLS
+	DEPRECATED("MoveRight function is deprecated, Define 'USE_LEGACY_CONTROLS' to enable")
+#endif
 	void MoveRight(float Distance);
 
 	SMatrix4 GetViewMatrix();

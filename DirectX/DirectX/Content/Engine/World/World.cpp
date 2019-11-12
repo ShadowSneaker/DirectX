@@ -102,6 +102,26 @@ void CWorld::LoadLevel(std::string File, bool UseDefaultFilePath)
 }
 
 
+void CWorld::CloseLevel(std::string FilePath)
+{
+	for (uint i = 0; i < Levels.size(); ++i)
+	{
+		if (Levels[i]->GetLevelFilePath() == FilePath)
+		{
+			delete Levels[i];
+			Levels.erase(Levels.begin() + i);
+			return;
+		}
+	}
+}
+
+
+void CWorld::CloseLevel(CLevel* LevelInstance)
+{
+	CloseLevel(LevelInstance->GetLevelFilePath());
+}
+
+
 std::string CWorld::GetLevelName() const
 {
 	 if (!Levels.empty()) 

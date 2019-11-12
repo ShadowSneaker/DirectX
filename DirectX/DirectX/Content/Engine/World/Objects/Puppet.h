@@ -1,5 +1,6 @@
 #pragma once
 #include "WorldObject.h"
+#include "../../Core/Systems/InputManager.h"
 
 
 // An object that can be controlled by the player or AI.
@@ -26,5 +27,5 @@ public:
 	virtual void Update() override;
 
 	// Allows user inputs to be bound to this object.
-	virtual void SetupInput(class CInputManager* Input) {}
+	virtual void SetupInput(CInputManager* Input) {}
 };

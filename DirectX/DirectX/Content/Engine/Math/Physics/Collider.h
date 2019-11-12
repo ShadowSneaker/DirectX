@@ -168,7 +168,7 @@ public:
 	inline void BindFunction(std::function<void(SHitInfo)> Function) { BoundFunction = Function; }
 
 	// Calls the bound function.
-	inline void CallFunction(SHitInfo HitInfo) const { BoundFunction(HitInfo); }
+	inline void CallFunction(SHitInfo HitInfo) const { if (BoundFunction) BoundFunction(HitInfo); }
 
 
 	/// Setters

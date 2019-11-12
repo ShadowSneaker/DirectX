@@ -1,6 +1,5 @@
 #pragma once
 #include "../Character.h"
-#include "../../../Core/Systems/InputManager.h"
 
 
 class CTestPlayer :public CCharacter
@@ -31,6 +30,7 @@ public:
 	void MoveUp(float Axis);
 
 	void Turn(float Axis);
+	void LookUp(float Axis);
 
 	void CloseGame(EInputMode InputMode);
 

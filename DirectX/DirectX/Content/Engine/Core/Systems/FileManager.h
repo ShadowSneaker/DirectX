@@ -184,7 +184,15 @@ public:
 	static Vector<Size, Type> ReadVector(String DataLine);
 
 	template <typename Type>
-	static Type GetValue(String Data);
+	static Type GetValue(String Data)
+	{
+		std::istringstream ISS{ Data };
+		Type Value;
+		ISS >> Value;
+		return Value;
+		//return (Type)atoi(Data.c_str());
+		
+	}
 };
 
 

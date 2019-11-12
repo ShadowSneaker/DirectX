@@ -71,6 +71,10 @@ public:
 	// Closes the currently opened level(s) and opens the inputted level.
 	void LoadLevel(std::string File, bool UseDefaultPath = true);
 
+	void CloseLevel(std::string FilePath);
+
+	void CloseLevel(CLevel* LevelInstance);
+
 
 	/// Getters
 

@@ -4,7 +4,7 @@
 const SQuaternion SQuaternion::Identity{ 0.0f, 0.0f, 0.0f, 1.0f };
 
 
-SVector SQuaternion::Euler() const
+SVector SQuaternion::ToEuler() const
 {
 	const float SingularityTest{ (Z * X) - (W * Y) };
 	const float YawY{ 2.0f * ((W * Z) + (X * Y)) };
@@ -88,6 +88,42 @@ SQuaternion SQuaternion::Exp() const
 }
 
 
+SQuaternion SQuaternion::Rotate(float InX, float InY, float InZ)
+{
+	return SQuaternion{};
+}
+
+
+SQuaternion SQuaternion::Rotate(SQuaternion Quaternion)
+{
+	float Factor{ TMath::Sin(Quaternion.W / 2.0f) };
+	float X{ Quaternion.X * Factor };
+	float Y{ Quaternion.Y * Factor };
+	float Z{ Quaternion.Z * Factor };
+
+	float W{ TMath::Cos(Quaternion.W / 2.0f) };
+	return SQuaternion{ X, Y, Z, W }.GetNormalized();
+}
+
+
+SQuaternion SQuaternion::Rotate(SVector Vector)
+{
+	return SQuaternion{};
+}
+
+
+SQuaternion SQuaternion::RotateEuler(float InX, float InY, float InZ)
+{
+	return SQuaternion{};
+}
+
+
+SQuaternion SQuaternion::RotateEuler(SVector Vector)
+{
+	return SQuaternion{};
+}
+
+
 void SQuaternion::ToSwingTwist(const SVector& TwistAxis, SQuaternion& Swing, SQuaternion& Twist) const
 {
 	SVector Projection{ TwistAxis * SVector::DotProduct(TwistAxis, SVector{ X, Y, Z }) };
@@ -111,5 +147,3 @@ float SQuaternion::AngularDistance(const SQuaternion& Quaternion) const
 	float InnerProd{ (X * Quaternion.X) + (Y * Quaternion.Y) + (Z * Quaternion.Z) + (W * Quaternion.W) };
 	return TMath::ACos((2.0f * InnerProd * InnerProd) - 1.0f);
 }
-
-

@@ -122,6 +122,18 @@ public:
 	/// Conversions
 
 
+	/// Debug
+
+	inline void CheckNaN() const
+	{
+		if (ContainsNaN())
+		{
+			printf("Quaternion contains NaN");
+			*const_cast<SQuaternion*>(this) = SQuaternion::Identity;
+		}
+	}
+
+
 	/// Functions
 
 	// Checks to see if this quaternion is an identity quaternion.
@@ -136,7 +148,7 @@ public:
 	inline bool NearlyEqual(SQuaternion Other, float Tolerance = MICRO_NUMBER) const;
 
 	// Converts this quaternion to Euler angles (degrees).
-	SVector Euler() const;
+	SVector ToEuler() const;
 
 	// Normalizes this quaternion if it is large enough.
 	// If this quaternion is too small, it will return an identity quaternion.
@@ -159,6 +171,7 @@ public:
 	// @return - Returns this quaternion with W = 0.0f and V = theta * v.
 	SQuaternion Log() const;
 
+	// 
 	// @note - Exp should only be used after Log().
 	SQuaternion Exp() const;
 
@@ -174,6 +187,18 @@ public:
 
 	// 
 	inline float ClampAxis(float Angle) const;
+
+	SQuaternion Rotate(float InX, float InY, float InZ);
+
+	SQuaternion Rotate(SQuaternion Quaternion);
+
+	SQuaternion Rotate(SVector Vector);
+
+	SQuaternion RotateEuler(float InX, float InY, float InZ);
+
+	SQuaternion RotateEuler(SVector Vector);
+
+	inline void Print() const;
 
 
 	/// Getters
@@ -255,7 +280,7 @@ public:
 	// @return - The constructor quaternion.
 	static SQuaternion Euler(const SVector& Vector)
 	{
-		const float DivideBy2 = (TMath::Pi / 180.0f) / 2;
+		const float DivideBy2{ (TMath::Pi / 180.0f) / 2.0f };
 
 		float SPitch;
 		float SYaw;
@@ -270,11 +295,12 @@ public:
 		TMath::SinCos(&SRoll, &CRoll, Vector[EAxis::Z] * DivideBy2);
 
 		SQuaternion Result;
-		Result.X = (CRoll * SPitch * SYaw) - (SRoll * CPitch * CYaw);
-		Result.Y = (-CRoll * SPitch * CYaw) - (SRoll * CPitch * SYaw);
-		Result.Z = (CRoll * CPitch * SYaw) - (SRoll * SPitch * CYaw);
-		Result.W = (CRoll * CPitch * CYaw) + (SRoll * SPitch * SYaw);
+		Result.X = ( CRoll * SPitch * SYaw) - (SRoll * CPitch * CYaw);
+		Result.Y = ( CRoll * CPitch * SYaw) - (SRoll * SPitch * CYaw);
+		Result.Z = (-CRoll * SPitch * CYaw) - (SRoll * CPitch * SYaw);
+		Result.W = ( CRoll * CPitch * CYaw) + (SRoll * SPitch * SYaw);
 
+		Result.CheckNaN();
 		return Result;
 	}
 };
@@ -325,6 +351,7 @@ inline SQuaternion SQuaternion::operator+=(const SQuaternion& Q)
 	Y += Q.Y;
 	Z += Q.Z;
 	W += Q.W;
+	CheckNaN();
 	return *this;
 }
 
@@ -347,28 +374,53 @@ inline SQuaternion SQuaternion::operator-=(const SQuaternion& Q)
 	Y -= Q.Y;
 	Z -= Q.Z;
 	W -= Q.W;
+	CheckNaN();
 	return *this;
 }
 
 
 inline SQuaternion SQuaternion::operator*(const SQuaternion& Q) const
 {
-	// NOT FINISHED
-	return SQuaternion();
+	// Mask0 =  1.0f, -1.0f,  1.0f, -1.0f
+	// Mask1 =  1.0f,  1.0f, -1.0f, -1.0f
+	// Mask2 = -1.0f,  1.0f,  1.0f, -1.0f
+
+	SQuaternion Result;
+	Result.X = this->W * Q.X;
+	Result.Y = this->W * Q.Y;
+	Result.Z = this->W * Q.Z;
+	Result.W = this->W * Q.W;
+
+	Result.X += (this->X * Q.W) * 1.0f;
+	Result.Y += (this->X * Q.Z) * -1.0f;
+	Result.Z += (this->X * Q.Y) * 1.0f;
+	Result.W += (this->X * Q.X) * -1.0f;
+
+	Result.X += (this->Y * Q.Z) * 1.0f;
+	Result.Y += (this->Y * Q.W) * 1.0f;
+	Result.Z += (this->Y * Q.X) * -1.0f;
+	Result.W += (this->Y * Q.Y) * -1.0f;
+
+	Result.X += (this->Z * Q.Y) * -1.0f;
+	Result.Y += (this->Z * Q.X) * 1.0f;
+	Result.Z += (this->Z * Q.W) * 1.0f;
+	Result.W += (this->Z * Q.Z) * -1.0f;
+
+	CheckNaN();
+	return Result;
 }
 
 
 inline SQuaternion SQuaternion::operator*=(const SQuaternion& Q)
 {
-	// NOT FINISHED
-	return SQuaternion();
+	*this = *this * Q;
+	return *this;
 }
 
 
 inline SVector SQuaternion::operator*(const SVector& V) const
 {
-	// NOT FINISHED
-	return SVector();
+	return RotateVector(V);
 }
 
 
@@ -390,6 +442,7 @@ inline SQuaternion SQuaternion::operator*=(const float& F)
 	Y *= F;
 	Z *= F;
 	W *= F;
+	CheckNaN();
 	return *this;
 }
 
@@ -414,6 +467,7 @@ inline SQuaternion SQuaternion::operator/=(const float& F)
 	Y *= Recip;
 	Z *= Recip;
 	W *= Recip;
+	CheckNaN();
 	return *this;
 }
 
@@ -564,7 +618,7 @@ inline SVector SQuaternion::RotateVector(SVector V) const
 	// V' = V + w*(T) + (Q x T)
 
 	const SVector Quat{ X, Y, Z };
-	SVector T{ SVector::CrossProduct(Quat, V) * 2.0f };
+	const SVector T{ SVector::CrossProduct(Quat, V) * 2.0f };
 	return SVector{ V + (T * W) + SVector::CrossProduct(Quat, T) };
 }
 
@@ -618,6 +672,12 @@ inline float SQuaternion::ClampAxis(float Angle) const
 		Angle += 360.0f;
 	}
 	return Angle;
+}
+
+
+inline void SQuaternion::Print() const
+{
+	printf("%f, %f, %f, %f", X, Y, Z, W);
 }
 
 

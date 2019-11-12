@@ -7,6 +7,7 @@ CFloor::CFloor(SObjectBase Base)
 	:CWorldObject::CWorldObject{ Base }
 {
 	Mesh = CreateComponent<CStaticMeshComponent>();
+	Mesh->SetMesh("Cube.obj");
 	Mesh->SetShader("Shaders.hlsl");
 
 	BoxCollider = CreateComponent<CBoxComponent>();

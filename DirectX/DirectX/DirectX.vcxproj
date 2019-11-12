@@ -194,6 +194,7 @@
     <ClInclude Include="Content\Engine\World\ObjectPool.h" />
     <ClInclude Include="Content\Engine\World\Objects\Puppet.h" />
     <ClInclude Include="Content\Engine\World\Objects\Testing\SkyBox.h" />
+    <ClInclude Include="Content\Engine\World\Objects\Testing\TestMove.h" />
     <ClInclude Include="Content\Engine\World\Objects\Testing\TestObject.h" />
     <ClInclude Include="Content\Engine\World\Objects\Testing\TestPlayer.h" />
     <ClInclude Include="Content\Engine\World\Objects\WorldObject.h" />
@@ -244,6 +245,7 @@
     <ClCompile Include="Content\Engine\World\Objects\ObectBase.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Puppet.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Testing\SkyBox.cpp" />
+    <ClCompile Include="Content\Engine\World\Objects\Testing\TestMove.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Testing\TestObject.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Testing\TestPlayer.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\WorldObject.cpp" />

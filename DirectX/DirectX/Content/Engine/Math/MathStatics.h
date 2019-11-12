@@ -118,19 +118,19 @@ public:
 	static void SinCos(float* ScalarSin, float* ScalarCos, float Value)
 	{
 		float Quotient = (InversePi * 0.5f) * Value;
-		Quotient = (float)((int)(Quotient + (Value >= 0.0f) ? 0.5f : -0.5f));
+		Quotient = (float)((int)(Quotient + ((Value >= 0.0f) ? 0.5f : -0.5f)));
 
 		float Y = Value - (2.0f * Pi) * Quotient;
 
 		float Sign;
 		if (Y > HalfPi)
 		{
-			Y -= Pi;
+			Y = Pi - Y;
 			Sign = -1.0f;
 		}
 		else if (Y < -HalfPi)
 		{
-			Y -= -Pi;
+			Y = -Pi - Y;
 			Sign = -1.0f;
 		}
 		else

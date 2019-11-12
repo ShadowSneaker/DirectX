@@ -1,3 +1,6 @@
+#define USE_LEGACY_CONTROLS
+
+
 #include "TestPlayer.h"
 #include "../../../Components/Graphics/Camera/CameraComponent.h"
 
@@ -30,6 +33,8 @@ void CTestPlayer::SetupInput(CInputManager* Input)
 
 	Input->BindAxis("Turn", EKey::IE_Right, std::bind(&CTestPlayer::Turn, this, std::placeholders::_1));
 	Input->BindAxis("Turn", EKey::IE_Left, -1.0f);
+	Input->BindAxis("LookUp", EKey::IE_Up, std::bind(&CTestPlayer::LookUp, this, std::placeholders::_1));
+	Input->BindAxis("LookUp", EKey::IE_Down, -1.0f);
 
 	Input->BindAction("Close", EInputMode::Pressed, EKey::IE_Escape, std::bind(&CTestPlayer::CloseGame, this, std::placeholders::_1));
 
@@ -42,7 +47,7 @@ void CTestPlayer::MoveForward(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->MoveForward(Value / 500.0f);
+		Camera->MoveForward(Value / 200.0f);
 	}
 }
 
@@ -51,7 +56,7 @@ void CTestPlayer::MoveSideways(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->MoveRight(Value / 500.0f);
+		Camera->MoveRight(Value / 200.0f);
 	}
 }
 
@@ -60,7 +65,7 @@ void CTestPlayer::MoveUp(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->MoveUp(Value / 500.0f);
+		Camera->MoveUp(Value / 200.0f);
 	}
 }
 
@@ -69,7 +74,17 @@ void CTestPlayer::Turn(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->Rotate(TO_RADIAN(Value / 50.0f));
+		//Camera->Rotate(TO_RADIAN(Value / 20.0f));
+		Camera->Rotate(0.0f, Value * 0.1f, 0.0f);
+	}
+}
+
+
+void CTestPlayer::LookUp(float Value)
+{
+	if (Value != 0.0f)
+	{
+		Camera->Rotate(0.0f, 0.0f, Value * 0.1f);
 	}
 }
 

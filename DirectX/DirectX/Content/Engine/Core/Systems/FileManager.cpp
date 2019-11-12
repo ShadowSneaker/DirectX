@@ -78,8 +78,3 @@ Vector<Size, Type> TFileManager::ReadVector(String DataLine)
 }
 
 
-template <typename Type>
-Type TFileManager::GetValue(String Data)
-{
-	return (Type)atoi(Data.c_str());
-}

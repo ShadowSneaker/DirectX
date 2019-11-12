@@ -3,6 +3,10 @@
 #include "../Core/Systems/FileManager.h"
 
 #include "Objects/Game/Floor.h"
+#include "Objects/Testing/TestPlayer.h"
+#include "Objects/Testing/SkyBox.h"
+#include "../Components/Graphics/Camera/CameraComponent.h"
+#include "Objects/Testing/TestMove.h"
 
 
 const std::string CLevel::DefaultFilePath{ "Content/Assets/Levels/" };
@@ -14,7 +18,7 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 	if (UseDeafultFilePath)
 	{
 		FilePath.FileName = File;
-		FilePath.FilePath = DefaultFilePath;
+		FilePath.FilePath = TFileManager::LevelFilePath;
 	}
 	else
 	{
@@ -30,27 +34,33 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 
 
 	// Make sure the file exists.
-	if (!TFileManager::DoesFileExist(File))
+	if (!TFileManager::DoesFileExist(FilePath.GetFilePath()))
 	{
 		// Log error
 		// Debug->LogError("Error: Could not open level: " + FilePath.GetFilePath());
-		delete this;
+		GetWorld()->CloseLevel(this);
 	}
 	else
 	{
+		CTestPlayer* Player = SpawnObject<CTestPlayer>();
+
+		CTestSkyBox* Sky = SpawnObject<CTestSkyBox>();
+		Sky->Camera = &Player->GetCamera()->Transform;
+
 		LoadObjects();
 
 	}
 
+	SpawnObject<CTestMove>(SVector{ 5.0f, 2.0f, 5.0f });
+#define INPUT_ENABLED
+	CTestMove* Test = SpawnObject<CTestMove>(SVector{ 0.0f, 2.0f, 0.0f });
+
+	Test->AllowMovement = false;
 
 	//SFileInfo Info{ TFileManager::ReadFile(File) };
-	//
-	//CTestPlayer* Player = SpawnObject<CTestPlayer>();
-	//
-	//CTestSkyBox* Sky = SpawnObject<CTestSkyBox>();
-	////Sky->Transform.SetParent(&Player->GetCamera()->Transform);
-	//Sky->Camera = &Player->GetCamera()->Transform;
-	//
+	
+	
+	
 	//CTestObject* Test = SpawnObject<CTestObject>();
 	//Test->Transform.Location = SVector{ -1.5f, 0.0f, 5.0f };
 	////Test->Transform.Scale = 0.2f;
@@ -98,11 +108,11 @@ void CLevel::LoadObjects()
 			Transform.Location[X] = TFileManager::GetValue<float>(Line[1]);
 			Transform.Location[Y] = TFileManager::GetValue<float>(Line[2]);
 			Transform.Location[Z] = TFileManager::GetValue<float>(Line[3]);
-
+			
 			Transform.Rotation.X = TFileManager::GetValue<float>(Line[4]);
 			Transform.Rotation.Y = TFileManager::GetValue<float>(Line[5]);
 			Transform.Rotation.Z = TFileManager::GetValue<float>(Line[6]);
-
+			
 			Transform.Scale[X] = TFileManager::GetValue<float>(Line[7]);
 			Transform.Scale[Y] = TFileManager::GetValue<float>(Line[8]);
 			Transform.Scale[Z] = TFileManager::GetValue<float>(Line[9]);

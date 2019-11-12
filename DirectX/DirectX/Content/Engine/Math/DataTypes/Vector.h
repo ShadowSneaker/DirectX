@@ -510,14 +510,31 @@ public:
 	// Calculates the distance between two vectors.
 	static inline float Distance(const Vector<Size, Element>& V1, const Vector<Size, Element>& V2)
 	{
-		float Result{ 0.0f };
-		for (uint i = 0; i < Size; ++i)
-		{
-			Element Temp{ (V1[i] + V2[i]) };
-			Result += float(Temp * Temp);
-		}
+		Vector<Size, Element> Delta{ V1 - V2 };
+		return TMath::Sqrt(Vector<Size, Element>::DotProduct(Delta, Delta));
+		//float Result{ 0.0f };
+		//for (uint i = 0; i < Size; ++i)
+		//{
+		//	Element Temp{ (V1[i] + V2[i]) };
+		//	Result += float{ Temp * Temp };
+		//}
+		//return TMath::Square(Result);
+	}
 
-		return Result;
+
+	// Calculates the distance between two vectors.
+	// This calculation skips the square root at the end.
+	static inline float DistanceSquared(const Vector<Size, Element>& V1, const Vector<Size, Element>& V2)
+	{
+		//float Result{ 0.0f };
+		//for (uint i = 0; i < Size; ++i)
+		//{
+		//	Element Temp{ (V1[i] + V2[i]) };
+		//	Result += float{ Temp * Temp };
+		//}
+		//return Result;
+		Vector<Size, Element> Delta{ V1 - V2 };
+		return Vector<Size, Element>::DotProduct(Delta, Delta);
 	}
 
 
