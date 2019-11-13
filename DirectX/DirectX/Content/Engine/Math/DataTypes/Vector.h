@@ -18,14 +18,14 @@ private:
 	/// Properties
 
 	// Stores all the Elements of this Vector class.
-	Element Data[Size]{Element(0.0f)};
+	Element Data[Size]{ Element(0.0f) };
 
 public:
 
 	/// Constructors
 
 	// Constructor, Default. Creates an empty Vector.
-	Vector<Size, Element>() 
+	Vector<Size, Element>()
 	{
 		for (uint i = 0; i < Size; ++i)
 		{
@@ -51,13 +51,13 @@ public:
 	}
 
 	// Constructor, Initializes a Vector3 using a Vector2 and a Value.
-	Vector<Size, Element>(Vector<2, Element> InV, Element InZ)
-	{
-		ASSERT(Size == 3, "Error: Illigal use of constructor. Is the vector the correct size?");
-		Data[0] = InV[0];
-		Data[1] = InV[1];
-		Data[2] = InZ;
-	}
+	//Vector<Size, Element>(Vector<2, Element> InV, Element InZ)
+	//{
+	//	ASSERT(Size == 3, "Error: Illigal use of constructor. Is the vector the correct size?");
+	//	Data[0] = InV[0];
+	//	Data[1] = InV[1];
+	//	Data[2] = InZ;
+	//}
 
 	// Constructor, Initializes a Vector4 using 4 Value.
 	Vector<Size, Element>(Element InX, Element InY, Element InZ, Element InW)
@@ -80,14 +80,14 @@ public:
 	}
 
 	// Constructor, Initializes a Vector4 using a Vector3 and a Value.
-	Vector<Size, Element>(Vector<3, Element> InV, Element InW)
-	{
-		ASSERT(Size == 4, "Error: Illigal use of constructor. Is the vector the correct size?");
-		Data[0] = InV[0];
-		Data[1] = InV[1];
-		Data[2] = InV[2];
-		Data[3] = InW;
-	}
+	//Vector<Size, Element>(Vector<3, Element> InV, Element InW)
+	//{
+	//	ASSERT(Size == 4, "Error: Illigal use of constructor. Is the vector the correct size?");
+	//	Data[0] = InV[0];
+	//	Data[1] = InV[1];
+	//	Data[2] = InV[2];
+	//	Data[3] = InW;
+	//}
 
 	// Constructor, Initializes a Vector4 using a Vector2 and 2 Values.
 	Vector<Size, Element>(Vector<2, Element> InV, Element InZ, Element InW)
@@ -110,6 +110,18 @@ public:
 		for (uint i = 0; i < Size; ++i)
 		{
 			Data[i] = InE;
+		}
+	}
+
+	// Constructor, Initiazes this vector with the components of another vector.
+	// @param Other - The other vector to copy the values from.
+	// @param FloodValue - The value to give this vector if the other vector is smaller than this one.
+	template <uint Size2, typename Element2>
+	Vector<Size, Element>(Vector<Size2, Element2> Other, float FloodValue = 0.0f)
+	{
+		for (uint i = 0; i < Size; ++i)
+		{
+			Data[i] = Element((i < Size2) ? Other[i] : FloodValue);
 		}
 	}
 
@@ -319,7 +331,7 @@ public:
 	template <uint NewSize>
 	inline Vector<NewSize, Element> Resize(const Element& Value = 0.0f) const;
 
-	
+
 
 
 	/// Getters
@@ -512,27 +524,11 @@ public:
 	{
 		Vector<Size, Element> Delta{ V1 - V2 };
 		return TMath::Sqrt(Vector<Size, Element>::DotProduct(Delta, Delta));
-		//float Result{ 0.0f };
-		//for (uint i = 0; i < Size; ++i)
-		//{
-		//	Element Temp{ (V1[i] + V2[i]) };
-		//	Result += float{ Temp * Temp };
-		//}
-		//return TMath::Square(Result);
 	}
 
 
-	// Calculates the distance between two vectors.
-	// This calculation skips the square root at the end.
 	static inline float DistanceSquared(const Vector<Size, Element>& V1, const Vector<Size, Element>& V2)
 	{
-		//float Result{ 0.0f };
-		//for (uint i = 0; i < Size; ++i)
-		//{
-		//	Element Temp{ (V1[i] + V2[i]) };
-		//	Result += float{ Temp * Temp };
-		//}
-		//return Result;
 		Vector<Size, Element> Delta{ V1 - V2 };
 		return Vector<Size, Element>::DotProduct(Delta, Delta);
 	}
@@ -555,9 +551,9 @@ public:
 		return Vector<4, Element>
 		{
 			V1[A],
-			V2[A],
-			V1[B],
-			V2[B]
+				V2[A],
+				V1[B],
+				V2[B]
 		};
 	}
 };
@@ -592,6 +588,18 @@ typedef Vector<3, int> SVector3i;
 
 // A int Vector with 4 Dimensions.
 typedef Vector<4, int> SVector4i;
+
+// A bool vector with 2 dimensions, used for Vector::Select();
+typedef Vector<2, bool> SVector2Control;
+
+// A bool vector with 3 dimensions, used for Vector::Select();
+typedef Vector<3, bool> SVectorControl;
+
+// A bool vector with 3 dimensions, used for Vector::Select();
+typedef Vector<3, bool> SVector3Control;
+
+// A bool vector with 4 dimensions, used for Vector::Select();
+typedef Vector<4, bool> SVector4Control;
 
 
 template <uint Size, typename Element>

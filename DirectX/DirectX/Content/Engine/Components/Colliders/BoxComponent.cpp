@@ -3,9 +3,10 @@
 
 
 CBoxComponent::CBoxComponent(SComponentInfo Info)
-	:CComponent::CComponent{ Info }, CBoxCollider::CBoxCollider{}
+	:CComponent::CComponent{ Info }, CBox::CBox{}
 {
 	GetPhysics()->AddCollider(this);
+	CBox::Owner = CComponent::GetOwner();
 }
 
 
@@ -13,5 +14,5 @@ CBoxComponent::~CBoxComponent()
 {
 	GetPhysics()->RemoveCollider(this);
 	CCollider::~CCollider();
-	CBoxCollider::~CBoxCollider();
+	CBox::~CBox();
 }

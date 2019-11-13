@@ -145,7 +145,7 @@ public:
 	// @param End - The end location of the line.
 	// @param DebugParams - Parameters for displaying a debug line.
 	// @return - The hit result from the first object this linecast hit.
-	SHitInfo Linecast(SVector Start, SVector End, SDebugColliderParams DebugParams = false) const;
+	SHitInfo Linecast(SVector Start, SVector End) const;
 
 	// Draws a line from a specified start and end and returns the first collision found.
 	// @param Start - The starting location of the line.
@@ -153,7 +153,7 @@ public:
 	// @param IgnoreObjects - A list of objects that should be ignored during the check.
 	// @param DebugParams - Parameters for drawing a debug line.
 	// @return - The hit results from the first object this line cast hit.
-	SHitInfo Linecast(SVector Start, SVector End, TObjectList IgnoreObjects, SDebugColliderParams DebugParams = false) const;
+	SHitInfo Linecast(SVector Start, SVector End, TObjectList IgnoreObjects) const;
 
 	// Shoots a line from the starting point in a direction and returns the first collider hit.
 	// @param Start - The starting location of the line.
@@ -161,7 +161,7 @@ public:
 	// @param Distance - How far the raycast should go (in pixels).
 	// @param DebugParams - Parameters for drawing a debug line.
 	// @return - The hit results from the first object this raycast hit.
-	SRaycastHit Raycast(SVector Start, SVector Direction, float Distance, SDebugColliderParams DebugParams = false) const;
+	SRaycastHit Raycast(SVector Start, SVector Direction, float Distance) const;
 	
 	// Shoots a line from the starting point in a direction and returns the first collider hit.
 	// @param Start - The starting location of the line.
@@ -170,7 +170,7 @@ public:
 	// @param IgnoreObjects - A list of objects that should be ignored during the check.
 	// @param DebugParams - Parameters for drawing a debug line.
 	// @return - The hit results from the first object this raycast hit.
-	SRaycastHit Raycast(SVector Start, SVector Direction, float Distance, TObjectList IgnoreObjects, SDebugColliderParams DebugParams = false) const;
+	SRaycastHit Raycast(SVector Start, SVector Direction, float Distance, TObjectList IgnoreObjects) const;
 
 	// Shoots a line from the starting point in a direction and returns the first collider hit.
 	// @param Start - The starting location of the line.
@@ -179,7 +179,7 @@ public:
 	// @param HitInfo - The list of hit results to assign the return results.
 	// @param DebugParams - Parameters for drawing a debug line.
 	// @return - The hit results from the first object this raycast hit.
-	SRaycastHit Raycast(SVector Start, SVector Direction, float Distance, SRaycastHit& HitInfo, SDebugColliderParams DebugParams = false) const;
+	SRaycastHit Raycast(SVector Start, SVector Direction, float Distance, SRaycastHit& HitInfo) const;
 
 	// Shoots a line from the starting point in a direction and returns the first collider hit.
 	// @param Start - The starting location of the line.
@@ -189,14 +189,14 @@ public:
 	// @param HitInfo - The list of hit results to assign the return results.
 	// @param DebugParams - Parameters for drawing a debug line.
 	// @return - The hit results from the first object this raycast hit.
-	SRaycastHit Raycast(SVector Start, SVector Direction, float Distance, TObjectList IgnoreObjects, SRaycastHit& HitInfo, SDebugColliderParams DebugParams = false) const;
+	SRaycastHit Raycast(SVector Start, SVector Direction, float Distance, TObjectList IgnoreObjects, SRaycastHit& HitInfo) const;
 
 	// Draws a line from a specified start and end and returns all the collisions found.
 	// @param Start - The starting location of the line.
 	// @param End - The end location of the line.
 	// @param DebugParams - Parameters for drawing a debug line.
 	// @return - The hit results from all objects this line cast hit.
-	THitInfoList LinecastMulti(SVector Start, SVector End, SDebugColliderParams DebugParams = false) const;
+	THitInfoList LinecastMulti(SVector Start, SVector End) const;
 	
 	// Draws a line from a specified start and end and returns all the collisions found.
 	// @param Start - The starting location of the line.
@@ -204,7 +204,7 @@ public:
 	// @param IgnoreObjects - A list of objects that should be ignored during the check.
 	// @param DebugParams - Parameters for drawing a debug line.
 	// @return - The hit results from all objects this line cast hit.
-	THitInfoList LinecastMulti(SVector Start, SVector End, TObjectList IgnoreObjects, SDebugColliderParams DebugParams = false) const;
+	THitInfoList LinecastMulti(SVector Start, SVector End, TObjectList IgnoreObjects) const;
 
 	// Shoots a line from the starting point in a direction and returns any colliders hit.
 	// @param Start - The starting location of the line.
@@ -212,7 +212,7 @@ public:
 	// @param Distance - How far the raycast should go (in pixels).
 	// @param DebugParams - Parameters for drawing a debug line.
 	// @return - The hit results from all objects this raycast hit.
-	std::vector<SRaycastHit> RaycastMulti(SVector Start, SVector Direction, float Distance, SDebugColliderParams DebugParams = false) const;
+	std::vector<SRaycastHit> RaycastMulti(SVector Start, SVector Direction, float Distance) const;
 
 	// Shoots a line from the starting point in a direction and returns any colliders hit.
 	// @param Start - The starting location of the line.
@@ -221,7 +221,7 @@ public:
 	// @param IgnoreObjects - A list of objects that should be ignored during the check.
 	// @param DebugParams - Parameters for drawing a debug line.
 	// @return - The hit results from all objects this raycast hit.
-	std::vector<SRaycastHit> RaycastMulti(SVector Start, SVector Direction, float Distance, TObjectList IgnoreObjects, SDebugColliderParams DebugParams = false) const;
+	std::vector<SRaycastHit> RaycastMulti(SVector Start, SVector Direction, float Distance, TObjectList IgnoreObjects) const;
 
 	// Shoots a line from the starting point in a direction and returns any colliders hit.
 	// @param Start - The starting location of the line.
@@ -230,7 +230,7 @@ public:
 	// @param HitInfo - The list of hit results to assign the return results.
 	// @param DebugParams - Parameters for drawing a debug line.
 	// @return - The hit results from all objects this raycast hit.
-	std::vector<SRaycastHit> RaycastMulti(SVector Start, SVector Direction, float Distance, std::vector<SRaycastHit>& HitInfo, SDebugColliderParams DebugParams = false) const;
+	std::vector<SRaycastHit> RaycastMulti(SVector Start, SVector Direction, float Distance, std::vector<SRaycastHit>& HitInfo) const;
 
 	// Shoots a line from the starting point in a direction and returns any colliders hit.
 	// @param Start - The starting location of the line.
@@ -240,6 +240,6 @@ public:
 	// @param HitInfo - The list of hit results to assign the return results.
 	// @param DebugParams - Parameters for drawing a debug line.
 	// @return - The hit results from all objects this raycast hit.
-	std::vector<SRaycastHit> RaycastMulti(SVector Start, SVector Direction, float Distance, TObjectList IgnoreObjects, std::vector<SRaycastHit>& HitInfo, SDebugColliderParams DebugParams = false) const;
+	std::vector<SRaycastHit> RaycastMulti(SVector Start, SVector Direction, float Distance, TObjectList IgnoreObjects, std::vector<SRaycastHit>& HitInfo) const;
 
 };

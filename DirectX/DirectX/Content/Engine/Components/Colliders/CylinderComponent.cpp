@@ -3,9 +3,10 @@
 
 
 CCylinderComponent::CCylinderComponent(SComponentInfo Info)
-	:CComponent::CComponent{ Info }, CCylinderCollider::CCylinderCollider{}
+	:CComponent::CComponent{ Info }, CCylinder::CCylinder{}
 {
 	GetPhysics()->AddCollider(this);
+	CCylinder::Owner = CComponent::GetOwner();
 }
 
 

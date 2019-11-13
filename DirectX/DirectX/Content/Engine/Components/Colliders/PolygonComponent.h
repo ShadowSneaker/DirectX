@@ -1,9 +1,9 @@
 #pragma once
 #include "../Component.h"
-#include "../../Math/Physics/Primitives/PolygonCollider.h"
+#include "../../Math/Physics/Primitives/Polygon.h"
 
 
-class CPolygonComponent :public CComponent, public CPolygonCollider
+class CPolygonComponent :public CComponent, public CPolygon
 {
 private:
 	/// Properties

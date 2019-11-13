@@ -1,25 +1,25 @@
 #include "Collider.h"
-#include "../../Graphics/Meshes/StaticMesh.h"
 
 
 CCollider::CCollider()
-{
-
-}
-
-
-CCollider::CCollider(class CStaticMesh* Mesh)
+	:Overlap{ false }
 {}
 
 
-CCollider::CCollider(class CWorldObject* InOwner, STransform InTransform)
-	:Transform{ InTransform }, Owner{ InOwner }
+CCollider::CCollider(STransform InTransform)
+	: Transform{ InTransform }, Overlap{ false }
+{}
+
+
+SVector CCollider::GetCenter() const
 {
+	SVector Max{ 0.0f };
+	SVector Min{ 0.0f };
+	for (uint i = 0; i < *VertexCount; ++i)
+	{
+		Max = SVector::Max(Max, Vertices[i]->Position);
+		Min = SVector::Min(Min, Vertices[i]->Position);
+	}
 
-}
-
-
-void CCollider::DrawDebug() const
-{
-
+	return { Max.Lerp(Min, Max, 0.5f) };
 }

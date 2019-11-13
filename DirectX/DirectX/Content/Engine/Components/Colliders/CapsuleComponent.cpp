@@ -3,9 +3,10 @@
 
 
 CCapsuleComponent::CCapsuleComponent(SComponentInfo Info)
-	:CComponent::CComponent{ Info }, CCapsuleCollider::CCapsuleCollider{}
+	:CComponent::CComponent{ Info }, CCapsule::CCapsule{}
 {
 	GetPhysics()->AddCollider(this);
+	CCapsule::Owner = CComponent::GetOwner();
 }
 
 

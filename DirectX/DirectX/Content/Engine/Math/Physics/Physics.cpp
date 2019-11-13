@@ -154,73 +154,73 @@ THitInfoList CPhysics::QuerryCollisions(CCollider* Collider, bool IgnoreSelf) co
 }
 
 
-SHitInfo CPhysics::Linecast(SVector Start, SVector End, SDebugColliderParams DebugParams) const
+SHitInfo CPhysics::Linecast(SVector Start, SVector End) const
 {
 	return SHitInfo();
 }
 
 
-SHitInfo CPhysics::Linecast(SVector Start, SVector End, TObjectList IgnoreObjects, SDebugColliderParams DebugParams) const
+SHitInfo CPhysics::Linecast(SVector Start, SVector End, TObjectList IgnoreObjects) const
 {
 	return SHitInfo();
 }
 
 
-SRaycastHit CPhysics::Raycast(SVector Start, SVector Direction, float Distance, SDebugColliderParams DebugParams) const
+SRaycastHit CPhysics::Raycast(SVector Start, SVector Direction, float Distance) const
 {
 	return SRaycastHit();
 }
 
 
-SRaycastHit CPhysics::Raycast(SVector Start, SVector Direction, float Distrance, TObjectList IgnoreObjects, SDebugColliderParams DebugParams) const
+SRaycastHit CPhysics::Raycast(SVector Start, SVector Direction, float Distrance, TObjectList IgnoreObjects) const
 {
 	return SRaycastHit();
 }
 
 
-SRaycastHit CPhysics::Raycast(SVector Start, SVector Direction, float Distance, SRaycastHit& HitInfo, SDebugColliderParams DebugParams) const
+SRaycastHit CPhysics::Raycast(SVector Start, SVector Direction, float Distance, SRaycastHit& HitInfo) const
 {
 	return SRaycastHit();
 }
 
 
-SRaycastHit CPhysics::Raycast(SVector Start, SVector Direction, float Distrance, TObjectList IgnoreObjects, SRaycastHit& HitInfo, SDebugColliderParams DebugParams) const
+SRaycastHit CPhysics::Raycast(SVector Start, SVector Direction, float Distrance, TObjectList IgnoreObjects, SRaycastHit& HitInfo) const
 {
 	return SRaycastHit();
 }
 
 
-THitInfoList CPhysics::LinecastMulti(SVector Start, SVector End, SDebugColliderParams DebugParams) const
+THitInfoList CPhysics::LinecastMulti(SVector Start, SVector End) const
 {
 	return THitInfoList();
 }
 
 
-THitInfoList CPhysics::LinecastMulti(SVector Start, SVector End, TObjectList IgnoreObjects, SDebugColliderParams DebugParams) const
+THitInfoList CPhysics::LinecastMulti(SVector Start, SVector End, TObjectList IgnoreObjects) const
 {
 	return THitInfoList();
 }
 
 
-std::vector<SRaycastHit> CPhysics::RaycastMulti(SVector Start, SVector Direction, float Distance, SDebugColliderParams DebugParams) const
+std::vector<SRaycastHit> CPhysics::RaycastMulti(SVector Start, SVector Direction, float Distance) const
 {
 	return std::vector<SRaycastHit>();
 }
 
 
-std::vector<SRaycastHit> CPhysics::RaycastMulti(SVector Start, SVector Direction, float Distance, TObjectList IgnoreObjects, SDebugColliderParams DebugParams) const
+std::vector<SRaycastHit> CPhysics::RaycastMulti(SVector Start, SVector Direction, float Distance, TObjectList IgnoreObjects) const
 {
 	return std::vector<SRaycastHit>();
 }
 
 
-std::vector<SRaycastHit> CPhysics::RaycastMulti(SVector Start, SVector Direction, float Distance, std::vector<SRaycastHit>& HitInfo, SDebugColliderParams DebugParams) const
+std::vector<SRaycastHit> CPhysics::RaycastMulti(SVector Start, SVector Direction, float Distance, std::vector<SRaycastHit>& HitInfo) const
 {
 	return std::vector<SRaycastHit>();
 }
 
 
-std::vector<SRaycastHit> CPhysics::RaycastMulti(SVector Start, SVector Direction, float Distance, TObjectList IgnoreObjects, std::vector<SRaycastHit>& HitInfo, SDebugColliderParams DebugParams) const
+std::vector<SRaycastHit> CPhysics::RaycastMulti(SVector Start, SVector Direction, float Distance, TObjectList IgnoreObjects, std::vector<SRaycastHit>& HitInfo) const
 {
 	return std::vector<SRaycastHit>();
 }

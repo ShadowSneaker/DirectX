@@ -3,9 +3,10 @@
 
 
 CSphereComponent::CSphereComponent(SComponentInfo Info)
-	:CComponent::CComponent{ Info }, CSphereCollider::CSphereCollider{}
+	:CComponent::CComponent{ Info }, CSphere::CSphere{}
 {
 	GetPhysics()->AddCollider(this);
+	CSphere::Owner = CComponent::GetOwner();
 }
 
 

@@ -1,9 +1,9 @@
 #pragma once
 #include "../Component.h"
-#include "../../Math/Physics//Primitives/BoxCollider.h"
+#include "../../Math/Physics//Primitives/Box.h"
 
 
-class CBoxComponent :public CComponent, public CBoxCollider
+class CBoxComponent :public CComponent, public CBox
 {
 private:
 	/// Properties

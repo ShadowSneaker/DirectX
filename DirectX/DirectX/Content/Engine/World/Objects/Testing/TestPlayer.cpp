@@ -75,7 +75,7 @@ void CTestPlayer::Turn(float Value)
 	if (Value != 0.0f)
 	{
 		//Camera->Rotate(TO_RADIAN(Value / 20.0f));
-		Camera->Rotate(0.0f, Value * 0.1f, 0.0f);
+		Camera->Rotate(0.0f, Value * 0.001f, 0.0f);
 	}
 }
 

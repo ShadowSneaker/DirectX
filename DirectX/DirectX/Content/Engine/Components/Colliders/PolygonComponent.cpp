@@ -3,9 +3,10 @@
 
 
 CPolygonComponent::CPolygonComponent(SComponentInfo Info)
-	:CComponent::CComponent{ Info }, CPolygonCollider::CPolygonCollider{}
+	:CComponent::CComponent{ Info }, CPolygon::CPolygon{}
 {
 	GetPhysics()->AddCollider(this);
+	CPolygon::Owner = CComponent::GetOwner();
 }
 
 

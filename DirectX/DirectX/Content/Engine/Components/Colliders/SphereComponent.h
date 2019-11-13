@@ -1,9 +1,9 @@
 #pragma once
 #include "../Component.h"
-#include "../../Math/Physics/Primitives/SphereCollider.h"
+#include "../../Math/Physics/Primitives/Sphere.h"
 
 
-class CSphereComponent :public CComponent, public CSphereCollider
+class CSphereComponent :public CComponent, public CSphere
 {
 private: 
 	/// Properties

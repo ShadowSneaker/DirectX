@@ -1,114 +1,86 @@
+
+
+/*
+	* Almost all colliders have two types of collision checks, a fast and slow check.
+	* Fast check will be enabled if USE_FAST_CHECK_WHERE_POSSIBLE is defined.
+	* Fast check can only be used if the collider is aligned with the grid.
+
+	* Fast check - Only runs when applicable, faster results, can't be used if the collider is rotated.
+	* Slow check - Slower results, used if fast check is not applicable.
+
+	* The Polygon collider will only use a slow check due to its unique nature of being any shape.
+*/
+
 #pragma once
 #include "../DataTypes/Transform.h"
-#include "../MathStatics.h"
-
-#include <functional>
+#include "../DataTypes/Vertex.h"
 
 
-// The info gathered whena collision occures.
+#define USE_FAST_CHECK_WHERE_POSSIBLE
+
+
+// The info that is recieved when an object collides with another.
 struct SHitInfo
 {
-public:
 	/// Properties
 
-	// Represents if the collision hit.
-	bool Hit{ false };
-
-	// A reference to the collider that was hit
-	class CCollider* Collider{ nullptr };
-
-	// A reference to the world object that owned the hit collider.
-	class CWorldObject* HitObject{ nullptr };
+	// A value determining if this object hit another.
+	bool Hit;
+	
+	// A reference tot he collider this object collided with.
+	class CCollider* Collider;
 
 
-	/// Constructors
-
-	// Constructor, Default.
-	SHitInfo()
-	{}
-
-	// Constructor, Initiates the hit result and hit collider.
-	SHitInfo(bool InHit, class CCollider* HitCollider)
-		:Hit{ InHit }, Collider{ HitCollider }
-	{}
-
-	// Constructor, Initaies every component of the struct.
-	SHitInfo(bool InHit, class CCollider* HitCollider, class CWorldObject* InHitObject)
-		:Hit{ InHit }, Collider{ HitCollider }, HitObject{ InHitObject }
-	{}
+	class CWorldObject* HitObject;
 
 
 	/// Operators
 
-	// Returns the hit component.
-	// Used for easy testing weather or not objects were hit.
+	// Converts the Hit Info into a bool for easy checking.
 	inline operator bool() const { return Hit; }
 };
 
 
-// Used to draw the collider outline for debug.
-struct SDebugColliderParams
-{
-	/// Properties
-
-	// Represents if the debug outline should be drawn.
-	bool Enable{ false };
-
-	// Determines how long the line should be displayed for (in seconds).
-	float DisplayDuration{ 5.0f };
-
-	// The colour that the debug line should be drawn in.
-	// SColour DisplayColour{ SColour::Yellow() };
-
-
-	/// Constructors
-
-	// Constructor, Default.
-	// Note: using this constructor will not allow the debug draw.
-	SDebugColliderParams()
-	{}
-
-
-	// 
-	SDebugColliderParams(bool SetEnabled)
-		:Enable{ SetEnabled }
-	{}
-
-
-	// 
-	SDebugColliderParams(bool SetEnabled, float Duration/*, SColour Colour*/)
-		:Enable{ SetEnabled }, DisplayDuration{ Duration }/*, DisplayColour{ Colour }*/
-	{}
-};
-
-
-//  
+// The base collider typ used to calculate collisions against other colliders.
+// This is an abiguous collider type. This just stores functions holds the basic
+// information for actual colliders. It also is used to store a list of colliders.
 class CCollider
 {
-private:
+protected:
 	/// Properties
 
-	// The delegate to the function that should be called when a collision occures.
-	std::function<void(SHitInfo)> BoundFunction;
+	// A reference to all the vertices the bound mesh has.
+	SVertex** Vertices{ nullptr };
+
+	// A reference to the amount of vertices the bound mesh has.
+	uint* VertexCount{ nullptr };
+
 
 public:
-	// Should this collider allow collisions.
-	bool Enabled{ true };
-
-	// Should this collider only trigger on overlap events.
-	bool Overlap{ false };
-
-	// The location, rotation and scale of this collider.
+	// The relative transform of this collider.
 	STransform Transform;
 
-	// The debug parameters for this collider.
-	SDebugColliderParams ShowCollider{ false };
+	// Makes this collider overlapable instead of blocking.
+	bool Overlap{ false };
 
-	// A reference to the owner of this collider.
+	// Allows this collider to check for collision types.
+	bool Enable{ true };
+
+	// Should this collider be affected by its parent's scale.
+	// Note: This collider will still be affected by this collider's scale.
+	bool UseScale{ true };
+
+	// Should this collider be affected by its parent's location.
+	// Note: This collider will still be affected by this collider's location.
+	bool UseLocation{ true };
+
+	// Adjusts this collider to the bounds of the attached object.
+	// @note - The bounding collider will cover the entire object.
+	bool AutoUpdateBounds{ false };
+
+
 	class CWorldObject* Owner{ nullptr };
 
-	// Should this collider be affected by the parent's scaling.
-	bool UseParentScale{ true };
 
 public:
 	/// Constructors
@@ -116,16 +88,12 @@ public:
 	// Constructor, Default.
 	CCollider();
 
-	// Constructor, Initialises a default size based on the vertices of the mesh this collider is on.
-	// @param Mesh - The reference to the mesh to create the default collider size.
-	CCollider(class CStaticMesh* Mesh);
-
 	// Constructor, Initiates this collider's transform.
-	// @param Transform - The location, rotatoin and scale of this collider.
-	CCollider(class CWorldObject* InOwner, STransform InTransform);
+	// @param InTransform - The location, rotation and scale of this collider.
+	CCollider(STransform InTransform);
 
 
-	/// Overridables
+	/// Functions
 
 	// Determines what collider type of collider the specified collider is
 	// then checks for the collision between this collider and the inputted collider.
@@ -133,46 +101,60 @@ public:
 	// @return - The information gathered from the collision check.
 	virtual bool CheckCollision(const CCollider* Other) const = 0;
 
-	// Checks the collision between this collider and a circle collider.
+	// Checks the collision between this collider and a sphere collider.
 	// @param Other - The circle collider to test against.
 	// @return - The information gathered from the collision check.
-	virtual bool CheckCollision(const class CSphereCollider* Other) const = 0;
+	virtual bool CheckCollision(const class CSphere* Other) const = 0;
 
-	// Checks the collision between this collider and a square collider.
-	// @param Other - The square collider to test against.
+	// Checks the collision between this collider and a box collider.
+	// @param Other - The box collider to test against.
 	// @return - The information gathered from the collision check.
-	virtual bool CheckCollision(const class CBoxCollider* Other) const = 0;
+	virtual bool CheckCollision(const class CBox* Other) const = 0;
 
-	// Checks the collision between this collider and a cylinder collider.
-	// @param Other - The cylinder collider to test against.
+	// Checks the collision between this collider and a axis aligned bounding box collider.
+	// @param Other - The bounding box collider to test against.
 	// @return - The information gathered from the collision check.
-	virtual bool CheckCollision(const class CCylinderCollider* Other) const = 0;
+	virtual bool CheckCollision(const class CAxisAlignedBoundingBox* Other) const = 0;
+
+	// Checks the collision between this collider and a point collider.
+	// @param Other - The point collider to test against.
+	// @return - The information gathered from the collision check.
+	virtual bool CheckCollision(const class CPoint* Other) const = 0;
+
+	// Checks the collision between this collider and a line collider.
+	// @param Other - The line collider to test against.
+	// @return - The information gathered from the collision check.
+	virtual bool CheckCollision(const class CLine* Other) const = 0;
 
 	// Checks the collision between this collider and a capsule collider.
 	// @param Other - The capsule collider to test against.
 	// @return - The information gathered from the collision check.
-	virtual bool CheckCollision(const class CCapsuleCollider* Other) const = 0;
+	virtual bool CheckCollision(const class CCapsule* Other) const = 0;
 
 	// Checks the collision between this collider and a polygon collider.
 	// @param Other - The polygon collider to test against.
 	// @return - The information gathered from the collision check.
-	virtual bool CheckCollision(const class CPolygonCollider* Other) const = 0;
+	virtual bool CheckCollision(const class CPolygon* Other) const = 0;
 
+	// Checks the collision between this collider and a cylinder collider.
+	// @param Other - The cylinder collider to test against.
+	// @return - The information gathered from the collision check.
+	virtual bool CheckCollision(const class CCylinder* Other) const = 0;
 
-	/// Functions
+	// Updates the bounding collider to cover the entire object.
+	virtual void UpdateBounds() = 0;
 
-	// Displays a representation of this collider on the screen for a specified amount of time.
-	virtual void DrawDebug() const;
-
-	// Sets the bound function to an inputted function.
-	inline void BindFunction(std::function<void(SHitInfo)> Function) { BoundFunction = Function; }
-
-	// Calls the bound function.
-	inline void CallFunction(SHitInfo HitInfo) const { if (BoundFunction) BoundFunction(HitInfo); }
 
 
 	/// Setters
 
 
+
 	/// Getters
+
+	inline SVector GetLocation() const { return ((UseLocation) ? Transform.GetWorldLocation() : Transform.Location); }
+
+	inline SVector GetScale() const { return ((UseScale) ? Transform.GetWorldScale() : Transform.Scale); }
+
+	SVector GetCenter() const;
 };
