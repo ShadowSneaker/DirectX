@@ -189,7 +189,7 @@
     <ClInclude Include="Content\Engine\Math\Physics\Primitives\Point.h" />
     <ClInclude Include="Content\Engine\Math\Physics\Primitives\Sphere.h" />
     <ClInclude Include="Content\Engine\Math\Physics\Primitives\Polygon.h" />
-    <ClInclude Include="Content\Engine\Math\Physics\RigidBody.h" />
+    <ClInclude Include="Content\Engine\Math\Physics\Rigidbody.h" />
     <ClInclude Include="Content\Engine\World\Level.h" />
     <ClInclude Include="Content\Engine\World\Objects\Character.h" />
     <ClInclude Include="Content\Engine\World\Objects\Game\Floor.h" />
@@ -243,7 +243,7 @@
     <ClCompile Include="Content\Engine\Math\Physics\Primitives\Point.cpp" />
     <ClCompile Include="Content\Engine\Math\Physics\Primitives\Sphere.cpp" />
     <ClCompile Include="Content\Engine\Math\Physics\Primitives\Polygon.cpp" />
-    <ClCompile Include="Content\Engine\Math\Physics\RigidBody.cpp" />
+    <ClCompile Include="Content\Engine\Math\Physics\Rigidbody.cpp" />
     <ClCompile Include="Content\Engine\World\Level.cpp" />
     <ClCompile Include="Content\Engine\World\ObjectPool.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Character.cpp" />

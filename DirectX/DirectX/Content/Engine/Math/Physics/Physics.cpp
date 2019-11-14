@@ -1,226 +1,439 @@
 #include "Physics.h"
-#include "../../World/Objects/WorldObject.h"
+#include "Primitives/Line.h"
 
 
 CPhysics::CPhysics()
 {
-
+	PhysicsThread = std::thread(&CPhysics::Update, this);
 }
 
 
 CPhysics::~CPhysics()
 {
-	DeleteAllColliders();
+	DeleteAllBodies();
 }
 
 
-void CPhysics::InitPhysics()
+void CPhysics::DeleteAllBodies()
 {
-
+	Simulate = false;
+	PhysicsThread.join();
+	while (!Bodies.empty())
+	{
+		delete Bodies.back();
+		Bodies.pop_back();
+	}
 }
 
 
 void CPhysics::Update()
 {
-	CurrentFrame = 0; // TODO: Change this to represent the performance counter.
-	while (RunPhysics)
+	PhysicsMutex.lock();
+	while (Simulate)
 	{
-		LastFrame = CurrentFrame;
-		CurrentFrame = 0; // Change this to set the performance counter.
-		DeltaTime = (float(CurrentFrame - LastFrame) / float(1 /*Change this to get the performance requency*/));
-	
-		// TODO: Do physics stuff.
-	}
-}
+		// Calculate Delta Time.
 
+		UpdateList();
 
-void CPhysics::DeleteAllColliders()
-{
-	while (!Colliders.empty())
-	{
-		delete Colliders.back().Collider;
-		delete Colliders.back().RigidBody;
-		Colliders.pop_back();
-	}
-}
-
-
-void CPhysics::DeleteCollider(CCollider* Collider)
-{
-	if (Collider)
-	{
-		for (uint i = 0; i < Colliders.size(); ++i)
+		// TODO:
+		// Put physics simulation here.
+		if (Bodies.size() > 0)
 		{
-			if (Colliders[i].Collider == Collider)
+			uint Count = Bodies.size();
+			for (uint i = 0; i < Count; ++i)
 			{
-				delete Colliders[i].RigidBody;
-				Colliders.erase(Colliders.begin() + i);
-				break;
-			}
-		}
-		delete Collider;
-	}
-}
-
-
-void CPhysics::RemoveCollider(CCollider* Collider)
-{
-	if (Collider)
-	{
-		for (uint i = 0; i < Colliders.size(); ++i)
-		{
-			if (Colliders[i].Collider == Collider)
-			{
-				Colliders.erase(Colliders.begin() + i);
+				if (Bodies[i]->Rigidbody)
+				{
+					Bodies[i]->Collider->Transform.Location += (Bodies[i]->Rigidbody->Velocity + Gravity) * DeltaTime;
+				}
 			}
 		}
 	}
+	PhysicsMutex.unlock();
+}
+
+
+void CPhysics::UpdateList()
+{
+	while (!RemoveQueue.empty())
+	{
+		RemoveFromSimulation(RemoveQueue.back());
+		RemoveQueue.pop_back();
+	}
+
+	while (!InputQueue.empty())
+	{
+		AddToSimulation(InputQueue.back());
+		InputQueue.pop_back();
+	}
+}
+
+
+void CPhysics::AddToSimulation(SPhysicsBody* Body)
+{
+	for (uint i = 0; i < Bodies.size(); ++i)
+	{
+		if (Body == Bodies[i])
+		{
+			return;
+		}
+		Bodies.push_back(Body);
+	}
+}
+
+
+void CPhysics::RemoveFromSimulation(SPhysicsBody* Body)
+{
+	for (uint i = 0; i < Bodies.size(); ++i)
+	{
+		if (Body == Bodies[i])
+		{
+			Bodies.erase(Bodies.begin() + i);
+			return;
+		}
+	}
+}
+
+
+void CPhysics::AddPhysicsBody(SPhysicsBody* Body)
+{
+	if (Body)
+	{
+		for (uint i = 0; i < Bodies.size(); ++i)
+		{
+			if (Bodies[i] == Body)
+			{
+				return;
+			}
+		}
+		InputQueue.push_back(Body);
+	}
+}
+
+
+void CPhysics::RemovePhysicsBody(SPhysicsBody* Body)
+{
+	if (Body)
+	{
+		for (uint i = 0; i < Bodies.size(); ++i)
+		{
+			if (Bodies[i] == Body)
+			{
+				//Bodies.erase(Bodies.begin() + i);
+				RemoveQueue.push_back(Body);
+			}
+		}
+	}
+}
+
+
+void CPhysics::DeletePhysicsBody(SPhysicsBody* Body)
+{
+	if (Body)
+	{
+		for (uint i = 0; i < Bodies.size(); ++i)
+		{
+			if (Bodies[i] == Body)
+			{
+				//Bodies.erase(Bodies.begin() + i);
+				RemoveQueue.push_back(Body);
+			}
+		}
+		delete Body;
+	}
+}
+
+
+SPhysicsBody* CPhysics::CreatePhysicsBody(CCollider* Collider, CRigidbody* Rigid)
+{
+	if (Collider)
+	{
+		SPhysicsBody* PhysicsBody = GetBody(Collider);
+		if (!PhysicsBody)
+		{
+			SPhysicsBody* Body = new SPhysicsBody{};
+			Body->Collider = Collider;
+			Body->Rigidbody = Rigid;
+			InputQueue.push_back(Body);
+			return Body;
+		}
+		else
+		{
+			return PhysicsBody;
+		}
+	}
+	return nullptr;
 }
 
 
 void CPhysics::AddCollider(CCollider* Collider)
 {
-	if (Collider)
-	{
-		Colliders.push_back(SColliderInfo{ Collider });
-	}
+	CreatePhysicsBody(Collider);
 }
 
 
-void CPhysics::CreateCollider()
+void CPhysics::RemoveCollider(CCollider* Collider)
 {
-
+	RemovePhysicsBody(GetBody(Collider));
 }
 
 
-THitInfoList CPhysics::QuerryCollisions() const
+void CPhysics::DeleteCollider(CCollider* Collider)
 {
-	THitInfoList InfoList;
-	for (uint i = 0; i < Colliders.size(); ++i)
+	DeletePhysicsBody(GetBody(Collider));
+}
+
+
+std::vector<SCollision> CPhysics::QuerryAllCollisions() const
+{
+	std::vector<SCollision> Results;
+	for (uint i = 0; i < Bodies.size(); ++i)
 	{
-		for (uint j = 0; j < Colliders.size(); ++j)
+		for (uint j = 0; j < Bodies.size(); ++j)
 		{
 			if (i != j)
 			{
-				SHitInfo Info;
-
-				if (Colliders[i].Collider->CheckCollision(Colliders[j].Collider))
+				if (Bodies[i]->Collider->CheckCollision(Bodies[j]->Collider))
 				{
-					Info.Hit = true;
-					Info.HitObject = Colliders[i].Collider->Owner;
-					InfoList.push_back(Info);
+					Bodies[i]->UpdateState(true, SCollision{ Bodies[j]->Collider });
+					Bodies[j]->UpdateState(true, SCollision{ Bodies[i]->Collider });
+					Results.push_back(SCollision{ Bodies[i]->Collider });
+				}
+				else
+				{
+					Bodies[i]->UpdateState(false, SCollision{ Bodies[j]->Collider });
+					Bodies[j]->UpdateState(false, SCollision{ Bodies[i]->Collider });
 				}
 			}
 		}
 	}
-	return InfoList;
+	return Results;
 }
 
 
-THitInfoList CPhysics::QuerryCollisions(CCollider* Collider, bool IgnoreSelf) const
+std::vector<SCollision> CPhysics::QuerryCollisions(CCollider* Collider, bool IgnoreSelf) const
 {
-	THitInfoList HitInfoList;
-
-	for (uint i = 0; i < Colliders.size(); ++i)
+	std::vector<SCollision> Results;
+	for (uint i = 0; i < Bodies.size(); ++i)
 	{
-		if (Collider == Colliders[i].Collider && IgnoreSelf)
+		if (Bodies[i]->Collider != Collider || !IgnoreSelf)
 		{
-			if (i + 1 < Colliders.size())
+			if (Collider->CheckCollision(Bodies[i]->Collider))
 			{
-				++i;
+				GetBody(Collider)->UpdateState(true, SCollision{ Bodies[i]->Collider });
+				Bodies[i]->UpdateState(true, SCollision{ Collider });
+				Results.push_back(SCollision{ Bodies[i]->Collider });
 			}
 			else
 			{
-				break;
-			}
-
-			// Do collision checks.
-			if (Collider->CheckCollision(Colliders[i].Collider))
-			{
-				SHitInfo HitInfo{ true, Colliders[i].Collider };
-				HitInfo.HitObject = Colliders[i].Collider->Owner;
-				HitInfoList.push_back(HitInfo);
-
-				SHitInfo OtherInfo{ true, Collider };
-				OtherInfo.HitObject = Collider->Owner;
-
-				Colliders[i].Collider->CallFunction(OtherInfo);
-				Collider->CallFunction(HitInfo);
+				GetBody(Collider)->UpdateState(false, SCollision{ Bodies[i]->Collider });
+				Bodies[i]->UpdateState(false, SCollision{ Collider });
 			}
 		}
 	}
-
-	return HitInfoList;
+	return Results;
 }
 
 
-SHitInfo CPhysics::Linecast(SVector Start, SVector End) const
+SHitInfo CPhysics::Raycast(SVector Origin, SVector Direction, float Distance)
 {
-	return SHitInfo();
+	return SHitInfo{};
 }
 
 
-SHitInfo CPhysics::Linecast(SVector Start, SVector End, TObjectList IgnoreObjects) const
+#ifdef WORLD
+SHitInfo CPhysics::Raycast(SVector Origin, SVector Direction, float Distance, std::vector<CWorldObject*> IgnoreObjects)
 {
-	return SHitInfo();
+	return SHitInfo{};
+}
+#endif
+
+
+SHitInfo CPhysics::Raycast(SVector Origin, SVector Direction, float Distance, SHitInfo& HitInfo)
+{
+	return SHitInfo{};
 }
 
 
-SRaycastHit CPhysics::Raycast(SVector Start, SVector Direction, float Distance) const
+#ifdef WORLD
+SHitInfo CPhysics::Raycast(SVector Origin, SVector Direction, float Distance, std::vector<CWorldObject*> IgnoreObjects, SHitInfo& HitInfo)
 {
-	return SRaycastHit();
+	return SHitInfo{};
+}
+#endif
+
+
+std::vector<SHitInfo> CPhysics::RaycastMulti(SVector Origin, SVector Direction, float Distance)
+{
+	return std::vector<SHitInfo>{};
 }
 
 
-SRaycastHit CPhysics::Raycast(SVector Start, SVector Direction, float Distrance, TObjectList IgnoreObjects) const
+#ifdef WORLD
+std::vector<SHitInfo> CPhysics::RaycastMulti(SVector Origin, SVector Direction, float Distance, std::vector<CWorldObject*> IgnoreObjects)
 {
-	return SRaycastHit();
+	return std::vector<SHitInfo>{};
+}
+#endif
+
+
+std::vector<SHitInfo> CPhysics::RaycastMulti(SVector Origin, SVector Direction, float Distance, std::vector<SHitInfo>& HitInfo)
+{
+	return std::vector<SHitInfo>{};
 }
 
 
-SRaycastHit CPhysics::Raycast(SVector Start, SVector Direction, float Distance, SRaycastHit& HitInfo) const
+#ifdef WORLD
+std::vector<SHitInfo> CPhysics::RaycastMulti(SVector Origin, SVector Direction, float Distance, std::vector<CWorldObject*> IgnoreObjects, std::vector<SHitInfo>& HitInfo)
 {
-	return SRaycastHit();
+	return std::vector<SHitInfo>{};
+}
+#endif
+
+
+bool CPhysics::Linecast(SVector StartPosition, SVector EndPosition)
+{
+	CLine* Line = new CLine{};
+	Line->Transform.Location = StartPosition;
+	Line->EndPosition = EndPosition;
+
+	for (uint i = 0; i < Bodies.size(); ++i)
+	{
+		if (Line->CheckCollision(Bodies[i]->Collider))
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 
-SRaycastHit CPhysics::Raycast(SVector Start, SVector Direction, float Distrance, TObjectList IgnoreObjects, SRaycastHit& HitInfo) const
+#ifdef WORLD
+bool CPhysics::Linecast(SVector StartPosition, SVector EndPosition, std::vector<CWorldObject*> IgnoreObjects)
 {
-	return SRaycastHit();
+	CLine* Line = new CLine{};
+	Line->Transform.Location = StartPosition;
+	Line->EndPosition = EndPosition;
+
+	for (uint i = 0; i < Bodies.size(); ++i)
+	{
+		for (uint j = 0; j < IgnoreObjects.size(); ++j)
+		{
+			if (IgnoreObjects[j] == Bodies[i]->Collider->Owner)
+			{
+				break;
+			}
+		}
+
+		if (Line->CheckCollision(Bodies[i]->Collider))
+		{
+			return true;
+		}
+
+		//if (!IgnoreObjects.Contains(Bodies[i]->Collider->Owner))
+		//{
+		//	if (Line->CheckCollision(Bodies[i]->Collider))
+		//	{
+		//		return true;
+		//	}
+		//}
+	}
+	return false;
+}
+#endif
+
+
+bool CPhysics::Linecast(SVector StartPosition, SVector EndPosition, std::vector<SHitInfo>& HitInfo)
+{
+	CLine* Line = new CLine{};
+	Line->Transform.Location = StartPosition;
+	Line->EndPosition = EndPosition;
+
+	HitInfo.resize(0);
+
+	bool Result{ false };
+	for (uint i = 0; i < Bodies.size(); ++i)
+	{
+		if (Line->CheckCollision(Bodies[i]->Collider))
+		{
+			SHitInfo Info;
+			Info.Collider = Bodies[i]->Collider;
+			Info.Hit = true;
+			HitInfo.push_back(Info);
+
+			Result = true;
+		}
+	}
+	return Result;
 }
 
 
-THitInfoList CPhysics::LinecastMulti(SVector Start, SVector End) const
+#ifdef WORLD
+bool CPhysics::Linecast(SVector StartPosition, SVector EndPosition, std::vector<CWorldObject*> IgnoreObjects, std::vector<SHitInfo>& HitInfo)
 {
-	return THitInfoList();
+	CLine* Line = new CLine{};
+	Line->Transform.Location = StartPosition;
+	Line->EndPosition = EndPosition;
+
+	HitInfo.resize(0);
+
+	bool Result{ false };
+	for (uint i = 0; i < Bodies.size(); ++i)
+	{
+		for (uint j = 0; j < IgnoreObjects.size(); ++j)
+		{
+			if (IgnoreObjects[j] == Bodies[i]->Collider->Owner)
+			{
+				break;
+			}
+		}
+
+		if (Line->CheckCollision(Bodies[i]->Collider))
+		{
+			SHitInfo Info;
+			Info.Collider = Bodies[i]->Collider;
+			Info.Hit = true;
+			HitInfo.push_back(Info);
+		}
+		//if (!IgnoreObjects.contains(Bodies[i]->Collider->Owner))
+		//{
+		//	if (Line->CheckCollision(Bodies[i]->Collider))
+		//	{
+		//		SHitInfo Info;
+		//		Info.Collider = Bodies[i]->Collider;
+		//		Info.Hit = true;
+		//		HitInfo.Add(Info);
+		//
+		//		Result = true;
+		//	}
+		//}
+	}
+	return Result;
+}
+#endif
+
+
+SPhysicsBody* CPhysics::GetBody(CCollider* Collider) const
+{
+	for (uint i = 0; i < Bodies.size(); ++i)
+	{
+		if (Bodies[i]->Collider == Collider)
+		{
+			return Bodies[i];
+		}
+	}
+	return nullptr;
 }
 
 
-THitInfoList CPhysics::LinecastMulti(SVector Start, SVector End, TObjectList IgnoreObjects) const
+SPhysicsBody* CPhysics::GetBody(CRigidbody* Rigid) const
 {
-	return THitInfoList();
-}
-
-
-std::vector<SRaycastHit> CPhysics::RaycastMulti(SVector Start, SVector Direction, float Distance) const
-{
-	return std::vector<SRaycastHit>();
-}
-
-
-std::vector<SRaycastHit> CPhysics::RaycastMulti(SVector Start, SVector Direction, float Distance, TObjectList IgnoreObjects) const
-{
-	return std::vector<SRaycastHit>();
-}
-
-
-std::vector<SRaycastHit> CPhysics::RaycastMulti(SVector Start, SVector Direction, float Distance, std::vector<SRaycastHit>& HitInfo) const
-{
-	return std::vector<SRaycastHit>();
-}
-
-
-std::vector<SRaycastHit> CPhysics::RaycastMulti(SVector Start, SVector Direction, float Distance, TObjectList IgnoreObjects, std::vector<SRaycastHit>& HitInfo) const
-{
-	return std::vector<SRaycastHit>();
+	for (uint i = 0; i < Bodies.size(); ++i)
+	{
+		if (Bodies[i]->Rigidbody == Rigid)
+		{
+			return Bodies[i];
+		}
+	}
+	return nullptr;
 }

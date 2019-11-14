@@ -1,8 +1,6 @@
-#include "RigidBody.h"
+#include "Rigidbody.h"
+#include "Collider.h"
 
 
-CRigidBody::CRigidBody(CCollider* InCollider)
-	:Collider{ InCollider }
-{
-
-}
+CRigidbody::CRigidbody()
+{}

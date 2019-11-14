@@ -69,13 +69,13 @@ bool CBox::CheckCollision(const CAxisAlignedBoundingBox* Other) const
 	// Check if fast check is possible.
 	//if (SVector::NearlyEqual(Transform.Up(), SVector::Up(), SMALL_NUMBER))
 	//{
-		SVector Dist1{ (Other->GetMinExtents() - GetMaxExtents()) };
-		SVector Dist2{ (GetMinExtents() - Other->GetMaxExtents()) };
+	SVector Dist1{ (Other->GetMinExtents() - GetMaxExtents()) };
+	SVector Dist2{ (GetMinExtents() - Other->GetMaxExtents()) };
 
-		SVector Distance{ SVector::Max(Dist1, Dist2) };
-		float MaxDistance{ Distance.MaxComp() };
+	SVector Distance{ SVector::Max(Dist1, Dist2) };
+	float MaxDistance{ Distance.MaxComp() };
 
-		return (MaxDistance < 0.0f);
+	return (MaxDistance < 0.0f);
 	//}
 #endif
 

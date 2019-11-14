@@ -7,16 +7,25 @@
 CTestMove::CTestMove(SObjectBase Base)
 	:CCharacter::CCharacter{ Base }
 {
-	SphereCollider = CreateComponent<CSphereComponent>();
-	SphereCollider->SetOwner(this);
-	SphereCollider->Transform.SetParent(&Transform);
-	SphereCollider->Radius = 0.75f;
 
 	Mesh = CreateComponent<CStaticMeshComponent>();
 	Mesh->SetMesh("Sphere.obj");
 	Mesh->SetShader("Shaders.hlsl");
 	Mesh->Transform.Scale = 0.25f;
 	Mesh->Transform.SetParent(&Transform);
+	
+	SphereCollider = CreateComponent<CSphereComponent>();
+	SphereCollider->SetOwner(this);
+	SphereCollider->Transform.SetParent(&Transform);
+	SphereCollider->Radius = 0.75f;
+
+
+	uint Count = Mesh->VertexCount;
+
+	SphereCollider->SetVertices(&Mesh->Vertices);
+	SphereCollider->SetVertexCount(&Mesh->VertexCount);
+	SphereCollider->UpdateBounds();
+	
 
 	SetupInput(GetInputManager());
 }
@@ -40,10 +49,10 @@ void CTestMove::TMoveForward(float Value)
 	{
 		Transform.Location[X] += Value * 0.01f;
 		
-		THitInfoList Info = GetPhysics()->QuerryCollisions(SphereCollider);
+		std::vector<SCollision> Info = GetPhysics()->QuerryCollisions(SphereCollider);
 		for (uint i = 0; i < Info.size(); ++i)
 		{
-			if (Info[i].Hit)
+			if (Info[i].Collider)
 			{
 				Transform.Location[X] -= Value * 0.01f;
 				break;
@@ -60,10 +69,10 @@ void CTestMove::TMoveSideways(float Value)
 	{
 		Transform.Location[Z] += Value * 0.01f;
 
-		THitInfoList Info = GetPhysics()->QuerryCollisions(SphereCollider);
+		std::vector<SCollision> Info = GetPhysics()->QuerryCollisions(SphereCollider);
 		for (uint i = 0; i < Info.size(); ++i)
 		{
-			if (Info[i].Hit)
+			if (Info[i].Collider)
 			{
 				Transform.Location[Z] -= Value * 0.01f;
 				break;

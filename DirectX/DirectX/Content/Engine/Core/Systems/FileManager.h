@@ -1,4 +1,7 @@
 #pragma once
+
+
+
 #include "../../Math/MathValues.h"
 #include "../../Math/DataTypes/Vector.h"
 
@@ -12,6 +15,7 @@
 #include <D3DX11.h>
 #include <DxErr.h>
 //#include <Windows.h>
+
 
 
 #ifdef DXTRACE_MSG
@@ -123,43 +127,7 @@ public:
 	// Reads an inputted file and returns all of the files contents.
 	// @param FilePath - The file location of the file to read.
 	// @return - Returns a copy of every line in the file.
-	static SFileInfo ReadFile(String FilePath)
-	{
-		FILE* File;
-		fopen_s(&File, FilePath.c_str(), "r");
-		if (File == NULL)
-		{
-			LOG_ERROR("Failed to open model file!", FilePath.c_str());
-			return SFileInfo{};
-		}
-		
-		SFileInfo FileInfo;
-
-		fseek(File, 0, SEEK_END);
-		FileInfo.Size = ftell(File);
-		rewind(File);
-
-		FileInfo.Contents = new char[FileInfo.Size + 1];
-		if (FileInfo.Contents == NULL)
-		{
-			fclose(File);
-			LOG_ERROR("Failed to allocate memory for model file!", FilePath.c_str());
-			return SFileInfo{};
-		}
-
-
-		FileInfo.ActualSize = fread(FileInfo.Contents, 1, FileInfo.Size, File);
-		if (FileInfo.ActualSize == 0)
-		{
-			fclose(File);
-			LOG_ERROR("Failed to read file!", FilePath.c_str());
-			return SFileInfo{};
-		}
-		
-		FileInfo.Contents[FileInfo.ActualSize] = '\n';
-		fclose(File);
-		return FileInfo;
-	}
+	static SFileInfo ReadFile(String FilePath);
 
 
 	static bool DoesFileExist(String FilePath)

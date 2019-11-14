@@ -66,12 +66,14 @@ private:
 
 protected:
 
+public:
 	// A reference to all the vertices that is on this mesh.
 	SVertex* Vertices{ nullptr };
 
 	// The total amount of vertices that this mesh has.
 	uint VertexCount{ 0 };
 
+protected:
 	// The shader type that this mesh uses.
 	SShader Shader;
 

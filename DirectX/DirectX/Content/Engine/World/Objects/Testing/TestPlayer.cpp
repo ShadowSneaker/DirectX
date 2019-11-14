@@ -5,7 +5,7 @@
 #include "../../../Components/Graphics/Camera/CameraComponent.h"
 
 #include "../../../Graphics/Renderer.h"
-#include "..//..//World.h"
+#include "../../World.h"
 
 
 CTestPlayer::CTestPlayer(SObjectBase Core)

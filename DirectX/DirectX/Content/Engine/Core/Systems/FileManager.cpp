@@ -1,3 +1,7 @@
+#ifndef _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include "FileManager.h"
 #include <fstream>
 
@@ -8,6 +12,45 @@ const String TFileManager::TextureFilePath{ TFileManager::DefaultFilePath + "Ima
 const String TFileManager::ShaderFilePath{ TFileManager::DefaultFilePath + "Shaders/" };
 const String TFileManager::FontFilePath{ TFileManager::DefaultFilePath + "Fonts/" };
 const String TFileManager::LevelFilePath{ TFileManager::DefaultFilePath + "Levels/" };
+
+
+SFileInfo TFileManager::ReadFile(String FilePath)
+{
+	FILE* File;
+	File = fopen(FilePath.c_str(), "r");
+	if (File == NULL)
+	{
+		LOG_ERROR("Failed to open model file!", FilePath.c_str());
+		return SFileInfo{};
+	}
+
+	SFileInfo FileInfo;
+
+	fseek(File, 0, SEEK_END);
+	FileInfo.Size = ftell(File);
+	rewind(File);
+
+	FileInfo.Contents = new char[FileInfo.Size + 1];
+	if (FileInfo.Contents == NULL)
+	{
+		fclose(File);
+		LOG_ERROR("Failed to allocate memory for model file!", FilePath.c_str());
+		return SFileInfo{};
+	}
+
+
+	FileInfo.ActualSize = fread(FileInfo.Contents, 1, FileInfo.Size, File);
+	if (FileInfo.ActualSize == 0)
+	{
+		fclose(File);
+		LOG_ERROR("Failed to read file!", FilePath.c_str());
+		return SFileInfo{};
+	}
+
+	FileInfo.Contents[FileInfo.ActualSize] = '\n';
+	fclose(File);
+	return FileInfo;
+}
 
 
 SStringBlock TFileManager::ReadFileAlt(String File)

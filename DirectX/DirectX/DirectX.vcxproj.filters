@@ -75,9 +75,6 @@
     <ClInclude Include="Content\Engine\Math\Physics\Collider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Content\Engine\Math\Physics\RigidBody.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Content\Engine\Components\Component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -189,6 +186,9 @@
     <ClInclude Include="Content\Engine\Math\Physics\Primitives\Sphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Content\Engine\Math\Physics\Rigidbody.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\Engine\Core\Source.cpp">
@@ -234,9 +234,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Content\Engine\Math\Physics\Collider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Content\Engine\Math\Physics\RigidBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Content\Engine\Components\Component.cpp">
@@ -345,6 +342,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Content\Engine\Math\Physics\Primitives\Sphere.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Engine\Math\Physics\Rigidbody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

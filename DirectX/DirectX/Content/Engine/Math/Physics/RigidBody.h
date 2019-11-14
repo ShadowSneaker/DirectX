@@ -1,22 +1,31 @@
 #pragma once
-#include "Collider.h"
+#include "../DataTypes/Vector.h"
 
 
-class CRigidBody
+class CRigidbody
 {
 private:
 	/// Properties
 
+	// A reference to the attached collider.
+	class CCollider* Collider{ nullptr };
+
 
 
 public:
-	CCollider* Collider;
+
+
+	// How much influence gravity has on this object.
+	float GravityScale{ 1.0f };
+
+	// The directional momentum this object has.
+	SVector Velocity{ 0.0f };
+
 
 
 public:
 	/// Constructors
 
-	// Constructor, Initiates the rigid body with an attached collider.
-	// @param InCollider - A reference to the collider that this rigid body uses.
-	CRigidBody(CCollider* InCollider);
+	// Constructor, Default.
+	CRigidbody();
 };

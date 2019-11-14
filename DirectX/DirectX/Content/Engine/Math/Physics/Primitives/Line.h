@@ -42,7 +42,7 @@ public:
 	// Checks the collision between this collider and a box collider.
 	// @param Other - The box collider to test against.
 	// @return - The information gathered from the collision check.
-	virtual bool CheckCollision(const CBox* Other) const override;
+	virtual bool CheckCollision(const class CBox* Other) const override;
 
 	// Checks the collision between this collider and a axis aligned bounding box collider.
 	// @param Other - The bounding box collider to test against.

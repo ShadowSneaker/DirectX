@@ -23,8 +23,8 @@
 
 struct SVertex
 {
-	SVector Position;
-	SColour Colour;
-	SVector2 UV;
-	SVector Normal;
+	SVector Position{ 0.0f };
+	SColour Colour{ 1.0f, 1.0f, 1.0f };
+	SVector2 UV{ 0.0f };
+	SVector Normal{ 0.0f };
 };

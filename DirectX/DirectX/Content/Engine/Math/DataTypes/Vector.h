@@ -50,15 +50,6 @@ public:
 		Data[2] = InZ;
 	}
 
-	// Constructor, Initializes a Vector3 using a Vector2 and a Value.
-	//Vector<Size, Element>(Vector<2, Element> InV, Element InZ)
-	//{
-	//	ASSERT(Size == 3, "Error: Illigal use of constructor. Is the vector the correct size?");
-	//	Data[0] = InV[0];
-	//	Data[1] = InV[1];
-	//	Data[2] = InZ;
-	//}
-
 	// Constructor, Initializes a Vector4 using 4 Value.
 	Vector<Size, Element>(Element InX, Element InY, Element InZ, Element InW)
 	{
@@ -78,16 +69,6 @@ public:
 		Data[2] = InV2[0];
 		Data[3] = InV2[1];
 	}
-
-	// Constructor, Initializes a Vector4 using a Vector3 and a Value.
-	//Vector<Size, Element>(Vector<3, Element> InV, Element InW)
-	//{
-	//	ASSERT(Size == 4, "Error: Illigal use of constructor. Is the vector the correct size?");
-	//	Data[0] = InV[0];
-	//	Data[1] = InV[1];
-	//	Data[2] = InV[2];
-	//	Data[3] = InW;
-	//}
 
 	// Constructor, Initializes a Vector4 using a Vector2 and 2 Values.
 	Vector<Size, Element>(Vector<2, Element> InV, Element InZ, Element InW)
@@ -276,6 +257,15 @@ public:
 	//inline DirectX::XMVECTOR ToXMVector() const;
 
 
+	/// Debug.
+
+	// Debug Diagnostics handle for when a vector contains NaN.
+	inline void CheckNaN() const;
+
+	// Checks if this vector components contains NaN.
+	inline bool ContainsNaN() const;
+
+
 	/// Functions
 
 	// Prints out the contents of this vector to the console. Returns the vector converted into a string.
@@ -370,24 +360,61 @@ public:
 	// @return - Returns how many dimensions this vector has.
 	inline uint GetSize() const { return Size; }
 
+	// Returns the X component.
+	inline Element GetX() const;
+
+	// Returns the Y component.
+	inline Element GetY() const;
+
+	// Returns the Z component.
+	inline Element GetZ() const;
+
+	// Returns the W component.
+	inline Element GetW() const;
+
+
+	/// Setters
+
+	// Sets the X component based on the inputted value.
+	inline void SetX(const Element& Value);
+
+	// Sets the Y component based on the inputted value.
+	inline void SetY(const Element& Value);
+
+	// Sets the Z component based on the inputted value.
+	inline void SetZ(const Element& Value);
+
+	// Sets the W component based on the inputted value.
+	inline void SetW(const Element& Value);
+
 
 	/// Statics
 
 	// Returns the dot product between two vectors.
-	static inline float DotProduct(const Vector<Size, Element>& A, const Vector<Size, Element>& B)
+	// @param V1 - The first vector.
+	// @param V2 - The second vector.
+	// @return - The dot product between the first and second vectors.
+	static inline float DotProduct(const Vector<Size, Element>& V1, const Vector<Size, Element>& V2)
 	{
-		return A ^ B;
+		return V1 ^ V2;
 	}
 
 
-	// Returns the cross product between two vector3s.
-	static inline Vector<Size, Element> CrossProduct(const Vector<Size, Element>& A, const Vector<Size, Element>& B)
+	// Calculates the cross product between two vectors.
+	// @param V1 - The first vector.
+	// @param V2 - The second vector.
+	// @return - A new vector with the cross product between the first and second vectors.
+	static inline Vector<Size, Element> CrossProduct(const Vector<Size, Element>& V1, const Vector<Size, Element>& V2)
 	{
-		return A | B;
+		return V1 | V2;
 	}
 
 
 	// Gets the value between two vectors based on a percentage value.
+	// @param Min - The minimum value of the lerp.
+	// @param Max - The maximum value of the lerp.
+	// @param Value - The point between the two vectors (between 0 - 1).
+	// @return - The vector at the position of the value.
 	static inline Vector<Size, Element> Lerp(const Vector<Size, Element>& Min, const Vector<Size, Element>& Max, float Value)
 	{
 		return ((Max - Min) * Value) + Min;
@@ -397,12 +424,16 @@ public:
 	// Powers the entire vector a specified amount of times.
 	// @param V - The vector to Power.
 	// @param Amount - The Power.
+	// @return - The vector powered.
 	static inline Vector<Size, Element> Power(const Vector<Size, Element>& V, uint Amount)
 	{
 		return V.Power(Amount);
 	}
 
 
+	// Normalizes the vector.
+	// @param V - The vector to normalize.
+	// @return - The normalized value.
 	static inline Vector<Size, Element> Normalize(Vector<Size, Element> V)
 	{
 		return V.Normalize();
@@ -492,13 +523,18 @@ public:
 
 
 	// Creates a vector with the highest values in each dimension between both inputted vectors.
-	static inline Vector<Size, Element> Max(const Vector<Size, Element>& A, const Vector<Size, Element>& B)
+	// @param V1 - The first vector to use.
+	// @param V2 - The second vector to use.
+	// @return - A new vector with the highest values between both vector.
+	static inline Vector<Size, Element> Max(const Vector<Size, Element>& V1, const Vector<Size, Element>& V2)
 	{
-		return A.Max(B);
+		return V1.Max(V2);
 	}
 
 
 	// Gets the highest value in the inputted vector.
+	// @param V - The vector to get the highest value component from.
+	// @return - The highest value in the vector.
 	static inline Element MaxComp(const Vector<Size, Element>& V)
 	{
 		return V.MaxComp();
@@ -506,13 +542,18 @@ public:
 
 
 	// Creates a vector with the lowest values in each dimension between both inputted vectors.
-	static inline Vector<Size, Element> Min(const Vector<Size, Element>& A, const Vector<Size, Element>& B)
+	// @param V1 - The first vector to use.
+	// @param V2 - The second vector to use.
+	// @return - A new vector with the lowest values between both vectors.
+	static inline Vector<Size, Element> Min(const Vector<Size, Element>& V1, const Vector<Size, Element>& V2)
 	{
-		return A.Min(B);
+		return V1.Min(V2);
 	}
 
 
 	// Gets the lowest value in the inputted vector.
+	// @param V - The vector to get the lowest value from.
+	// @return - The lowest value in the inputted vector.
 	static inline Element MinComp(const Vector<Size, Element>& V)
 	{
 		return V.MinComp();
@@ -520,6 +561,9 @@ public:
 
 
 	// Calculates the distance between two vectors.
+	// @param V1 - The first vector.
+	// @param V2 - The second vector.
+	// @return - Returns a distance between the two vectors.
 	static inline float Distance(const Vector<Size, Element>& V1, const Vector<Size, Element>& V2)
 	{
 		Vector<Size, Element> Delta{ V1 - V2 };
@@ -527,6 +571,10 @@ public:
 	}
 
 
+	// Calculates the distance between two vectors squared.
+	// @param V1 - The first vector.
+	// @param V2 - The second vector.
+	// @return - Returns a distance between the two vectors squared.
 	static inline float DistanceSquared(const Vector<Size, Element>& V1, const Vector<Size, Element>& V2)
 	{
 		Vector<Size, Element> Delta{ V1 - V2 };
@@ -534,6 +582,11 @@ public:
 	}
 
 
+	// Creates a new vector by selecting using values in two vectors and a bool value (true = V1, false = V2).
+	// @param V1 - The first vector type to use.
+	// @param V2 - The second vector type to use.
+	// @param Control - Determines which vector to use for each axis.
+	// @return - Returns a new vector with the selected values.
 	static inline Vector<Size, Element> Select(Vector<Size, Element> V1, Vector<Size, Element> V2, Vector<Size, bool> Control)
 	{
 		Vector<Size, Element> Result;
@@ -542,19 +595,28 @@ public:
 			//Result[i] = V1[i] & ~Control[i] | V2[i] & Control[0]; 
 			Result[i] = ((Control[i]) ? V1[i] : V2[i]);
 		}
+		Result.CheckNaN();
 		return Result;
 	}
 
 
+	// Merges two vectors together based on the inputted axis.
+	// @param V1 - The first vector to use.
+	// @param V2 - The second vector to use.
+	// @param A - The axis to initiate the first two values.
+	// @param B - The axis to initiate the last two values.
+	// @return - Returns a vector4 with the merged values.
 	static inline Vector<4, Element> Merge(Vector<4, Element> V1, Vector<4, Element> V2, EAxis A, EAxis B)
 	{
-		return Vector<4, Element>
+		Vector<4, Element> Result
 		{
 			V1[A],
-				V2[A],
-				V1[B],
-				V2[B]
+			V2[A],
+			V1[B],
+			V2[B]
 		};
+		Result.CheckNaN();
+		return Result;
 	}
 };
 
@@ -626,6 +688,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator+(const Vector<Size2
 	{
 		Result[i] = Data[i] + (Element)V[i];
 	}
+	Result.CheckNaN();
 	return Result;
 }
 
@@ -638,6 +701,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator+(const Element& E) 
 	{
 		Result[i] = Data[i] + E;
 	}
+	Result.CheckNaN();
 	return Result;
 }
 
@@ -651,6 +715,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator+=(const Vector<Size
 	{
 		Data[i] += (Element)V[i];
 	}
+	CheckNaN();
 	return *this;
 }
 
@@ -662,6 +727,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator+=(const Element& E)
 	{
 		Data[i] += E;
 	}
+	CheckNaN();
 	return *this;
 }
 
@@ -676,6 +742,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator-(const Vector<Size2
 	{
 		Result[i] = Data[i] - (Element)V[i];
 	}
+	Result.CheckNaN();
 	return Result;
 }
 
@@ -688,6 +755,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator-(const Element& E) 
 	{
 		Result[i] = Data[i] - E;
 	}
+	Result.CheckNaN();
 	return Result;
 }
 
@@ -700,6 +768,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator-() const
 	{
 		Result[i] = -Data[i];
 	}
+	Result.CheckNaN();
 	return Result;
 }
 
@@ -713,6 +782,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator-=(const Vector<Size
 	{
 		Data[i] -= (Element)V[i];
 	}
+	CheckNaN();
 	return *this;
 }
 
@@ -724,6 +794,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator-=(const Element& E)
 	{
 		Data[i] -= E;
 	}
+	CheckNaN();
 	return *this;
 }
 
@@ -738,6 +809,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator*(const Vector<Size2
 	{
 		Result[i] = Data[i] * (Element)V[i];
 	}
+	Result.CheckNaN();
 	return Result;
 }
 
@@ -750,6 +822,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator*(const Element& E) 
 	{
 		Result[i] = Data[i] * E;
 	}
+	Result.CheckNaN();
 	return Result;
 }
 
@@ -763,6 +836,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator*=(const Vector<Size
 	{
 		Data[i] *= (Element)V[i];
 	}
+	CheckNaN();
 	return *this;
 }
 
@@ -774,6 +848,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator*=(const Element& E)
 	{
 		Data[i] *= E;
 	}
+	CheckNaN();
 	return *this;
 }
 
@@ -788,6 +863,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator/(const Vector<Size2
 	{
 		Result[i] = Data[i] / (Element)V[i];
 	}
+	Result.CheckNaN();
 	return Result;
 }
 
@@ -800,6 +876,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator/(const Element& E) 
 	{
 		Result[i] = Data[i] / E;
 	}
+	Result.CheckNaN();
 	return Result;
 }
 
@@ -813,6 +890,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator/=(const Vector<Size
 	{
 		Data[i] /= (Element)V[i];
 	}
+	CheckNaN();
 	return *this;
 }
 
@@ -824,6 +902,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator/=(const Element& E)
 	{
 		Data[i] /= E;
 	}
+	CheckNaN();
 	return *this;
 }
 
@@ -835,6 +914,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator++()
 	{
 		++Data[i];
 	}
+	CheckNaN();
 	return *this;
 }
 
@@ -846,6 +926,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator--()
 	{
 		--Data[i];
 	}
+	CheckNaN();
 	return *this;
 }
 
@@ -857,6 +938,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator=(const Element& E)
 	{
 		Data[i] = E;
 	}
+	CheckNaN();
 	return *this;
 }
 
@@ -868,7 +950,7 @@ inline Vector<Size, Element> Vector<Size, Element>::operator|(const Vector<Size,
 	Result[EAxis::X] = (Data[EAxis::Y] * V[EAxis::Z]) - (Data[EAxis::Z] * V[EAxis::Y]);
 	Result[EAxis::Y] = (Data[EAxis::Z] * V[EAxis::X]) - (Data[EAxis::X] * V[EAxis::Z]);
 	Result[EAxis::Z] = (Data[EAxis::X] * V[EAxis::Y]) - (Data[EAxis::Y] * V[EAxis::X]);
-
+	Result.CheckNaN();
 	return Result;
 };
 
@@ -881,6 +963,7 @@ inline Element Vector<Size, Element>::operator^(const Vector<Size, Element>& V) 
 	{
 		Result += Data[i] * V[i];
 	}
+	//if (TMath::IsFinite(Result)) Result{ 0.0f };
 	return Result;
 }
 
@@ -1053,6 +1136,7 @@ inline Vector<Size, Type> Vector<Size, Element>::ToType()
 	{
 		Result[i] = (Type)Data[i];
 	}
+	Result.CheckNaN();
 	return Result;
 }
 
@@ -1066,6 +1150,7 @@ inline Vector<Size, Type> Vector<Size, Element>::ToType() const
 	{
 		Result[i] = (Type)Data[i];
 	}
+	Result.CheckNaN();
 	return Result;
 }
 
@@ -1112,16 +1197,29 @@ inline Vector<Size, double> Vector<Size, Element>::ToDouble() const
 }
 
 
-//template <uint Size, typename Element>
-//inline DirectX::XMVECTOR Vector<Size, Element>::ToXMVector() const
-//{
-//	DirectX::XMVECTOR Result;
-//	for (uint i = 0; i < Size; ++i)
-//	{
-//		Result.vector4_f32[i] = Data[i];
-//	}
-//	return Result;
-//}
+template <uint Size, typename Element>
+inline void Vector<Size, Element>::CheckNaN() const
+{
+	if (ContainsNaN())
+	{
+		printf("Vector contains NaN");
+		*const_cast<Vector<Size, Element>*>(this) = Vector<Size, Element>{ 0.0f };
+	}
+}
+
+
+template <uint Size, typename Element>
+inline bool Vector<Size, Element>::ContainsNaN() const
+{
+	for (uint i = 0; i < Size; ++i)
+	{
+		if (TMath::IsFinite(Data[i]))
+		{
+			return false;
+		}
+	}
+	return true;
+}
 
 
 template <uint Size, typename Element>
@@ -1165,6 +1263,7 @@ inline Vector<Size, Element> Vector<Size, Element>::Max(const Vector<Size, Eleme
 	{
 		Result[i] = (Data[i] > V[i]) ? Data[i] : V[i];
 	}
+	Result.CheckNaN();
 	return Result;
 }
 
@@ -1177,6 +1276,7 @@ inline Element Vector<Size, Element>::MaxComp() const
 	{
 		Result = (Result > Data[i]) ? Result : Data[i];
 	}
+	if (TMath::IsFinite(Result)) Result = 0.0f;
 	return Result;
 }
 
@@ -1189,6 +1289,7 @@ inline Vector<Size, Element> Vector<Size, Element>::Min(const Vector<Size, Eleme
 	{
 		Result[i] = (Data[i] < V[i]) ? Data[i] : V[i];
 	}
+	Result.CheckNaN();
 	return Result;
 }
 
@@ -1201,6 +1302,7 @@ inline Element Vector<Size, Element>::MinComp() const
 	{
 		Result = (Result < Data[i]) ? Result : Data[i];
 	}
+	if (TMath::IsFinite(Result)) Result = 0.0f;
 	return Result;
 }
 
@@ -1259,6 +1361,7 @@ inline Vector<Size, Element> Vector<Size, Element>::Power(uint Amount)
 	{
 		Result *= Data;
 	}
+	Result.CheckNaN();
 	return Result;
 }
 
@@ -1271,6 +1374,7 @@ inline float Vector<Size, Element>::SizeSquared() const
 	{
 		Result += Data[i] * Data[i];
 	}
+	if (TMath::IsFinite(Result)) Result = 0.0f;
 	return Result;
 }
 
@@ -1284,6 +1388,7 @@ inline Vector<NewSize, Element> Vector<Size, Element>::Resize(const Element& Val
 	{
 		Result[i] = (i < Size) ? Data[i] : Value;
 	}
+	Result.CheckNaN();
 	return Result;
 }
 
@@ -1363,4 +1468,72 @@ inline Element Vector<Size, Element>::W() const
 {
 	ASSERT(Size > 3, "This vector does not have a 'W' component.");
 	return Data[EAxis::W];
+}
+
+
+template <uint Size, typename Element>
+inline Element Vector<Size, Element>::GetX() const
+{
+	ASSERT(Size > 0, "This vector does not have a 'X' component.");
+	return Data[EAxis::X];
+}
+
+
+template <uint Size, typename Element>
+inline Element Vector<Size, Element>::GetY() const
+{
+	ASSERT(Size > 1, "This vector does not have a 'Y' component.");
+	return Data[EAxis::Y];
+}
+
+
+template <uint Size, typename Element>
+inline Element Vector<Size, Element>::GetZ() const
+{
+	ASSERT(Size > 2, "This vector does not have a 'Z' component.");
+	return Data[EAxis::Z];
+}
+
+
+template <uint Size, typename Element>
+inline Element Vector<Size, Element>::GetW() const
+{
+	ASSERT(Size > 3, "This vector does not have a 'W' component.");
+	return Data[EAxis::W];
+}
+
+
+template <uint Size, typename Element>
+inline void Vector<Size, Element>::SetX(const Element& Value)
+{
+	ASSERT(Size > 0, "This vector does not have a 'X' component.");
+	Data[EAxis::X] = Value;
+	CheckNaN();
+}
+
+
+template <uint Size, typename Element>
+inline void Vector<Size, Element>::SetY(const Element& Value)
+{
+	ASSERT(Size > 1, "This vector does not have a 'Y' component.");
+	Data[EAxis::Y] = Value;
+	CheckNaN();
+}
+
+
+template <uint Size, typename Element>
+inline void Vector<Size, Element>::SetZ(const Element& Value)
+{
+	ASSERT(Size > 2, "This vector does not have a 'Z' component.");
+	Data[EAxis::Z] = Value;
+	CheckNaN();
+}
+
+
+template <uint Size, typename Element>
+inline void Vector<Size, Element>::SetW(const Element& Value)
+{
+	ASSERT(Size > 3, "This vector does not have a 'W' component.");
+	Data[EAxis::W] = Value;
+	CheckNaN();
 }

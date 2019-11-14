@@ -1,5 +1,7 @@
 #pragma once
 
+#define WORLD
+
 //#include "../Graphics/Renderer.h"
 #include "Objects/ObjectBase.h"
 

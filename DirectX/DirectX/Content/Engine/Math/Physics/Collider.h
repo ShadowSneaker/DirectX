@@ -15,7 +15,9 @@
 #include "../DataTypes/Transform.h"
 #include "../DataTypes/Vertex.h"
 
-
+#ifndef WORLD
+#define WORLD
+#endif // !WORLD
 #define USE_FAST_CHECK_WHERE_POSSIBLE
 
 
@@ -26,13 +28,14 @@ struct SHitInfo
 
 	// A value determining if this object hit another.
 	bool Hit;
-	
+
 	// A reference tot he collider this object collided with.
 	class CCollider* Collider;
 
-
+#ifdef WORLD
+	// A reference to the owning object that was hit.
 	class CWorldObject* HitObject;
-
+#endif
 
 	/// Operators
 
@@ -60,6 +63,11 @@ public:
 	// The relative transform of this collider.
 	STransform Transform;
 
+#ifdef WORLD
+	// A reference to this collider's owner object.
+	class CWorldObject* Owner;
+#endif
+
 	// Makes this collider overlapable instead of blocking.
 	bool Overlap{ false };
 
@@ -77,9 +85,6 @@ public:
 	// Adjusts this collider to the bounds of the attached object.
 	// @note - The bounding collider will cover the entire object.
 	bool AutoUpdateBounds{ false };
-
-
-	class CWorldObject* Owner{ nullptr };
 
 
 public:
@@ -144,17 +149,19 @@ public:
 	// Updates the bounding collider to cover the entire object.
 	virtual void UpdateBounds() = 0;
 
-
-
 	/// Setters
 
-
+	inline void SetVertices(SVertex** InVertices) { Vertices = InVertices; }
+	inline void SetVertexCount(uint* Count) { VertexCount = Count; }
 
 	/// Getters
 
+	// Returns the location of this collider (Takes UseLocation into consideration).
 	inline SVector GetLocation() const { return ((UseLocation) ? Transform.GetWorldLocation() : Transform.Location); }
 
+	// Returns the scale of this collider (Takes UseScale into consideration).
 	inline SVector GetScale() const { return ((UseScale) ? Transform.GetWorldScale() : Transform.Scale); }
 
+	// Returns the center of all the vertices.
 	SVector GetCenter() const;
 };

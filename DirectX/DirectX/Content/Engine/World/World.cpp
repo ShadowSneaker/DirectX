@@ -61,6 +61,7 @@ void CWorld::Inputs()
 
 void CWorld::Update()
 {
+	//Physics->Update();
 	for (uint i = 0; i < Levels.size(); ++i)
 	{
 		Levels[i]->Update();
