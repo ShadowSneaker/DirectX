@@ -241,26 +241,10 @@ SHitInfo CPhysics::Raycast(SVector Origin, SVector Direction, float Distance)
 }
 
 
-#ifdef WORLD
-SHitInfo CPhysics::Raycast(SVector Origin, SVector Direction, float Distance, std::vector<CWorldObject*> IgnoreObjects)
-{
-	return SHitInfo{};
-}
-#endif
-
-
 SHitInfo CPhysics::Raycast(SVector Origin, SVector Direction, float Distance, SHitInfo& HitInfo)
 {
 	return SHitInfo{};
 }
-
-
-#ifdef WORLD
-SHitInfo CPhysics::Raycast(SVector Origin, SVector Direction, float Distance, std::vector<CWorldObject*> IgnoreObjects, SHitInfo& HitInfo)
-{
-	return SHitInfo{};
-}
-#endif
 
 
 std::vector<SHitInfo> CPhysics::RaycastMulti(SVector Origin, SVector Direction, float Distance)
@@ -269,26 +253,10 @@ std::vector<SHitInfo> CPhysics::RaycastMulti(SVector Origin, SVector Direction, 
 }
 
 
-#ifdef WORLD
-std::vector<SHitInfo> CPhysics::RaycastMulti(SVector Origin, SVector Direction, float Distance, std::vector<CWorldObject*> IgnoreObjects)
-{
-	return std::vector<SHitInfo>{};
-}
-#endif
-
-
 std::vector<SHitInfo> CPhysics::RaycastMulti(SVector Origin, SVector Direction, float Distance, std::vector<SHitInfo>& HitInfo)
 {
 	return std::vector<SHitInfo>{};
 }
-
-
-#ifdef WORLD
-std::vector<SHitInfo> CPhysics::RaycastMulti(SVector Origin, SVector Direction, float Distance, std::vector<CWorldObject*> IgnoreObjects, std::vector<SHitInfo>& HitInfo)
-{
-	return std::vector<SHitInfo>{};
-}
-#endif
 
 
 bool CPhysics::Linecast(SVector StartPosition, SVector EndPosition)
@@ -308,7 +276,56 @@ bool CPhysics::Linecast(SVector StartPosition, SVector EndPosition)
 }
 
 
+bool CPhysics::Linecast(SVector StartPosition, SVector EndPosition, std::vector<SHitInfo>& HitInfo)
+{
+	CLine* Line = new CLine{};
+	Line->Transform.Location = StartPosition;
+	Line->EndPosition = EndPosition;
+
+	HitInfo.resize(0);
+
+	bool Result{ false };
+	for (uint i = 0; i < Bodies.size(); ++i)
+	{
+		if (Line->CheckCollision(Bodies[i]->Collider))
+		{
+			SHitInfo Info;
+			Info.Collider = Bodies[i]->Collider;
+			Info.Hit = true;
+			HitInfo.push_back(Info);
+
+			Result = true;
+		}
+	}
+	return Result;
+}
+
+
 #ifdef WORLD
+SHitInfo CPhysics::Raycast(SVector Origin, SVector Direction, float Distance, std::vector<CWorldObject*> IgnoreObjects)
+{
+	return SHitInfo{};
+}
+
+
+SHitInfo CPhysics::Raycast(SVector Origin, SVector Direction, float Distance, std::vector<CWorldObject*> IgnoreObjects, SHitInfo& HitInfo)
+{
+	return SHitInfo{};
+}
+
+
+std::vector<SHitInfo> CPhysics::RaycastMulti(SVector Origin, SVector Direction, float Distance, std::vector<CWorldObject*> IgnoreObjects)
+{
+	return std::vector<SHitInfo>{};
+}
+
+
+std::vector<SHitInfo> CPhysics::RaycastMulti(SVector Origin, SVector Direction, float Distance, std::vector<CWorldObject*> IgnoreObjects, std::vector<SHitInfo>& HitInfo)
+{
+	return std::vector<SHitInfo>{};
+}
+
+
 bool CPhysics::Linecast(SVector StartPosition, SVector EndPosition, std::vector<CWorldObject*> IgnoreObjects)
 {
 	CLine* Line = new CLine{};
@@ -340,35 +357,8 @@ bool CPhysics::Linecast(SVector StartPosition, SVector EndPosition, std::vector<
 	}
 	return false;
 }
-#endif
 
 
-bool CPhysics::Linecast(SVector StartPosition, SVector EndPosition, std::vector<SHitInfo>& HitInfo)
-{
-	CLine* Line = new CLine{};
-	Line->Transform.Location = StartPosition;
-	Line->EndPosition = EndPosition;
-
-	HitInfo.resize(0);
-
-	bool Result{ false };
-	for (uint i = 0; i < Bodies.size(); ++i)
-	{
-		if (Line->CheckCollision(Bodies[i]->Collider))
-		{
-			SHitInfo Info;
-			Info.Collider = Bodies[i]->Collider;
-			Info.Hit = true;
-			HitInfo.push_back(Info);
-
-			Result = true;
-		}
-	}
-	return Result;
-}
-
-
-#ifdef WORLD
 bool CPhysics::Linecast(SVector StartPosition, SVector EndPosition, std::vector<CWorldObject*> IgnoreObjects, std::vector<SHitInfo>& HitInfo)
 {
 	CLine* Line = new CLine{};

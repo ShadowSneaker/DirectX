@@ -285,16 +285,6 @@ public:
 	// @return - The hit information on the first object hit.
 	SHitInfo Raycast(SVector Origin, SVector Direction, float Distance);
 
-#ifdef WORLD
-	// Sends out a line in a direction and returns the first object it hits.
-	// @param Origin - The starting location of the raycast.
-	// @param Direction - Where the raycast is pointing.
-	// @param Distance - How far the raycast goes.
-	// @param IgnoreObjects - A list of objects this raycast ignores.
-	// @return - The hit information on the first object hit.
-	SHitInfo Raycast(SVector StartPosition, SVector Direction, float Distance, std::vector<class CWorldObject*> IgnoreObjects);
-#endif
-
 	// Sends out a line in a direction and returns the first object it hits.
 	// @param Origin - The starting location of the raycast.
 	// @param Direction - Where the raycast is pointing.
@@ -303,33 +293,12 @@ public:
 	// @return - The hit information on the first object hit.
 	SHitInfo Raycast(SVector Origin, SVector Direction, float Distance, SHitInfo& HitInfo);
 
-#ifdef WORLD
-	// Sends out a line in a direction and returns the first object it hits.
-	// @param Origin - The starting location of the raycast.
-	// @param Direction - Where the raycast is pointing.
-	// @param Distance - How far the raycast goes.
-	// @param IgnoreObjects - A list of objects this raycast ignores.
-	// @param HitInfo - Used to get the results of the raycast.
-	// @return - The hit information on the first object hit.
-	SHitInfo Raycast(SVector StartPosition, SVector Direction, float Distance, std::vector<class CWorldObject*> IgnoreObjects, SHitInfo& HitInfo);
-#endif
-
 	// Sends out a line in a direction and returns all objects hit.
 	// @param Origin - The starting location of the raycast.
 	// @param Direction - Where the raycast is pointing.
 	// @param Distance - How far the raycast goes.
 	// @return - The hit information on the first object hit.
 	std::vector<SHitInfo> RaycastMulti(SVector Origin, SVector Direction, float Distance);
-
-#ifdef WORLD
-	// Sends out a line in a direction and returns all objects hit.
-	// @param Origin - The starting location of the raycast.
-	// @param Direction - Where the raycast is pointing.
-	// @param Distance - How far the raycast goes.
-	// @param IgnoreObjects - A list of objects this raycast ignores.
-	// @return - The hit information on the first object hit.
-	std::vector<SHitInfo> RaycastMulti(SVector Origin, SVector Direction, float Distance, std::vector<class CWorldObject*> IgnoreObjects);
-#endif
 
 	// Sends out a line in a direction and returns all objects hit.
 	// @param Origin - The starting location of the raycast.
@@ -339,31 +308,11 @@ public:
 	// @return - The hit information on the first object hit.
 	std::vector<SHitInfo> RaycastMulti(SVector Origin, SVector Direction, float Distance, std::vector<SHitInfo>& HitInfo);
 
-#ifdef WORLD
-	// Sends out a line in a direction and returns all objects hit.
-	// @param Origin - The starting location of the raycast.
-	// @param Direction - Where the raycast is pointing.
-	// @param Distance - How far the raycast goes.
-	// @param IgnoreObjects - A list of objects this raycast ignores.
-	// @param HitInfo - Used to get the results of the raycast.
-	// @return - The hit information on the first object hit.
-	std::vector<SHitInfo> RaycastMulti(SVector Origin, SVector Direction, float Distance, std::vector<class CWorldObject*> IgnoreObjects, std::vector<SHitInfo>& HitInfo);
-#endif
-
 	// Creates a line and checks to see if it is colliding with anything.
 	// @param StartPosition - The location this linecast starts at.
 	// @param EndPosition - The location this linecast ends at.
 	// @return - Returns true if this line intersects with anything.
 	bool Linecast(SVector StartPosition, SVector EndPosition);
-
-#ifdef WORLD
-	// Creates a line and checks to see if it is colliding with anything.
-	// @param StartPosition - The location this linecast starts at.
-	// @param EndPosition - The location this linecast ends at.
-	// @param IgnoreObjects - A list of objects this linecast ignores.
-	// @return - Returns true if this line intersects with anything.
-	bool Linecast(SVector StartPosition, SVector EndPosition, std::vector<class CWorldObject*> IgnoreObjects);
-#endif
 
 	// Creates a line and checks to see if it is colliding with anything.
 	// @param StartPosition - The location this linecast starts at.
@@ -373,6 +322,56 @@ public:
 	bool Linecast(SVector StartPosition, SVector EndPosition, std::vector<SHitInfo>& HitInfo);
 
 #ifdef WORLD
+	/// World Object Specific
+
+	/*
+		These objects can only work if WorldObjects exists in the project.
+
+		WorldObjects are a part of the World Libraries. If they added to the project,
+		these functions will be enabled and can be used.
+	*/
+
+	// Sends out a line in a direction and returns the first object it hits.
+	// @param Origin - The starting location of the raycast.
+	// @param Direction - Where the raycast is pointing.
+	// @param Distance - How far the raycast goes.
+	// @param IgnoreObjects - A list of objects this raycast ignores.
+	// @return - The hit information on the first object hit.
+	SHitInfo Raycast(SVector StartPosition, SVector Direction, float Distance, std::vector<class CWorldObject*> IgnoreObjects);
+
+	// Sends out a line in a direction and returns the first object it hits.
+	// @param Origin - The starting location of the raycast.
+	// @param Direction - Where the raycast is pointing.
+	// @param Distance - How far the raycast goes.
+	// @param IgnoreObjects - A list of objects this raycast ignores.
+	// @param HitInfo - Used to get the results of the raycast.
+	// @return - The hit information on the first object hit.
+	SHitInfo Raycast(SVector StartPosition, SVector Direction, float Distance, std::vector<class CWorldObject*> IgnoreObjects, SHitInfo& HitInfo);
+
+	// Sends out a line in a direction and returns all objects hit.
+	// @param Origin - The starting location of the raycast.
+	// @param Direction - Where the raycast is pointing.
+	// @param Distance - How far the raycast goes.
+	// @param IgnoreObjects - A list of objects this raycast ignores.
+	// @return - The hit information on the first object hit.
+	std::vector<SHitInfo> RaycastMulti(SVector Origin, SVector Direction, float Distance, std::vector<class CWorldObject*> IgnoreObjects);
+
+	// Sends out a line in a direction and returns all objects hit.
+	// @param Origin - The starting location of the raycast.
+	// @param Direction - Where the raycast is pointing.
+	// @param Distance - How far the raycast goes.
+	// @param IgnoreObjects - A list of objects this raycast ignores.
+	// @param HitInfo - Used to get the results of the raycast.
+	// @return - The hit information on the first object hit.
+	std::vector<SHitInfo> RaycastMulti(SVector Origin, SVector Direction, float Distance, std::vector<class CWorldObject*> IgnoreObjects, std::vector<SHitInfo>& HitInfo);
+
+	// Creates a line and checks to see if it is colliding with anything.
+	// @param StartPosition - The location this linecast starts at.
+	// @param EndPosition - The location this linecast ends at.
+	// @param IgnoreObjects - A list of objects this linecast ignores.
+	// @return - Returns true if this line intersects with anything.
+	bool Linecast(SVector StartPosition, SVector EndPosition, std::vector<class CWorldObject*> IgnoreObjects);
+
 	// Creates a line and checks to see if it is colliding with anything.
 	// @param StartPosition - The location this linecast starts at.
 	// @param EndPosition - The location this linecast ends at.
