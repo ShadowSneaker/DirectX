@@ -2,7 +2,7 @@
 #include "../../Math/MathValues.h"
 
 
-// Holes the information to display a colour.
+// Holds the information to display a colour.
 struct SColour
 {
 public:

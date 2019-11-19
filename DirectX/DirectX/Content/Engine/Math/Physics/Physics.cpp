@@ -346,14 +346,6 @@ bool CPhysics::Linecast(SVector StartPosition, SVector EndPosition, std::vector<
 		{
 			return true;
 		}
-
-		//if (!IgnoreObjects.Contains(Bodies[i]->Collider->Owner))
-		//{
-		//	if (Line->CheckCollision(Bodies[i]->Collider))
-		//	{
-		//		return true;
-		//	}
-		//}
 	}
 	return false;
 }
@@ -385,18 +377,6 @@ bool CPhysics::Linecast(SVector StartPosition, SVector EndPosition, std::vector<
 			Info.Hit = true;
 			HitInfo.push_back(Info);
 		}
-		//if (!IgnoreObjects.contains(Bodies[i]->Collider->Owner))
-		//{
-		//	if (Line->CheckCollision(Bodies[i]->Collider))
-		//	{
-		//		SHitInfo Info;
-		//		Info.Collider = Bodies[i]->Collider;
-		//		Info.Hit = true;
-		//		HitInfo.Add(Info);
-		//
-		//		Result = true;
-		//	}
-		//}
 	}
 	return Result;
 }
