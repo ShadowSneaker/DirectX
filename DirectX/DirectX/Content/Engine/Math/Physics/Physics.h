@@ -69,8 +69,8 @@ public:
 	// Destructor.
 	~SPhysicsBody()
 	{
-		delete Collider;
-		if (Rigidbody) delete Rigidbody;
+		//delete Collider;
+		//if (Rigidbody) delete Rigidbody;
 	}
 
 
@@ -189,6 +189,7 @@ private:
 	// A list of objects that needs to be removed from the engine.
 	std::vector<SPhysicsBody*> RemoveQueue;
 
+
 	// Represents when this object is currently simulating physics.
 	bool Simulate{ true };
 
@@ -266,6 +267,11 @@ public:
 	// Deletes a physics body containing an inputted collider from this object and deletes the collider.
 	// @param Collider - The reference to the collider to delete.
 	void DeleteCollider(CCollider* Collider);
+
+	// Attaches a rigidbody to a pre-created collider body.
+	// @param Collider - The collider the rigidbody should be attached to.
+	// @param Rigidbody - The reference to the rigidbody to attach.
+	void AttachRigidbody(CCollider* Collider, CRigidbody* Rigidbody);
 
 	// Checks collisions against all colliders against every other collider.
 	// @note - This is very performance heavy and should not be ran on Update().

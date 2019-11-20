@@ -48,9 +48,15 @@ bool CSphere::CheckCollision(const CBox* Other) const
 	// Check if fast check is possible.
 	//if (SVector::NearlyEqual(Transform.Up(), SVector::Up(), SMALL_NUMBER))
 	//{
-	//
-	//
-	//	return false;
+		SVector BoxMin{ Other->GetMinExtents() };
+		SVector BoxMax{ Other->GetMaxExtents() };
+		SVector SpherePos{ Transform.GetWorldLocation() };
+		SVector Max{ SVector::Max(BoxMin, SVector::Min(SpherePos, BoxMax)) };
+		float Distance{ SVector::DistanceSquared(Max, SpherePos) };
+		float Radi{ GetRadius() };
+		Radi *= Radi;
+
+		return Distance < Radi;
 	//}
 #endif
 
@@ -120,18 +126,19 @@ bool CSphere::CheckCollision(const CCylinder* Other) const
 
 void CSphere::UpdateBounds()
 {
-	if (VertexCount && *VertexCount > 0)
+	if (Vertices && Vertices->size() > 0)
 	{
 		SVector Center{ GetCenter() };
 		Transform.Location = Center;
 
 		float Distance{ 0.0f };
 
-		for (uint i = 0; i < *VertexCount; ++i)
+		for (uint i = 0; i < Vertices->size(); ++i)
 		{
-			Distance = TMath::Max(Distance, SVector::DistanceSquared(Center, Vertices[i]->Position));
+			SVector Temp = Vertices->at(i).Position;
+			Distance = TMath::Max(Distance, SVector::DistanceSquared(Center, Vertices->at(i).Position));
 		}
-		Radius = Distance;
+		Radius = TMath::Sqrt(Distance) / 4.0f;
 	}
 }
 

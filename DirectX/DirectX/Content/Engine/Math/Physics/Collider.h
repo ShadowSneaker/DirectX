@@ -53,10 +53,11 @@ protected:
 	/// Properties
 
 	// A reference to all the vertices the bound mesh has.
-	SVertex** Vertices{ nullptr };
+	//SVertex** Vertices{ nullptr };
+	std::vector<SVertex>* Vertices{ nullptr };
 
 	// A reference to the amount of vertices the bound mesh has.
-	uint* VertexCount{ nullptr };
+	//uint* VertexCount{ nullptr };
 
 
 public:
@@ -151,8 +152,9 @@ public:
 
 	/// Setters
 
-	inline void SetVertices(SVertex** InVertices) { Vertices = InVertices; }
-	inline void SetVertexCount(uint* Count) { VertexCount = Count; }
+	//inline void SetVertices(SVertex** InVertices) { Vertices = InVertices; }
+	inline void SetVertices(std::vector<SVertex>* InVertices) { Vertices = InVertices; }
+	//inline void SetVertexCount(uint* Count) { VertexCount = Count; }
 
 	/// Getters
 

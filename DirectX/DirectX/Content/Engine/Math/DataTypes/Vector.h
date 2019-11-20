@@ -963,7 +963,7 @@ inline Element Vector<Size, Element>::operator^(const Vector<Size, Element>& V) 
 	{
 		Result += Data[i] * V[i];
 	}
-	//if (TMath::IsFinite(Result)) Result{ 0.0f };
+	//if (!TMath::IsFinite(Result)) Result = 0.0f;
 	return Result;
 }
 
@@ -1276,7 +1276,7 @@ inline Element Vector<Size, Element>::MaxComp() const
 	{
 		Result = (Result > Data[i]) ? Result : Data[i];
 	}
-	if (TMath::IsFinite(Result)) Result = 0.0f;
+	if (!TMath::IsFinite(Result)) Result = 0.0f;
 	return Result;
 }
 
@@ -1302,7 +1302,7 @@ inline Element Vector<Size, Element>::MinComp() const
 	{
 		Result = (Result < Data[i]) ? Result : Data[i];
 	}
-	if (TMath::IsFinite(Result)) Result = 0.0f;
+	if (!TMath::IsFinite(Result)) Result = 0.0f;
 	return Result;
 }
 
@@ -1374,7 +1374,7 @@ inline float Vector<Size, Element>::SizeSquared() const
 	{
 		Result += Data[i] * Data[i];
 	}
-	if (TMath::IsFinite(Result)) Result = 0.0f;
+	if (!TMath::IsFinite(Result)) Result = 0.0f;
 	return Result;
 }
 

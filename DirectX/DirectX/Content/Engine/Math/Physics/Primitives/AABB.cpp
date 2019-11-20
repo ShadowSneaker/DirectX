@@ -119,22 +119,22 @@ bool CAxisAlignedBoundingBox::CheckCollision(const CCylinder* Other) const
 
 void CAxisAlignedBoundingBox::UpdateBounds()
 {
-	if (VertexCount && *VertexCount > 0)
+	if (Vertices && Vertices->size() > 0)
 	{
 		SVector Center{ GetCenter() };
 		Transform.Location = Center;
 
 		float Distance{ 0.0f };
 		uint HighestIndex{ 0 };
-		for (uint i = 0; i < *VertexCount; ++i)
+		for (uint i = 0; i < Vertices->size(); ++i)
 		{
-			float Dist{ TMath::Max(Distance, SVector::DistanceSquared(Center, Vertices[i]->Position)) };
+			float Dist{ TMath::Max(Distance, SVector::DistanceSquared(Center, Vertices->at(i).Position)) };
 			if (Dist > Distance)
 			{
 				Distance = Dist;
 				HighestIndex = i;
 			}
 		}
-		Extents = Vertices[HighestIndex]->Position * 2.0f;
+		Extents = Vertices->at(HighestIndex).Position * 2.0f;
 	}
 }

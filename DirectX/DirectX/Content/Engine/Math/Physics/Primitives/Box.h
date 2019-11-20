@@ -88,8 +88,8 @@ public:
 	/// Getters
 
 	// Gets the cube collider's minimum extents in the worldspace.
-	inline const SVector GetMinExtents() const { return ((UseLocation) ? Transform.GetWorldLocation() : Transform.Location) - ((Extents / 2) * ((UseScale) ? Transform.GetWorldScale() : Transform.Scale)); }
+	inline const SVector GetMinExtents() const { return ((UseLocation) ? Transform.GetWorldLocation() : Transform.Location) - ((Extents / 2.0f) * ((UseScale) ? Transform.GetWorldScale() : Transform.Scale)); }
 
 	// Gets the cube collider's minimum extents in the worldspace.
-	inline const SVector GetMaxExtents() const { return ((UseLocation) ? Transform.GetWorldLocation() : Transform.Location) + ((Extents / 2) * ((UseScale) ? Transform.GetWorldScale() : Transform.Scale)); }
+	inline const SVector GetMaxExtents() const { return ((UseLocation) ? Transform.GetWorldLocation() : Transform.Location) + ((Extents / 2.0f) * ((UseScale) ? Transform.GetWorldScale() : Transform.Scale)); }
 };

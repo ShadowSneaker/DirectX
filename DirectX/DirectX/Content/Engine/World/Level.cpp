@@ -53,7 +53,7 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 
 	SpawnObject<CTestMove>(SVector{ 5.0f, 2.0f, 5.0f });
 #define INPUT_ENABLED
-	CTestMove* Test = SpawnObject<CTestMove>(SVector{ 0.0f, 2.0f, 0.0f });
+	CTestMove* Test = SpawnObject<CTestMove>(SVector{ -5.0f, 2.0f, 0.0f });
 
 	Test->AllowMovement = false;
 

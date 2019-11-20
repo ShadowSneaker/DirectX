@@ -1,6 +1,6 @@
 #include "Floor.h"
 #include "../../../Components/Graphics/Meshes/StaticMeshComponent.h"
-#include "../../../Components/Colliders/BoxComponent.h"
+#include "../../../Components/Physics/BoxComponent.h"
 
 
 CFloor::CFloor(SObjectBase Base)
@@ -12,5 +12,6 @@ CFloor::CFloor(SObjectBase Base)
 	Mesh->SetColour(SColour::Cyan());
 
 	BoxCollider = CreateComponent<CBoxComponent>();
+	BoxCollider->Transform.SetParent(&Transform);
 	BoxCollider->Extents = SVector{ 1.0f, 0.01f, 1.0f };
 }

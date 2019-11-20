@@ -68,7 +68,8 @@ protected:
 
 public:
 	// A reference to all the vertices that is on this mesh.
-	SVertex* Vertices{ nullptr };
+	//SVertex* Vertices{ nullptr };
+	std::vector<SVertex> Vertices;
 
 	// The total amount of vertices that this mesh has.
 	uint VertexCount{ 0 };
@@ -144,8 +145,8 @@ public:
 
 	inline uint GetVertexCount() const { return VertexCount; }
 
-	//inline SModelVertex* GetVertices() const { return Vertices; }
-	inline SVertex* GetVertices() const { return Vertices; }
+	//inline SVertex* GetVertices() const { return Vertices; }
+	inline std::vector<SVertex> GetVertices() const { return Vertices; }
 
 	SShader GetShader() const;
 

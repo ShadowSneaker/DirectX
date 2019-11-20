@@ -1,7 +1,7 @@
 #include "Character.h"
 #include "../../Components/CharacterComponent.h"
 //#include "../../Components/Graphics/SkeletalMesh.h"
-#include "../../Components/Colliders/CapsuleComponent.h"
+#include "../../Components/Physics/CapsuleComponent.h"
 
 
 CCharacter::CCharacter(SObjectBase Core)

@@ -145,11 +145,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Content\Engine\Components\CharacterComponent.h" />
-    <ClInclude Include="Content\Engine\Components\Colliders\BoxComponent.h" />
-    <ClInclude Include="Content\Engine\Components\Colliders\CapsuleComponent.h" />
-    <ClInclude Include="Content\Engine\Components\Colliders\CylinderComponent.h" />
-    <ClInclude Include="Content\Engine\Components\Colliders\PolygonComponent.h" />
-    <ClInclude Include="Content\Engine\Components\Colliders\SphereComponent.h" />
+    <ClInclude Include="Content\Engine\Components\Physics\BoxComponent.h" />
+    <ClInclude Include="Content\Engine\Components\Physics\CapsuleComponent.h" />
+    <ClInclude Include="Content\Engine\Components\Physics\CylinderComponent.h" />
+    <ClInclude Include="Content\Engine\Components\Physics\PolygonComponent.h" />
+    <ClInclude Include="Content\Engine\Components\Physics\RigidbodyComponent.h" />
+    <ClInclude Include="Content\Engine\Components\Physics\SphereComponent.h" />
     <ClInclude Include="Content\Engine\Components\Component.h" />
     <ClInclude Include="Content\Engine\Components\Graphics\Camera\CameraComponent.h" />
     <ClInclude Include="Content\Engine\Components\Graphics\Lighting\DirectionalLightComponent.h" />
@@ -205,11 +206,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\Engine\Components\CharacterComponent.cpp" />
-    <ClCompile Include="Content\Engine\Components\Colliders\BoxComponent.cpp" />
-    <ClCompile Include="Content\Engine\Components\Colliders\CapsuleComponent.cpp" />
-    <ClCompile Include="Content\Engine\Components\Colliders\CylinderComponent.cpp" />
-    <ClCompile Include="Content\Engine\Components\Colliders\PolygonComponent.cpp" />
-    <ClCompile Include="Content\Engine\Components\Colliders\SphereComponent.cpp" />
+    <ClCompile Include="Content\Engine\Components\Physics\BoxComponent.cpp" />
+    <ClCompile Include="Content\Engine\Components\Physics\CapsuleComponent.cpp" />
+    <ClCompile Include="Content\Engine\Components\Physics\RigidbodyComponent.cpp" />
+    <ClCompile Include="Content\Engine\Components\Physics\CylinderComponent.cpp" />
+    <ClCompile Include="Content\Engine\Components\Physics\PolygonComponent.cpp" />
+    <ClCompile Include="Content\Engine\Components\Physics\SphereComponent.cpp" />
     <ClCompile Include="Content\Engine\Components\Component.cpp" />
     <ClCompile Include="Content\Engine\Components\Graphics\Camera\CameraComponent.cpp" />
     <ClCompile Include="Content\Engine\Components\Graphics\Lighting\DirectionalLightComponent.cpp" />

@@ -15,12 +15,12 @@ SVector CCollider::GetCenter() const
 {
 	SVector Max{ 0.0f };
 	SVector Min{ 0.0f };
-	for (uint i = 0; i < *VertexCount; ++i)
+	for (uint i = 0; i < Vertices->size(); ++i)
 	{
 		if (Vertices)
 		{
-			Max = SVector::Max(Max, Vertices[i]->Position);
-			Min = SVector::Min(Min, Vertices[i]->Position);
+			Max = SVector::Max(Max, Vertices->at(i).Position);
+			Min = SVector::Min(Min, Vertices->at(i).Position);
 		}
 	}
 

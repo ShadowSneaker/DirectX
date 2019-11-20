@@ -16,7 +16,7 @@ CStaticMesh::CStaticMesh()
 CStaticMesh::~CStaticMesh()
 {
 	Shader.Clear();
-	delete[] Vertices;
+	//delete[] Vertices;
 
 	PositionList.clear();
 	NormalList.clear();
@@ -26,7 +26,7 @@ CStaticMesh::~CStaticMesh()
 
 void CStaticMesh::SetupVertices(SFileInfo FileInfo)
 {
-	if (VertexCount > 0) delete[] Vertices;
+	//if (VertexCount > 0) delete[] Vertices;
 
 	TokenPtr = 0;
 
@@ -157,7 +157,8 @@ void CStaticMesh::SetupVertices(SFileInfo FileInfo)
 
 
 	VertexCount = PIndices.size();
-	Vertices = new SVertex[VertexCount];
+	//Vertices = new SVertex[VertexCount];
+	Vertices.resize(VertexCount);
 
 	for (uint i = 0; i < VertexCount; ++i)
 	{

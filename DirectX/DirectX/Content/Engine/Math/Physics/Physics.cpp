@@ -1,5 +1,6 @@
 #include "Physics.h"
 #include "Primitives/Line.h"
+#include "../../World/Objects/WorldObject.h"
 
 
 CPhysics::CPhysics()
@@ -20,7 +21,7 @@ void CPhysics::DeleteAllBodies()
 	PhysicsThread.join();
 	while (!Bodies.empty())
 	{
-		delete Bodies.back();
+		delete Bodies[Bodies.size() - 1];
 		Bodies.pop_back();
 	}
 }
@@ -44,7 +45,15 @@ void CPhysics::Update()
 			{
 				if (Bodies[i]->Rigidbody)
 				{
-					Bodies[i]->Collider->Transform.Location += (Bodies[i]->Rigidbody->Velocity + Gravity) * DeltaTime;
+					float DT{ 0.00001f };
+					//Bodies[i]->Collider->Owner->Transform.Location += (Bodies[i]->Rigidbody->Velocity + Gravity) * 0.00000001f;//DeltaTime;
+					Bodies[i]->Rigidbody->Velocity += Gravity * DT;
+					Bodies[i]->Collider->Owner->Transform.Location += Bodies[i]->Rigidbody->Velocity * DT;
+					if (QuerryCollisions(Bodies[i]->Collider).size())
+					{
+						Bodies[i]->Collider->Owner->Transform.Location -= Bodies[i]->Rigidbody->Velocity * DT;
+						Bodies[i]->Rigidbody->Velocity = 0.0f;
+					}
 				}
 			}
 		}
@@ -77,8 +86,8 @@ void CPhysics::AddToSimulation(SPhysicsBody* Body)
 		{
 			return;
 		}
-		Bodies.push_back(Body);
 	}
+	Bodies.push_back(Body);
 }
 
 
@@ -181,6 +190,30 @@ void CPhysics::RemoveCollider(CCollider* Collider)
 void CPhysics::DeleteCollider(CCollider* Collider)
 {
 	DeletePhysicsBody(GetBody(Collider));
+}
+
+
+void CPhysics::AttachRigidbody(CCollider* Collider, CRigidbody* Rigidbody)
+{
+	if (Rigidbody)
+	{
+		if (InputQueue.size() > 0)
+		{
+			for (uint i = 0; i < InputQueue.size(); ++i)
+			{
+				if (InputQueue[i]->Collider == Collider)
+				{
+					InputQueue[i]->Rigidbody = Rigidbody;
+				}
+			}
+		}
+
+		SPhysicsBody* Body{ GetBody(Collider) };
+		if (Body)
+		{
+			Body->Rigidbody = Rigidbody;
+		}
+	}
 }
 
 

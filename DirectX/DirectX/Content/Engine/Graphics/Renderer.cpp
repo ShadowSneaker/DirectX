@@ -205,7 +205,9 @@ SShader CRenderer::SetShader(CStaticMesh* Mesh, std::string FilePath, bool UseDe
 
 	D3D11_MAPPED_SUBRESOURCE MS;
 	Setup->GetDeviceContext()->Map(Shader.VertexBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &MS);
-	memcpy(MS.pData, Mesh->GetVertices(), sizeof(Mesh->GetVertices()[0]) * Mesh->GetVertexCount());
+	//memcpy(MS.pData, &Mesh->GetVertices(), sizeof(Mesh->GetVertices()[0]) * Mesh->GetVertexCount() + 4);
+	memcpy(MS.pData, &Mesh->GetVertices()[0], sizeof(Mesh->GetVertices()[0]) * Mesh->GetVertices().size());
+	//std::copy(Mesh->GetVertices().begin(), Mesh->GetVertices().end(), MS.pData);
 	Setup->GetDeviceContext()->Unmap(Shader.VertexBuffer, NULL);
 
 
@@ -414,12 +416,15 @@ void CRenderer::DrawAll()
 
 		// Not sure if it's a good idea to have this here, however, by putting this here I am able to change the colour of objects during runtime.
 
-		SVertex* Vertices = Objects[i]->GetVertices();
+		//SVertex* Vertices = Objects[i]->GetVertices();
+		std::vector<SVertex> Vertices = Objects[i]->GetVertices();
 		uint VertexCount = Objects[i]->GetVertexCount();
 
 		D3D11_MAPPED_SUBRESOURCE MS;
 		Setup->GetDeviceContext()->Map(VBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &MS);
-		memcpy(MS.pData, Objects[i]->GetVertices(), sizeof(Objects[i]->GetVertices()[0]) * Objects[i]->GetVertexCount());
+		//memcpy(MS.pData, &Objects[i]->GetVertices(), sizeof(Objects[i]->GetVertices()[0]) * Objects[i]->GetVertexCount());
+		memcpy(MS.pData, &Objects[i]->GetVertices()[0], sizeof(Objects[i]->GetVertices()[0])* Objects[i]->GetVertices().size());
+
 		Setup->GetDeviceContext()->Unmap(VBuffer, NULL);
 
 

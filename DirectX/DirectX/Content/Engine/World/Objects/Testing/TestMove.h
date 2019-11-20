@@ -7,6 +7,7 @@ class CTestMove :public CCharacter
 private:
 	class CStaticMeshComponent* Mesh;
 	class CSphereComponent* SphereCollider;
+	class CRigidbodyComponent* Rigid;
 
 public:
 	bool AllowMovement{ true };

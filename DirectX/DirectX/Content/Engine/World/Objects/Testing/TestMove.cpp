@@ -1,7 +1,8 @@
 #include "TestMove.h"
-#include "../../../Components/Colliders/SphereComponent.h"
+#include "../../../Components/Physics/SphereComponent.h"
 #include "../../../Components/Graphics/Meshes/StaticMeshComponent.h"
 #include "../../../Math/Physics/Physics.h"
+#include "../../../Components/Physics/RigidbodyComponent.h"
 
 
 CTestMove::CTestMove(SObjectBase Base)
@@ -17,14 +18,17 @@ CTestMove::CTestMove(SObjectBase Base)
 	SphereCollider = CreateComponent<CSphereComponent>();
 	SphereCollider->SetOwner(this);
 	SphereCollider->Transform.SetParent(&Transform);
-	SphereCollider->Radius = 0.75f;
+	SphereCollider->Radius = 0.725f;
 
+	Rigid = CreateComponent<CRigidbodyComponent>();
+	Rigid->AttachCollider(SphereCollider);
 
-	uint Count = Mesh->VertexCount;
+	
 
 	SphereCollider->SetVertices(&Mesh->Vertices);
-	SphereCollider->SetVertexCount(&Mesh->VertexCount);
 	SphereCollider->UpdateBounds();
+
+	//SphereCollider->Radius = 100.0f;
 	
 
 	SetupInput(GetInputManager());

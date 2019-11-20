@@ -74,12 +74,11 @@ bool CPolygon::CheckCollision(const CCylinder* Other) const
 
 void CPolygon::UpdateBounds()
 {
-	ColliderVertices.resize(*VertexCount);
-	if (VertexCount)
+	if (Vertices)
 	{
-		for (uint i = 0; i < *VertexCount; ++i)
+		for (uint i = 0; i < Vertices->size(); ++i)
 		{
-			ColliderVertices[i] = Vertices[i]->Position;
+			ColliderVertices[i] = Vertices->at(i).Position;
 		}
 	}
 }

@@ -192,15 +192,15 @@ bool CCapsule::CheckCollision(const CCylinder* Other) const
 
 void CCapsule::UpdateBounds()
 {
-	if (VertexCount && *VertexCount > 0)
+	if (Vertices && Vertices->size() > 0)
 	{
 		SVector Center{ GetCenter() };
 		SVector Max{ 0.0f };
 		SVector Min{ 0.0f };
-		for (uint i = 0; i < *VertexCount; ++i)
+		for (uint i = 0; i < Vertices->size(); ++i)
 		{
-			Max = SVector::Max(Max, Vertices[i]->Position);
-			Min = SVector::Min(Min, Vertices[i]->Position);
+			Max = SVector::Max(Max, Vertices->at(i).Position);
+			Min = SVector::Min(Min, Vertices->at(i).Position);
 		}
 
 		Vector<3, bool> ControlX{ true, false, true };
@@ -208,10 +208,10 @@ void CCapsule::UpdateBounds()
 
 		float DistX{ 0.0f };
 		float DistY{ 0.0f };
-		for (uint i = 0; i < *VertexCount; ++i)
+		for (uint i = 0; i < Vertices->size(); ++i)
 		{
-			DistX = SVector::Distance(Center, SVector::Select(Vertices[i]->Position, Center, ControlX));
-			DistY = SVector::Distance(Center, SVector::Select(Vertices[i]->Position, Center, ControlY));
+			DistX = SVector::Distance(Center, SVector::Select(Vertices->at(i).Position, Center, ControlX));
+			DistY = SVector::Distance(Center, SVector::Select(Vertices->at(i).Position, Center, ControlY));
 		}
 
 		Radius = DistX;

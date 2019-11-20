@@ -28,4 +28,10 @@ public:
 
 	// Constructor, Default.
 	CRigidbody();
+
+
+	/// Functions
+
+
+	
 };

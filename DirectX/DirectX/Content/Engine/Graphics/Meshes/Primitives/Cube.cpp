@@ -4,7 +4,8 @@
 CCube::CCube()
 {
 	VertexCount = 36;
-	Vertices = new SVertex[VertexCount];
+	//Vertices = new SVertex[VertexCount];
+	Vertices.resize(VertexCount);
 
 	// Back face.
 	Vertices[0]  = SVertex{ SVector{ -1.0f,  1.0f,  1.0f }, SColour{ 0.0f, 1.0f, 1.0f, 1.0f }, SVector2{ 0.0f, 0.0f }, SVector{  0.0f,  0.0f,  1.0f } };

@@ -28,10 +28,11 @@ CWorld::CWorld(HINSTANCE HandleInstance, int CommandShow)
 
 CWorld::~CWorld()
 {
+	delete Physics;
+
 	CloseAllLevels();
 
 	delete ObjectPool;
-	delete Physics;
 	delete Renderer;
 }
 
@@ -73,11 +74,6 @@ void CWorld::Graphics()
 {
 	Renderer->DrawAll();
 }
-
-
-
-
-
 
 
 void CWorld::CloseAllLevels()

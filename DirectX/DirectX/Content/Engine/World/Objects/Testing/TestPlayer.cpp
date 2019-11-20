@@ -14,6 +14,8 @@ CTestPlayer::CTestPlayer(SObjectBase Core)
 	SetupInput(GetInputManager());
 	Camera = CreateComponent<CCameraComponent>();
 	Camera->Transform.SetParent(&Transform);
+
+	Camera->UseLegacyControls = true;
 }
 
 
