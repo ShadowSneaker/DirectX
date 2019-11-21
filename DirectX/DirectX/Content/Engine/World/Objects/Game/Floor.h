@@ -17,4 +17,6 @@ public:
 
 	CFloor(SObjectBase Base);
 
+
+	class CStaticMeshComponent* GetMesh() const;
 };

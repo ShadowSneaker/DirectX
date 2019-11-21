@@ -1,5 +1,6 @@
 #pragma once
-#include "../../Math/MathValues.h"
+//#include "../../Math/MathValues.h"
+#include "../../Math/DataTypes/Vector.h"
 
 
 // Holds the information to display a colour.
@@ -34,6 +35,11 @@ public:
 	SColour(float InR, float InG, float InB, float InA = 1.0f)
 		:R{ InG }, G{ InG }, B{ InB }, A{ InA }
 	{}
+
+
+	/// Operator
+
+	inline SColour operator=(const SColour& Colour);
 
 
 	/// Statics
@@ -93,3 +99,13 @@ public:
 	static inline SColour Clear() { return SColour{ 1.0f, 1.0f, 1.0f, 0.5f }; }
 
 };
+
+
+inline SColour SColour::operator=(const SColour& Colour)
+{
+	R = Colour.R;
+	G = Colour.G;
+	B = Colour.B;
+	A = Colour.A;
+	return *this;
+}

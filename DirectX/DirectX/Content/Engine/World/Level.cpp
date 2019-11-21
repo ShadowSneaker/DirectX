@@ -8,6 +8,10 @@
 #include "../Components/Graphics/Camera/CameraComponent.h"
 #include "Objects/Testing/TestMove.h"
 
+#include "../Components/Graphics/Meshes/StaticMeshComponent.h"
+#include <random>
+#include <time.h>
+
 
 const std::string CLevel::DefaultFilePath{ "Content/Assets/Levels/" };
 
@@ -51,7 +55,7 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 
 	}
 
-	SpawnObject<CTestMove>(SVector{ 5.0f, 2.0f, 5.0f });
+	SpawnObject<CTestMove>(SVector{ 0.0f, 5.0f, 0.0f });
 #define INPUT_ENABLED
 	CTestMove* Test = SpawnObject<CTestMove>(SVector{ -5.0f, 2.0f, 0.0f });
 
@@ -97,6 +101,7 @@ void CLevel::Update()
 void CLevel::LoadObjects()
 {
 	SStringBlock Contents = TFileManager::ReadFileAlt(FilePath.GetFilePath());
+	srand(time(0));
 
 	for (uint i = 0; i < Contents.size(); ++i)
 	{
@@ -108,15 +113,21 @@ void CLevel::LoadObjects()
 			Transform.Location[X] = TFileManager::GetValue<float>(Line[1]);
 			Transform.Location[Y] = TFileManager::GetValue<float>(Line[2]);
 			Transform.Location[Z] = TFileManager::GetValue<float>(Line[3]);
-			
+
 			Transform.Rotation.X = TFileManager::GetValue<float>(Line[4]);
 			Transform.Rotation.Y = TFileManager::GetValue<float>(Line[5]);
 			Transform.Rotation.Z = TFileManager::GetValue<float>(Line[6]);
-			
+
 			Transform.Scale[X] = TFileManager::GetValue<float>(Line[7]);
 			Transform.Scale[Y] = TFileManager::GetValue<float>(Line[8]);
 			Transform.Scale[Z] = TFileManager::GetValue<float>(Line[9]);
-			SpawnObject<CFloor>(Transform);
+			CFloor* Floor = SpawnObject<CFloor>(Transform);
+			//float R{ float(rand() % 100) / 100.0f };
+			//float G{ float(rand() % 100) / 100.0f };
+			//float B{ float(rand() % 100) / 100.0f };
+			//Floor->GetMesh()->SetColour(R, G, B, 1.0f);
+
+			//if (i == 0) Floor->GetMesh()->SetColour(SColour::Red());
 		}
 	}
 }

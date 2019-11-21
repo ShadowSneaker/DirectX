@@ -13,7 +13,7 @@ public:
 	float Strength{ 1.0f };
 
 	// The colour this light will shine onto all objects.
-	SVector4 Colour{ 1.0f, 1.0f, 1.0f, 0.0f };
+	SVector4 Colour{ 0.0f, 1.0f, 0.0f, 1.0f };
 
 	// Determines if this light applies shadows.
 	bool CastShadow{ true };
