@@ -25,7 +25,7 @@ VOut VShader(float4 Position : POSITION, float4 Colour : COLOUR, float2 uv : UV,
 	Output.Position = mul(ViewMatrix, Position);
 
 	float DiffuseAmount = saturate(dot(Normal, -DirectionalLight));
-	Output.Colour = (AmbiantLight + (LightColour * DiffuseAmount)) * Colour;
+	Output.Colour = (AmbiantLight + (LightColour * DiffuseAmount) * Colour);
 
 	Output.uv = uv;
 	return Output;
