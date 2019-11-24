@@ -46,7 +46,7 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 	}
 	else
 	{
-		CTestPlayer* Player = SpawnObject<CTestPlayer>();
+		CTestPlayer* Player = SpawnObject<CTestPlayer>(SVector{ 0.0f, 2.0f, -10.0f});
 
 		CTestSkyBox* Sky = SpawnObject<CTestSkyBox>();
 		Sky->Camera = &Player->GetCamera()->Transform;
@@ -114,20 +114,14 @@ void CLevel::LoadObjects()
 			Transform.Location[Y] = TFileManager::GetValue<float>(Line[2]);
 			Transform.Location[Z] = TFileManager::GetValue<float>(Line[3]);
 
-			Transform.Rotation.X = TFileManager::GetValue<float>(Line[4]);
-			Transform.Rotation.Y = TFileManager::GetValue<float>(Line[5]);
-			Transform.Rotation.Z = TFileManager::GetValue<float>(Line[6]);
+			Transform.Rotation.X = TO_RADIAN(TFileManager::GetValue<float>(Line[4]));
+			Transform.Rotation.Y = TO_RADIAN(TFileManager::GetValue<float>(Line[5]));
+			Transform.Rotation.Z = TO_RADIAN(TFileManager::GetValue<float>(Line[6]));
 
 			Transform.Scale[X] = TFileManager::GetValue<float>(Line[7]);
 			Transform.Scale[Y] = TFileManager::GetValue<float>(Line[8]);
 			Transform.Scale[Z] = TFileManager::GetValue<float>(Line[9]);
 			CFloor* Floor = SpawnObject<CFloor>(Transform);
-			//float R{ float(rand() % 100) / 100.0f };
-			//float G{ float(rand() % 100) / 100.0f };
-			//float B{ float(rand() % 100) / 100.0f };
-			//Floor->GetMesh()->SetColour(R, G, B, 1.0f);
-
-			//if (i == 0) Floor->GetMesh()->SetColour(SColour::Red());
 		}
 	}
 }

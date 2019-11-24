@@ -6,11 +6,11 @@
 #include "../Core/Systems/InputManager.h"
 
 #include "Level.h"
+#include <iostream>
 
 
 CWorld::CWorld(HINSTANCE HandleInstance, int CommandShow)
 {
-
 	Renderer = new CRenderer{ HandleInstance, CommandShow };
 	if (!Renderer) exit(0);
 
@@ -34,6 +34,7 @@ CWorld::~CWorld()
 
 	delete ObjectPool;
 	delete Renderer;
+	FreeConsole();
 }
 
 

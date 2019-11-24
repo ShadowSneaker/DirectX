@@ -45,13 +45,13 @@ void CPhysics::Update()
 			{
 				if (Bodies[i]->Rigidbody)
 				{
-					float DT{ 0.00001f };
+					float DT{ 0.0005f };
 					//Bodies[i]->Collider->Owner->Transform.Location += (Bodies[i]->Rigidbody->Velocity + Gravity) * 0.00000001f;//DeltaTime;
 					Bodies[i]->Rigidbody->Velocity += Gravity * DT;
-					Bodies[i]->Collider->Owner->Transform.Location += Bodies[i]->Rigidbody->Velocity * DT;
+					Bodies[i]->Collider->Owner->Transform.Location += Bodies[i]->Rigidbody->Velocity * Bodies[i]->Rigidbody->GravityScale * DT;
 					if (QuerryCollisions(Bodies[i]->Collider).size())
 					{
-						Bodies[i]->Collider->Owner->Transform.Location -= Bodies[i]->Rigidbody->Velocity * DT;
+						Bodies[i]->Collider->Owner->Transform.Location -= Bodies[i]->Rigidbody->Velocity * Bodies[i]->Rigidbody->GravityScale * DT;
 						Bodies[i]->Rigidbody->Velocity = 0.0f;
 					}
 				}

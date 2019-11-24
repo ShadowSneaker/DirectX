@@ -369,9 +369,16 @@ private:
 	// A reference to the current message.
 	MSG Message;
 
-	IDirectInput8* Input;
+	IDirectInput8* Input{ nullptr };
 
-	IDirectInputDevice8* KeyboardDevice;
+	IDirectInputDevice8* KeyboardDevice{ nullptr };
+	IDirectInputDevice8* MouseDevice{ nullptr };
+
+	unsigned char KeyboardState[256];
+	DIMOUSESTATE MouseState;
+	SVector2i ScreenSize;
+	SVector2i MousePos;
+
 
 
 	// Determines if control is currently being pressed.
@@ -391,13 +398,20 @@ public:
 	/// Constructors
 
 	// Constructor, Default.
-	CInputManager(class CWindow* Window);
+	CInputManager(class CWindow* InWindow);
 
 	// Destructor.
 	~CInputManager();
 
 
 	/// Functions
+
+private: 
+	bool SetupDevice();
+
+	bool ReadKeyboard();
+	bool ReadMouse();
+public:
 
 	// Updates the current event and updates all inputs.
 	void Update();
@@ -477,4 +491,33 @@ public:
 
 	// Gets a reference of the current message.
 	inline MSG GetMsg() const { return Message; }
+
+
+	inline SVector2i GetMousePos() const { return MousePos; }
+
+	// Returns true if this button is currently held down.
+	inline bool GetButtonDown(uint Key) const { return GetKeyState(Key); }
+
+	// Returns true if the specified action bind is held down.
+	bool GetButtonDown(std::string Action) const;
+
+	// Returns true if this button was pressed this frame.
+	bool GetButtonPressed(uint Key) const;
+
+	// Returns true if the specified action bind was pressed this frame.
+	bool GetButtonPressed(std::string Action) const;
+
+	// Returns true if this button was released this frame.
+	bool GetButtonReleased(uint Key) const;
+
+	// Returns true if the specified action bind was released this frame.
+	bool GetButtonReleased(std::string Action) const;
+
+	// Returns the axis value of a selected key.
+	inline float GetAxis(uint Key) const { return (GetKeyState(Key)) ? 1.0f : 0.0f; }
+
+	// Returns the axis value of a specified axis bind.
+	inline float GetAxis(std::string Axis) const { return AxisBinds.at(Axis).GetValue(); }
+
+	
 };

@@ -8,9 +8,7 @@ CFloor::CFloor(SObjectBase Base)
 {
 	Mesh = CreateComponent<CStaticMeshComponent>();
 	Mesh->SetMesh("Plane.obj");
-	//Mesh->SetTexture("images.jpg");
 	Mesh->SetShader("Shaders.hlsl");
-	Mesh->SetColour(SColour::Green());
 
 	BoxCollider = CreateComponent<CBoxComponent>();
 	BoxCollider->Transform.SetParent(&Transform);

@@ -5,22 +5,37 @@
 
 CInputManager::CInputManager(class CWindow* Window)
 {
-	HRESULT HR;
+	ScreenSize = Window->GetWindowSize();
+	MousePos = SVector2i{ 0 };
 	
+	HRESULT HR;
+
+	// Setup keyboard
 	HR = DirectInput8Create(Window->GetHandle(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&Input, NULL);
-	if (FAILED(HR)) DebugBreak();
+	if (FAILED(HR)) return;
 
 	HR = Input->CreateDevice(GUID_SysKeyboard, &KeyboardDevice, NULL);
-	if (FAILED(HR)) DebugBreak();
+	if (FAILED(HR)) return;
 
 	HR = KeyboardDevice->SetDataFormat(&c_dfDIKeyboard);
-	if (FAILED(HR)) DebugBreak();
+	if (FAILED(HR)) return;
 
 	HR = KeyboardDevice->SetCooperativeLevel(Window->GetWindowHandle(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
-	if (FAILED(HR)) DebugBreak();
+	if (FAILED(HR)) return;
 
-	HR = KeyboardDevice->Acquire();
-	if (FAILED(HR)) DebugBreak();
+
+	// Setup mouse.
+	HR = Input->CreateDevice(GUID_SysMouse, &MouseDevice, NULL);
+	if (FAILED(HR)) return;
+
+	HR = MouseDevice->SetDataFormat(&c_dfDIMouse);
+	if (FAILED(HR)) return;
+
+	HR = MouseDevice->SetCooperativeLevel(Window->GetWindowHandle(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+	if (FAILED(HR)) return;
+
+
+	SetupDevice();
 }
 
 
@@ -32,7 +47,67 @@ CInputManager::~CInputManager()
 		KeyboardDevice->Release();
 	}
 
+	if (MouseDevice)
+	{
+		MouseDevice->Unacquire();
+		KeyboardDevice->Release();
+	}
+
 	if (Input) Input->Release();
+}
+
+
+bool CInputManager::SetupDevice()
+{
+	HRESULT HR;
+
+	HR = KeyboardDevice->Acquire();
+	if (FAILED(HR)) return false;
+
+	HR = MouseDevice->Acquire();
+	if (FAILED(HR)) return false;
+
+	return true;
+}
+
+
+bool CInputManager::ReadKeyboard()
+{
+	HRESULT HR;
+
+	HR = KeyboardDevice->GetDeviceState(sizeof(KeyboardState), &KeyboardState);
+	if (FAILED(HR))
+	{
+		if ((HR == DIERR_INPUTLOST) || (HR == DIERR_NOTACQUIRED))
+		{
+			KeyboardDevice->Acquire();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+
+bool CInputManager::ReadMouse()
+{
+	HRESULT HR;
+
+	HR = MouseDevice->GetDeviceState(sizeof(KeyboardState), &KeyboardState);
+	if (FAILED(HR))
+	{
+		if ((HR == DIERR_INPUTLOST) || (HR == DIERR_NOTACQUIRED))
+		{
+			MouseDevice->Acquire();
+		}
+		else
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 
@@ -47,24 +122,25 @@ void CInputManager::AxisUpdate()
 
 void CInputManager::Update()
 {
-	if (PeekMessage(&Message, NULL, 0, 0, PM_REMOVE))
-	{
-		TranslateMessage(&Message);
-		DispatchMessage(&Message);
-	}
+
+	if (!ReadKeyboard()) return;
+	if (!ReadMouse()) return;
+
+	MousePos[X] += MouseState.lX;
+	MousePos[Y] += MouseState.lY;
+	MousePos = TMath::Clamp(SVector2i{ 0 }, ScreenSize, MousePos);
 
 
-	HRESULT HR;
-	HR = KeyboardDevice->GetDeviceState(sizeof(ActionBinds), &ActionBinds);
-	if (FAILED(HR))
-	{
-		if ((HR == DIERR_INPUTLOST) || (HR == DIERR_NOTACQUIRED))
-		{
-			KeyboardDevice->Acquire();
-		}
-	}
-	
 
+
+	//if (PeekMessage(&Message, NULL, 0, 0, PM_REMOVE))
+	//{
+	//	TranslateMessage(&Message);
+	//	DispatchMessage(&Message);
+	//}
+
+
+	/*
 	if (Message.message == WM_KEYDOWN)
 	{
 		switch (Message.wParam)
@@ -99,7 +175,7 @@ void CInputManager::Update()
 	}
 
 
-	for (auto i = AxisBinds.begin(); i != AxisBinds.end();  ++i)
+	for (auto i = AxisBinds.begin(); i != AxisBinds.end(); ++i)
 	{
 		for (uint j = 0; j < i->second.Keys.size(); ++j)
 		{
@@ -168,6 +244,7 @@ void CInputManager::Update()
 	}
 
 	AxisUpdate();
+	*/
 }
 
 
