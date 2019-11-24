@@ -129,8 +129,9 @@ public:
 					CollidingObjects.erase(CollidingObjects.begin() + i);
 				}
 			}
-			return false;
+			return true;
 		}
+		return false;
 	}
 
 	// Invokes the OnCollisionEnter function.

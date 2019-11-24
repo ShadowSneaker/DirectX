@@ -46,8 +46,8 @@ bool CSphere::CheckCollision(const CBox* Other) const
 {
 #ifdef USE_FAST_CHECK_WHERE_POSSIBLE
 	// Check if fast check is possible.
-	//if (SVector::NearlyEqual(Transform.Up(), SVector::Up(), SMALL_NUMBER))
-	//{
+	if (SVector::NearlyEqual(Transform.Up(), SVector::Up(), SMALL_NUMBER))
+	{
 		SVector BoxMin{ Other->GetMinExtents() };
 		SVector BoxMax{ Other->GetMaxExtents() };
 		SVector SpherePos{ Transform.GetWorldLocation() };
@@ -57,11 +57,11 @@ bool CSphere::CheckCollision(const CBox* Other) const
 		Radi *= Radi;
 
 		return Distance < Radi;
-	//}
+	}
 #endif
 
 	// Slow Check.
-	return false;
+	return SATCollision(Other);
 }
 
 
@@ -103,7 +103,7 @@ bool CSphere::CheckCollision(const CCapsule* Other) const
 
 bool CSphere::CheckCollision(const CPolygon* Other) const
 {
-	return false;
+	return SATCollision(Other);
 }
 
 
@@ -111,16 +111,16 @@ bool CSphere::CheckCollision(const CCylinder* Other) const
 {
 #ifdef USE_FAST_CHECK_WHERE_POSSIBLE
 	// Check if fast check is possible.
-	//if (SVector::NearlyEqual(Transform.Up(), SVector::Up(), SMALL_NUMBER))
-	//{
-	//
-	//
-	//	return false;
-	//}
+	if (SVector::NearlyEqual(Transform.Up(), SVector::Up(), SMALL_NUMBER))
+	{
+
+
+		//return false;
+	}
 #endif
 
 	// Slow Check.
-	return false;
+	return SATCollision(Other);
 }
 
 
@@ -141,29 +141,3 @@ void CSphere::UpdateBounds()
 		Radius = TMath::Sqrt(Distance) / 4.0f;
 	}
 }
-
-
-/**
-bool CSphereCollider::CheckCollision(const CSphereCollider* Other) const
-{
-	float Radi = GetRadius() + Other->GetRadius();
-	SVector A = Transform.GetWorldLocation();
-	SVector B = Other->Transform.GetWorldLocation();
-
-	//return Radi > TMath::Sqrt(TMath::Power(A[X] - B[X], 2) + TMath::Power(A[Y] - B[Y], 2) + TMath::Power(A[Z] - B[Z], 2));
-	return false;
-}
-
-
-bool CSphereCollider::CheckCollision(const CLineCollider* Other) const
-{
-	return false;
-}
-
-
-bool CSphereCollider::CheckCollision(const SVector Other) const
-{
-	SVector Location = Transform.GetWorldLocation();
-	//return Radius > TMath::Sqrt(TMath::Power(Location[X] - Other[X], 2) + TMath::Power(Location[Y] - Other[Y], 2) + TMath::Power(Location[Z] - Other[Z], 2));
-	return false;
-}*/

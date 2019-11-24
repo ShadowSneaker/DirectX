@@ -33,16 +33,16 @@ bool CCylinder::CheckCollision(const CSphere* Other) const
 {
 #ifdef USE_FAST_CHECK_WHERE_POSSIBLE
 	// Check if fast check is possible.
-	//if (SVector::NearlyEqual(Transform.Up(), SVector::Up(), SMALL_NUMBER))
-	//{
-	//
-	//
-	//	return false;
-	//}
+	if (SVector::NearlyEqual(Transform.Up(), SVector::Up(), SMALL_NUMBER))
+	{
+
+
+		//return false;
+	}
 #endif
 
 	// Slow Check.
-	return false;
+	return SATCollision(Other);
 }
 
 
@@ -50,16 +50,16 @@ bool CCylinder::CheckCollision(const CBox* Other) const
 {
 #ifdef USE_FAST_CHECK_WHERE_POSSIBLE
 	// Check if fast check is possible.
-	//if (SVector::NearlyEqual(Transform.Up(), SVector::Up(), SMALL_NUMBER))
-	//{
-	//
-	//
-	//	return false;
-	//}
+	if (SVector::NearlyEqual(Transform.Up(), SVector::Up(), SMALL_NUMBER))
+	{
+
+
+		//return false;
+	}
 #endif
 
 	// Slow Check.
-	return false;
+	return SATCollision(Other);
 }
 
 
@@ -67,16 +67,16 @@ bool CCylinder::CheckCollision(const CAxisAlignedBoundingBox* Other) const
 {
 #ifdef USE_FAST_CHECK_WHERE_POSSIBLE
 	// Check if fast check is possible.
-	//if (SVector::NearlyEqual(Transform.Up(), SVector::Up(), SMALL_NUMBER))
-	//{
-	//
-	//
-	//	return false;
-	//}
+	if (SVector::NearlyEqual(Transform.Up(), SVector::Up(), SMALL_NUMBER))
+	{
+
+
+		//return false;
+	}
 #endif
 
 	// Slow Check.
-	return false;
+	return SATCollision(Other);
 }
 
 
@@ -84,29 +84,29 @@ bool CCylinder::CheckCollision(const CPoint* Other) const
 {
 #ifdef USE_FAST_CHECK_WHERE_POSSIBLE
 	// Check if fast check is possible.
-	//if (SVector::NearlyEqual(Transform.Up(), SVector::Up(), SMALL_NUMBER))
-	//{
-	SVector Position{ Transform.GetWorldLocation() };
-	SVector OtherPos{ Other->Transform.GetWorldLocation() };
-
-	// Only continue if the point is within the bottom and top of the cylinder, no need to calculate the rest if it's not.
-	float ThisHeight{ GetHeight() };
-	if (TMath::Range(Position[Y] - ThisHeight, Position[Y] + ThisHeight, OtherPos[Y]))
+	if (SVector::NearlyEqual(Transform.Up(), SVector::Up(), SMALL_NUMBER))
 	{
-		SVectorControl Control{ true, false, true };
+		SVector Position{ Transform.GetWorldLocation() };
+		SVector OtherPos{ Other->Transform.GetWorldLocation() };
 
-		SVector Distance{ SVector::DistanceSquared(SVector::Select(Position, SVector{ 0.0f }, Control), SVector::Select(OtherPos, SVector{ 0.0f }, Control)) };
-		float Radius{ GetRadius() };
-		Radius *= Radius;
+		// Only continue if the point is within the bottom and top of the cylinder, no need to calculate the rest if it's not.
+		float ThisHeight{ GetHeight() };
+		if (TMath::Range(Position[Y] - ThisHeight, Position[Y] + ThisHeight, OtherPos[Y]))
+		{
+			SVectorControl Control{ true, false, true };
 
-		return (Distance < Radius);
+			SVector Distance{ SVector::DistanceSquared(SVector::Select(Position, SVector{ 0.0f }, Control), SVector::Select(OtherPos, SVector{ 0.0f }, Control)) };
+			float Radius{ GetRadius() };
+			Radius *= Radius;
+
+			return (Distance < Radius);
+		}
+		return false;
 	}
-	return false;
-	//}
 #endif
 
 	// Slow check
-
+	return SATCollision(Other);
 }
 
 
@@ -125,18 +125,7 @@ bool CCylinder::CheckCollision(const CCapsule* Other) const
 
 bool CCylinder::CheckCollision(const CPolygon* Other) const
 {
-#ifdef USE_FAST_CHECK_WHERE_POSSIBLE
-	// Check if fast check is possible.
-	//if (SVector::NearlyEqual(Transform.Up(), SVector::Up(), SMALL_NUMBER))
-	//{
-	//
-	//
-	//	return false;
-	//}
-#endif
-
-	// Slow Check.
-	return false;
+	return SATCollision(Other);
 }
 
 
@@ -144,16 +133,16 @@ bool CCylinder::CheckCollision(const CCylinder* Other) const
 {
 #ifdef USE_FAST_CHECK_WHERE_POSSIBLE
 	// Check if fast check is possible.
-	//if (SVector::NearlyEqual(Transform.Up(), SVector::Up(), SMALL_NUMBER))
-	//{
-	//
-	//
-	//	return false;
-	//}
+	if (SVector::NearlyEqual(Transform.Up(), SVector::Up(), SMALL_NUMBER))
+	{
+		// I can probably assume both cylinders as a 2D Circle and a 2D Box then do calculations against those 4 colliders.
+
+		//return false;
+	}
 #endif
 
 	// Slow Check.
-	return false;
+	return SATCollision(Other);
 }
 
 

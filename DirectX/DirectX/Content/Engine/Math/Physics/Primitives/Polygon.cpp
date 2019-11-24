@@ -26,31 +26,31 @@ bool CPolygon::CheckCollision(const CCollider* Other) const
 
 bool CPolygon::CheckCollision(const CSphere* Other) const
 {
-	return false;
+	return SATCollision(Other);
 }
 
 
 bool CPolygon::CheckCollision(const CBox* Other) const
 {
-	return false;
+	return SATCollision(Other);
 }
 
 
 bool CPolygon::CheckCollision(const CAxisAlignedBoundingBox* Other) const
 {
-	return false;
+	return SATCollision(Other);
 }
 
 
 bool CPolygon::CheckCollision(const CPoint* Other) const
 {
-	return false;
+	return SATCollision(Other);
 }
 
 
 bool CPolygon::CheckCollision(const CLine* Other) const
 {
-	return false;
+	return SATCollision(Other);
 }
 
 
@@ -62,13 +62,13 @@ bool CPolygon::CheckCollision(const CCapsule* Other) const
 
 bool CPolygon::CheckCollision(const CPolygon* Other) const
 {
-	return false;
+	return SATCollision(Other);
 }
 
 
 bool CPolygon::CheckCollision(const CCylinder* Other) const
 {
-	return false;
+	return SATCollision(Other);
 }
 
 

@@ -46,21 +46,20 @@ bool CAxisAlignedBoundingBox::CheckCollision(const CBox* Other) const
 {
 #ifdef USE_FAST_CHECK_WHERE_POSSIBLE
 	// Check if fast check is possible.
-	//if (SVector::NearlyEqual(Other->Transform.Up(), SVector::Up(), SMALL_NUMBER))
-	//{
-	SVector Dist1{ (Other->GetMinExtents() - GetMaxExtents()) };
-	SVector Dist2{ (GetMinExtents() - Other->GetMaxExtents()) };
+	if (SVector::NearlyEqual(Other->Transform.Up(), SVector::Up(), SMALL_NUMBER))
+	{
+		SVector Dist1{ (Other->GetMinExtents() - GetMaxExtents()) };
+		SVector Dist2{ (GetMinExtents() - Other->GetMaxExtents()) };
 
-	SVector Distance{ SVector::Max(Dist1, Dist2) };
-	float MaxDistance{ Distance.MaxComp() };
+		SVector Distance{ SVector::Max(Dist1, Dist2) };
+		float MaxDistance{ Distance.MaxComp() };
 
-	return (MaxDistance < 0.0f);
-	//}
+		return (MaxDistance < 0.0f);
+	}
 #endif
 
 	// Slow Check.
-
-	return false;
+	return SATCollision(Other);
 }
 
 
@@ -96,7 +95,7 @@ bool CAxisAlignedBoundingBox::CheckCollision(const CCapsule* Other) const
 
 bool CAxisAlignedBoundingBox::CheckCollision(const CPolygon* Other) const
 {
-	return false;
+	return SATCollision(Other);
 }
 
 
@@ -104,16 +103,16 @@ bool CAxisAlignedBoundingBox::CheckCollision(const CCylinder* Other) const
 {
 #ifdef USE_FAST_CHECK_WHERE_POSSIBLE
 	// Check if fast check is possible.
-	//if (SVector::NearlyEqual(Other->Transform.Up(), SVector::Up(), SMALL_NUMBER))
-	//{
-	//
-	//
-	//	return false;
-	//}
+	if (SVector::NearlyEqual(Other->Transform.Up(), SVector::Up(), SMALL_NUMBER))
+	{
+
+
+		//return false;
+	}
 #endif
 
 	// Slow Check.
-	return false;
+	return SATCollision(Other);
 }
 
 
