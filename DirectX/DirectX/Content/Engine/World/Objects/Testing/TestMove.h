@@ -18,6 +18,8 @@ public:
 
 	virtual void SetupInput(CInputManager* Input) override;
 
+	virtual void Update() override;
+
 
 	void TMoveForward(float Value);
 

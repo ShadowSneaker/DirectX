@@ -29,6 +29,8 @@ public:
 	// Determines how far objects can get before they start dissapearing (This cannot be lower than the NearClipPlane).
 	float FarClipPlane{ 1000.0f };
 
+	float FieldOfView{ 90.0f };
+
 	bool UseLegacyControls{ true };
 
 

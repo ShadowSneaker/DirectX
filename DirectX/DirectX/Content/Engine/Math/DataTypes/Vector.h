@@ -265,11 +265,11 @@ public:
 	// Checks if this vector components contains NaN.
 	inline bool ContainsNaN() const;
 
+	// Prints out the contents of this vector to the console. Returns the vector converted into a string.
+	inline void Print() const;
+
 
 	/// Functions
-
-	// Prints out the contents of this vector to the console. Returns the vector converted into a string.
-	inline std::string Print(const bool bPrintToConsole = true) const;
 
 	// Calculates the Cross Product between this Vector and another Vector.
 	inline Vector<3, Element> CrossProduct(const Vector<3, Element>& V) const;
@@ -1223,21 +1223,13 @@ inline bool Vector<Size, Element>::ContainsNaN() const
 
 
 template <uint Size, typename Element>
-inline std::string Vector<Size, Element>::Print(const bool Print) const
+inline void Vector<Size, Element>::Print() const
 {
-	std::string Result;
-	std::string Temp;
 	for (uint i = 0; i < Size; ++i)
 	{
-		Temp = (i > 0) ? ", " : "";
-		Result += Temp;
-		Result += std::to_string(Data[i]);
+		printf("%f, ", Data[i]);
 	}
-
-	if (Print)
-		std::cout << Result;
-
-	return Result;
+	printf("\n");
 }
 
 

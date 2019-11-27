@@ -18,10 +18,16 @@ public:
 	~CTestPlayer();
 
 
-	/// Functions
+	/// Overridables
 
+	// 
 	virtual void SetupInput(CInputManager* Input) override;
 
+	// 
+	virtual void Update() override;
+
+
+	/// Functions
 
 	void MoveForward(float Axis);
 

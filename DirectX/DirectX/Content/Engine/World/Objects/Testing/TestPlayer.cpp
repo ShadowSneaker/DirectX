@@ -45,11 +45,17 @@ void CTestPlayer::SetupInput(CInputManager* Input)
 }
 
 
+void CTestPlayer::Update()
+{
+	//Transform.Rotation.Y += 0.01f;
+}
+
+
 void CTestPlayer::MoveForward(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->MoveForward(Value / 200.0f);
+		Camera->MoveForward(Value / 50.0f);
 	}
 }
 
@@ -58,7 +64,7 @@ void CTestPlayer::MoveSideways(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->MoveRight(Value / 200.0f);
+		Camera->MoveRight(Value / 50.0f);
 	}
 }
 
@@ -67,7 +73,7 @@ void CTestPlayer::MoveUp(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->MoveUp(Value / 200.0f);
+		Camera->MoveUp(Value / 50.0f);
 	}
 }
 
@@ -77,7 +83,7 @@ void CTestPlayer::Turn(float Value)
 	if (Value != 0.0f)
 	{
 		//Camera->Rotate(TO_RADIAN(Value / 20.0f));
-		Camera->Rotate(0.0f, Value * 0.001f, 0.0f);
+		Camera->Rotate(0.0f, Value * 0.02f, 0.0f);
 	}
 }
 
@@ -86,7 +92,7 @@ void CTestPlayer::LookUp(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->Rotate(0.0f, 0.0f, Value * 0.1f);
+		Camera->Rotate(0.0f, 0.0f, Value * 0.2f);
 	}
 }
 

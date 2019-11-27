@@ -10,9 +10,9 @@ CTestMove::CTestMove(SObjectBase Base)
 {
 
 	Mesh = CreateComponent<CStaticMeshComponent>();
-	Mesh->SetMesh("Sphere.obj");
+	Mesh->SetMesh("Cube.obj");
 	Mesh->SetShader("Shaders.hlsl");
-	Mesh->Transform.Scale = 0.25f;
+	Mesh->Transform.Scale = 0.05f;
 	Mesh->Transform.SetParent(&Transform);
 	
 	SphereCollider = CreateComponent<CSphereComponent>();
@@ -20,8 +20,8 @@ CTestMove::CTestMove(SObjectBase Base)
 	SphereCollider->Transform.SetParent(&Transform);
 	SphereCollider->Radius = 0.725f;
 
-	Rigid = CreateComponent<CRigidbodyComponent>();
-	Rigid->AttachCollider(SphereCollider);
+	//Rigid = CreateComponent<CRigidbodyComponent>();
+	//Rigid->AttachCollider(SphereCollider);
 
 	
 
@@ -47,6 +47,12 @@ void CTestMove::SetupInput(CInputManager* Input)
 }
 
 
+void CTestMove::Update()
+{
+	Transform.Rotation.Y += 0.01f;
+}
+
+
 void CTestMove::TMoveForward(float Value)
 {
 	if (Value != 0.0f && AllowMovement)
@@ -62,7 +68,6 @@ void CTestMove::TMoveForward(float Value)
 				break;
 			}
 		}
-
 	}
 }
 

@@ -1396,7 +1396,7 @@ template <uint Columns, uint Rows>
 inline SVector SMatrix<Columns, Rows>::GetLocation() const
 {
 	ASSERT(Columns >= 3 && Rows >= 3, "Matrix must be 3x3 or larger.");
-	return GetColumn(EAxis::W);
+	return Data[EAxis::W];
 }
 
 
@@ -1405,50 +1405,51 @@ inline SQuaternion SMatrix<Columns, Rows>::GetRotation() const
 {
 	ASSERT(Columns >= 3 && Rows >= 3, "Matrix must be 3x3 or larger.");
 	SQuaternion Quat;
-	if (Data[2][2] <= 0.0f)
+	float R22{ Data[2][2] };
+	if (R22 <= 0.0f)
 	{
 		float Dif10 = Data[1][1] - Data[0][0];
-		float Omr22 = 1.0f - Data[2][2];
+		float Omr22 = 1.0f - R22;
 		if (Dif10 <= 0.0f)
 		{
 			float FourXSqr = Omr22 - Dif10;
 			float Inv4x = 0.5f / TMath::Sqrt(FourXSqr);
-			Quat.W = FourXSqr * Inv4x;
-			Quat.X = (Data[0][1] + Data[1][0]) * Inv4x;
-			Quat.Y = (Data[0][2] + Data[2][0]) * Inv4x;
-			Quat.Z = (Data[1][2] - Data[2][1]) * Inv4x;
+			Quat.X = FourXSqr * Inv4x;
+			Quat.Y = (Data[0][1] + Data[1][0]) * Inv4x;
+			Quat.Z = (Data[0][2] + Data[2][0]) * Inv4x;
+			Quat.W = (Data[1][2] - Data[2][1]) * Inv4x;
 		}
 		else
 		{
 			float FourYSqr = Omr22 + Dif10;
 			float Inv4y = 0.5f / TMath::Sqrt(FourYSqr);
-			Quat.W = (Data[0][1] + Data[1][0]) * Inv4y;
-			Quat.X = FourYSqr * Inv4y;
-			Quat.Y = (Data[1][2] + Data[2][1]) * Inv4y;
-			Quat.Z = (Data[2][0] - Data[0][2]) * Inv4y;
+			Quat.X = (Data[0][1] + Data[1][0]) * Inv4y;
+			Quat.Y = FourYSqr * Inv4y;
+			Quat.Z = (Data[1][2] + Data[2][1]) * Inv4y;
+			Quat.W = (Data[2][0] - Data[0][2]) * Inv4y;
 		}
 	}
 	else
 	{
 		float Sum10 = Data[1][1] + Data[0][0];
-		float Opr22 = 1.0f + Data[2][2];
+		float Opr22 = 1.0f + R22;
 		if (Sum10 <= 0.0f)
 		{
 			float FourZSqr = Opr22 - Sum10;
 			float Inv4z = 0.5f / TMath::Sqrt(FourZSqr);
-			Quat.W = (Data[0][2] + Data[2][0]) * Inv4z;
-			Quat.X = (Data[1][2] + Data[2][1]) * Inv4z;
-			Quat.Y = FourZSqr * Inv4z;
-			Quat.Z = (Data[0][1] - Data[1][0]) * Inv4z;
+			Quat.X = (Data[0][2] + Data[2][0]) * Inv4z;
+			Quat.Y = (Data[1][2] + Data[2][1]) * Inv4z;
+			Quat.Z = FourZSqr * Inv4z;
+			Quat.W = (Data[0][1] - Data[1][0]) * Inv4z;
 		}
 		else
 		{
 			float FourWSqr = Opr22 + Sum10;
 			float Inv4w = 0.5f / TMath::Sqrt(FourWSqr);
-			Quat.W = (Data[1][2] - Data[2][1]) * Inv4w;
-			Quat.X = (Data[2][0] - Data[0][2]) * Inv4w;
-			Quat.Y = (Data[0][1] - Data[1][0]) * Inv4w;
-			Quat.Z = FourWSqr * Inv4w;
+			Quat.X = (Data[1][2] - Data[2][1]) * Inv4w;
+			Quat.Y = (Data[2][0] - Data[0][2]) * Inv4w;
+			Quat.Z = (Data[0][1] - Data[1][0]) * Inv4w;
+			Quat.W = FourWSqr * Inv4w;
 		}
 	}
 	return Quat;
@@ -1523,7 +1524,7 @@ template <uint Columns, uint Rows>
 inline SVector SMatrix<Columns, Rows>::GetScale() const
 {
 	ASSERT(Columns >= 3 && Rows >= 3, "Matrix must be 3x3 or larger.");
-	return SVector{ 1.0f };
+	//return SVector{ 1.0f };
 	SVector Scale;
 	for (uint i = 0; i < 3; ++i)
 	{

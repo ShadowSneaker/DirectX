@@ -357,9 +357,11 @@ void CRenderer::DrawAll()
 		SMatrix4 Rotation;
 		SMatrix4 Position;
 
-		Scale.SetScale(Objects[i]->Transform.GetWorldScale());
-		Rotation.SetRotate(Objects[i]->Transform.GetWorldRotation());
-		Position.SetTranslate(Objects[i]->Transform.GetWorldLocation());
+		STransform WorldTransform{ Objects[i]->Transform.GetWorldTransform() };
+
+		Scale.SetScale(WorldTransform.Scale);
+		Rotation.SetRotate(WorldTransform.Rotation);
+		Position.SetTranslate(WorldTransform.Location);
 		//Scale.SetScale(Objects[i]->Transform.Scale);
 		//Rotation.SetRotate(Objects[i]->Transform.Rotation);
 		//Position.SetTranslate(Objects[i]->Transform.Location);
@@ -375,10 +377,15 @@ void CRenderer::DrawAll()
 		SMatrix4 View;
 		SMatrix4 Projection;
 		
-		
+		float NearClip{ 0.0001f };
+		float FarClip{ 1000.0f };
+		float FOV{ 45.0f };
 		if (SelectedCamera)
 		{
 			View = SelectedCamera->GetViewMatrix();
+			NearClip = SelectedCamera->NearClipPlane;
+			FarClip = SelectedCamera->FarClipPlane;
+			float FOV = SelectedCamera->FieldOfView;
 		}
 		else
 		{
@@ -387,7 +394,7 @@ void CRenderer::DrawAll()
 
 		SVector2i Size = Window->GetWindowSize();
 		//World.SetTranslate(0.0f, 0.0f, 5.0f);
-		Projection = SMatrix4::PersepctiveFovLH(TO_RADIAN(45.0f), (float)Size[X] / (float)Size[Y], 0.0001f, 1000.0f);
+		Projection = SMatrix4::PersepctiveFovLH(TO_RADIAN(FOV), (float)Size[X] / (float)Size[Y], NearClip, FarClip);
 
 		
 
