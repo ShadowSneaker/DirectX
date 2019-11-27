@@ -90,7 +90,8 @@ SMatrix4 CCamera::GetViewMatrix()
 {
 	if (UseLegacyControls)
 	{
-		SVector4 WorldLocation{ Transform.GetWorldLocation(), 0.0f };
+		//SVector4 WorldLocation{ Transform.GetWorldLocation(), 0.0f };
+		SVector4 WorldLocation{ Transform.Location, 0.0f };
 
 		//Offset = SVector4{ Transform.Location, 0.0f };
 		Offset = WorldLocation;

@@ -85,13 +85,18 @@ public:
 	// Gets the relatice scale of this object.
 	inline SVector GetScale() const { return Scale; }
 
-	inline SVector GetWorldLocation() const { return ((Parent) ? Parent->GetWorldLocation() : SVector{ 0.0f }) + Location; }
+	STransform GetWorldTransform() const;
+
+	//inline SVector GetWorldLocation() const { return ((Parent) ? Parent->GetWorldLocation() : SVector{ 0.0f }) + Location; }
+	inline SVector GetWorldLocation() const { return GetWorldTransform().Location; }
 
 	// Gets the rotation of this object in worldspace.
-	inline SQuaternion GetWorldRotation() const { return ((Parent) ? Parent->GetWorldRotation() : SQuaternion{ 0.0f }) + Rotation; }
+	//inline SQuaternion GetWorldRotation() const { return ((Parent) ? Parent->GetWorldRotation() : SQuaternion{ 0.0f }) + Rotation; }
+	inline SQuaternion GetWorldRotation() const { return GetWorldTransform().Rotation; }
 
 	// Gets the scale of this object in worldspace.
-	inline SVector GetWorldScale() const { return ((Parent) ? Parent->GetWorldScale() : SVector{ 1.0f }) * Scale; }
+	//inline SVector GetWorldScale() const { return ((Parent) ? Parent->GetWorldScale() : SVector{ 1.0f }) * Scale; }
+	inline SVector GetWorldScale() const { return GetWorldTransform().Scale; }
 
 	// Gets a reference to all this object's children.
 	inline std::vector<STransform*> GetChildren() const { return Children; }
@@ -114,3 +119,5 @@ inline void STransform::LookAt(STransform Other)
 {
 	Rotation.Y = TO_DEGREES(TMath::ATan2(Other.Location[X] - Location[X], Other.Location[Z] - Location[Z]));
 }
+
+

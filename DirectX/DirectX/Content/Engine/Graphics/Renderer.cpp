@@ -2,6 +2,7 @@
 #include "Meshes/Primitives/Cube.h"
 #include "Camera.h"
 #include "Lighting/DirectionalLight.h"
+#include <DirectXMath.h>
 
 
 CRenderer::CRenderer(HINSTANCE HandleInstance, int CommandShow)
@@ -351,6 +352,7 @@ void CRenderer::DrawAll()
 
 		SMatrix4 World;
 
+
 		SMatrix4 Scale;
 		SMatrix4 Rotation;
 		SMatrix4 Position;
@@ -358,6 +360,9 @@ void CRenderer::DrawAll()
 		Scale.SetScale(Objects[i]->Transform.GetWorldScale());
 		Rotation.SetRotate(Objects[i]->Transform.GetWorldRotation());
 		Position.SetTranslate(Objects[i]->Transform.GetWorldLocation());
+		//Scale.SetScale(Objects[i]->Transform.Scale);
+		//Rotation.SetRotate(Objects[i]->Transform.Rotation);
+		//Position.SetTranslate(Objects[i]->Transform.Location);
 
 
 		//Scale.SetScale(1.0f, 1.0f, 1.0f);
@@ -386,6 +391,7 @@ void CRenderer::DrawAll()
 
 		
 
+		//DirectX::XMQuaternionRotationMatrix();
 
 		SVector4 Rot{ DirectionalLight->Transform.Rotation.GetAsVector() };
 

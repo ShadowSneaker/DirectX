@@ -13,6 +13,7 @@
 
 #define RETURN(x) return x;
 
+#define SHUFFLE(v, c) _mm_shuffle_ps(v, v, c)
 
 
 typedef unsigned int uint;

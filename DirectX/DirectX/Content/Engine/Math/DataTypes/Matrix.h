@@ -429,6 +429,18 @@ public:
 	// @return - The vector retrieved from the inputted column.
 	inline Vector<Rows> GetColumn(EAxis Axis) const;
 
+	// Returns this matrix as a STransform.
+	inline STransform GetTransform() const;
+
+	// Returns the location in this matrix.
+	inline SVector GetLocation() const;
+
+	// Returns the rotation in this matrix.
+	inline SQuaternion GetRotation() const;
+
+	// Returns the scale in this matrix.
+	inline SVector GetScale() const;
+
 
 	/// Statics
 
@@ -1364,4 +1376,158 @@ inline Vector<Rows> SMatrix<Columns, Rows>::GetColumn(EAxis Axis) const
 		Result[i] = Data[i][Axis];
 	}
 	return Result;
+}
+
+
+template <uint Columns, uint Rows>
+inline STransform SMatrix<Columns, Rows>::GetTransform() const
+{
+	ASSERT(Columns >= 3 && Rows >= 3, "Matrix must be 3x3 or larger.");
+	return STransform
+	{
+		GetLocation(),
+		GetRotation(),
+		GetScale()
+	};
+}
+
+
+template <uint Columns, uint Rows>
+inline SVector SMatrix<Columns, Rows>::GetLocation() const
+{
+	ASSERT(Columns >= 3 && Rows >= 3, "Matrix must be 3x3 or larger.");
+	return GetColumn(EAxis::W);
+}
+
+
+template <uint Columns, uint Rows>
+inline SQuaternion SMatrix<Columns, Rows>::GetRotation() const
+{
+	ASSERT(Columns >= 3 && Rows >= 3, "Matrix must be 3x3 or larger.");
+	SQuaternion Quat;
+	if (Data[2][2] <= 0.0f)
+	{
+		float Dif10 = Data[1][1] - Data[0][0];
+		float Omr22 = 1.0f - Data[2][2];
+		if (Dif10 <= 0.0f)
+		{
+			float FourXSqr = Omr22 - Dif10;
+			float Inv4x = 0.5f / TMath::Sqrt(FourXSqr);
+			Quat.W = FourXSqr * Inv4x;
+			Quat.X = (Data[0][1] + Data[1][0]) * Inv4x;
+			Quat.Y = (Data[0][2] + Data[2][0]) * Inv4x;
+			Quat.Z = (Data[1][2] - Data[2][1]) * Inv4x;
+		}
+		else
+		{
+			float FourYSqr = Omr22 + Dif10;
+			float Inv4y = 0.5f / TMath::Sqrt(FourYSqr);
+			Quat.W = (Data[0][1] + Data[1][0]) * Inv4y;
+			Quat.X = FourYSqr * Inv4y;
+			Quat.Y = (Data[1][2] + Data[2][1]) * Inv4y;
+			Quat.Z = (Data[2][0] - Data[0][2]) * Inv4y;
+		}
+	}
+	else
+	{
+		float Sum10 = Data[1][1] + Data[0][0];
+		float Opr22 = 1.0f + Data[2][2];
+		if (Sum10 <= 0.0f)
+		{
+			float FourZSqr = Opr22 - Sum10;
+			float Inv4z = 0.5f / TMath::Sqrt(FourZSqr);
+			Quat.W = (Data[0][2] + Data[2][0]) * Inv4z;
+			Quat.X = (Data[1][2] + Data[2][1]) * Inv4z;
+			Quat.Y = FourZSqr * Inv4z;
+			Quat.Z = (Data[0][1] - Data[1][0]) * Inv4z;
+		}
+		else
+		{
+			float FourWSqr = Opr22 + Sum10;
+			float Inv4w = 0.5f / TMath::Sqrt(FourWSqr);
+			Quat.W = (Data[1][2] - Data[2][1]) * Inv4w;
+			Quat.X = (Data[2][0] - Data[0][2]) * Inv4w;
+			Quat.Y = (Data[0][1] - Data[1][0]) * Inv4w;
+			Quat.Z = FourWSqr * Inv4w;
+		}
+	}
+	return Quat;
+
+
+
+	/*static const SVector4 PMMP{ 1.0f, -1.0f, -1.0f,  1.0f };
+	static const SVector4 MPMP{ -1.0f,  1.0f, -1.0f,  1.0f };
+	static const SVector4 MMPP{ -1.0f, -1.0f,  1.0f,  1.0f };
+
+	SVector4 R0{ Data[0] };
+	SVector4 R1{ Data[1] };
+	SVector4 R2{ Data[2] };
+
+	SVector4 R00{ SHUFFLE(R0, _MM_SHUFFLE(0, 0, 0, 0)) };
+	SVector4 R11{ SHUFFLE(R0, _MM_SHUFFLE(1, 1, 1, 1)) };
+	SVector4 R22{ SHUFFLE(R0, _MM_SHUFFLE(2, 2, 2, 2)) };
+
+	SVector4 R11MR00{ _mm_sub_ps(R11, R00) };
+	SVector4 X2GEY2{ _mm_cmple_ps(R11MR00, SVector4{ 0.0f }) };
+
+	SVector4 R11PR00{ _mm_add_ps(R11, R00) };
+	SVector4 Z2GEW2{ _mm_cmple_ps(R11PR00, SVector4{ 0.0f }) };
+
+	SVector4 X2PY2GEZ2PW2{ _mm_cmple_ps(R22, SVector4{ 0.0f }) };
+
+	SVector4 T0{ _mm_mul_ps(PMMP, R00) };
+	SVector4 T1{ _mm_mul_ps(MPMP, R11) };
+	SVector4 T2{ _mm_mul_ps(MMPP, R22) };
+
+	SVector4 X2Y2Z2W2{ _mm_add_ps(T0, T1) };
+	X2Y2Z2W2 = _mm_add_ps(T2, X2Y2Z2W2);
+	X2Y2Z2W2 = _mm_add_ps(X2Y2Z2W2, SVector4{ 1.0f });
+	
+
+	T0 = _mm_shuffle_ps(R0, R1, _MM_SHUFFLE(1, 2, 2, 1));
+	T1 = _mm_shuffle_ps(R1, R2, _MM_SHUFFLE(1, 0, 0, 0));
+	T1 = SHUFFLE(T1, _MM_SHUFFLE(1, 3, 2, 0));
+	SVector4 XYXZYZ{ _mm_add_ps(T0, T1) };
+
+	T0 = _mm_shuffle_ps(R2, R1, _MM_SHUFFLE(0, 0, 0, 1));
+	T1 = _mm_shuffle_ps(R1, R0, _MM_SHUFFLE(1, 2, 2, 2));
+	T1 = SHUFFLE(T1, _MM_SHUFFLE(1, 3, 2, 0));
+	SVector4 XWYWZW{ _mm_sub_ps(T0, T1) };
+	XWYWZW = _mm_mul_ps(MPMP, XWYWZW);
+
+	T0 = _mm_shuffle_ps(X2Y2Z2W2, XYXZYZ, _MM_SHUFFLE(0, 0, 1, 0));
+	T1 = _mm_shuffle_ps(X2Y2Z2W2, XWYWZW, _MM_SHUFFLE(0, 2, 3, 2));
+	T2 = _mm_shuffle_ps(XYXZYZ, XWYWZW, _MM_SHUFFLE(1, 0, 2, 1));
+
+	SVector4 Tensor0{ _mm_shuffle_ps(T0, T2, _MM_SHUFFLE(2, 0, 2, 0)) };
+	SVector4 Tensor1{ _mm_shuffle_ps(T0, T2, _MM_SHUFFLE(3, 1, 1, 2)) };
+	SVector4 Tensor2{ _mm_shuffle_ps(T2, T1, _MM_SHUFFLE(2, 0, 1, 0)) };
+	SVector4 Tensor3{ _mm_shuffle_ps(T2, T1, _MM_SHUFFLE(1, 2, 3, 2)) };
+
+	T0 = _mm_and_ps(X2GEY2, Tensor0);
+	T1 = _mm_andnot_ps(X2GEY2, Tensor1);
+	T0 = _mm_or_ps(T0, T1);
+	T1 = _mm_and_ps(Z2GEW2, Tensor2);
+	T2 = _mm_andnot_ps(Z2GEW2, Tensor2);
+	T1 = _mm_or_ps(T1, T2);
+	T0 = _mm_and_ps(X2PY2GEZ2PW2, T0);
+	T1 = _mm_andnot_ps(X2PY2GEZ2PW2, T1);
+	T2 = _mm_or_ps(T0, T1);
+
+	T0 = T2.Normalize();
+	return SQuaternion{ _mm_div_ps(T2, T0) };*/
+}
+
+
+template <uint Columns, uint Rows>
+inline SVector SMatrix<Columns, Rows>::GetScale() const
+{
+	ASSERT(Columns >= 3 && Rows >= 3, "Matrix must be 3x3 or larger.");
+	return SVector{ 1.0f };
+	SVector Scale;
+	for (uint i = 0; i < 3; ++i)
+	{
+		Scale[i] = Data[i][i];
+	}
+	return Scale;
 }

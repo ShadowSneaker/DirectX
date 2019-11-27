@@ -356,7 +356,6 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Content\Assets\Shaders\Shaders.hlsl" />
-    <FxCompile Include="TestShader.hlsl" />
     <FxCompile Include="Content\Assets\Shaders\SkyBox.hlsl" />
     <FxCompile Include="Content\Assets\Shaders\ReflectShader.hlsl" />
   </ItemGroup>
