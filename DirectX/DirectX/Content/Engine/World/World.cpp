@@ -18,7 +18,7 @@ CWorld::CWorld(HINSTANCE HandleInstance, int CommandShow)
 	ObjectPool = new CObjectPool{ this };
 	TimerManager = new CTimerManager{};
 	InputManager = new CInputManager{ Renderer->GetWindow() };
-
+	Time = new TTime();
 
 
 
@@ -63,7 +63,7 @@ void CWorld::Inputs()
 
 void CWorld::Update()
 {
-	//Physics->Update();
+	Time->Update();
 	for (uint i = 0; i < Levels.size(); ++i)
 	{
 		Levels[i]->Update();

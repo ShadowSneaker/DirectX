@@ -28,6 +28,8 @@ class CWorld
 	// A reference to the created input manager object.
 	class CInputManager* InputManager;
 
+	class TTime* Time;
+
 	// A list of all the objects in the world. - this will likely change to hold all the levels.
 	// The level class will hold all the objects.
 	// Level 0 is considered the root level.

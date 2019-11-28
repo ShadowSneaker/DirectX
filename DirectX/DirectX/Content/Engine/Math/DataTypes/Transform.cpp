@@ -67,11 +67,12 @@ STransform STransform::GetWorldTransform() const
 	RotationMat.SetRotate(Rotation);
 	LocationMat.SetTranslate(Location);
 
-	SMatrix4 World{ ScaleMat * RotationMat * LocationMat };
+	SMatrix4 Local{ ScaleMat * RotationMat * LocationMat };
 
-	World = World * ParentMat;
+	Local = ParentMat * Local;
 	//World = ParentMat * World;
 	// Convert the world matrix to a transform.
-	STransform Transform{ World.GetTransform() };
-	return World.GetTransform();
+	STransform Transform{ Local.GetTransform() };
+	return Transform;
+	//return World.GetTransform();
 }

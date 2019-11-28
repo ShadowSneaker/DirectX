@@ -9,7 +9,7 @@ private:
 
 	class CCameraComponent* Camera;
 	float TempRotate{ 0.0f };
-	float Speed{ 500.0f };
+	float Speed{ 2.0f };
 
 public:
 	/// Constructors.

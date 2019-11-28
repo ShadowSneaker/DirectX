@@ -9,8 +9,6 @@
 #include "Objects/Testing/TestMove.h"
 
 #include "../Components/Graphics/Meshes/StaticMeshComponent.h"
-#include <random>
-#include <time.h>
 
 
 const std::string CLevel::DefaultFilePath{ "Content/Assets/Levels/" };
@@ -49,7 +47,8 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 		CTestPlayer* Player = SpawnObject<CTestPlayer>(SVector{ 0.0f, 2.0f, -10.0f});
 
 		CTestSkyBox* Sky = SpawnObject<CTestSkyBox>();
-		Sky->Camera = &Player->GetCamera()->Transform;
+		//Sky->Camera = &Player->GetCamera()->Transform;
+		Sky->Transform.SetParent(&Player->Transform);
 
 		LoadObjects();
 
@@ -103,7 +102,6 @@ void CLevel::Update()
 void CLevel::LoadObjects()
 {
 	SStringBlock Contents = TFileManager::ReadFileAlt(FilePath.GetFilePath());
-	srand(time(0));
 
 	for (uint i = 0; i < Contents.size(); ++i)
 	{
