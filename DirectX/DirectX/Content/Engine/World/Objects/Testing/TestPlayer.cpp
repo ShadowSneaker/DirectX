@@ -55,7 +55,8 @@ void CTestPlayer::MoveForward(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->MoveForward(Value * Speed * TTime::DeltaTime);
+		Transform.Location += Transform.Forward() * Value * Speed * TTime::DeltaTime;
+		//Camera->MoveForward(Value * Speed * TTime::DeltaTime);
 	}
 }
 
@@ -64,7 +65,8 @@ void CTestPlayer::MoveSideways(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->MoveRight(Value * Speed * TTime::DeltaTime);
+		Transform.Location += Transform.Right() * Value * Speed * TTime::DeltaTime;
+		//Camera->MoveRight(Value * Speed * TTime::DeltaTime);
 	}
 }
 
@@ -73,7 +75,8 @@ void CTestPlayer::MoveUp(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->MoveUp(Value * Speed * TTime::DeltaTime);
+		Transform.Location += SVector::Up() * Value * Speed * TTime::DeltaTime;
+		//Camera->MoveUp(Value * Speed * TTime::DeltaTime);
 	}
 }
 
@@ -82,8 +85,8 @@ void CTestPlayer::Turn(float Value)
 {
 	if (Value != 0.0f)
 	{
-		//Camera->Rotate(TO_RADIAN(Value / 20.0f));
-		Camera->Rotate(0.0f, Value * Speed * TTime::DeltaTime, 0.0f);
+		Camera->Rotate(0.0f, TO_RADIAN(Value * Speed * 10.0f * TTime::DeltaTime), 0.0f);
+		//Camera->Rotate(0.0f, Value * Speed * TTime::DeltaTime, 0.0f);
 	}
 }
 

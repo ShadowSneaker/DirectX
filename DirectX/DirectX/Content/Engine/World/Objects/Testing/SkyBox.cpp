@@ -23,6 +23,6 @@ void CTestSkyBox::Update()
 
 	if (Camera)
 	{
-		Transform.Location = Camera->GetWorldLocation();
+		//Transform.Location = Camera->GetWorldLocation();
 	}
 }
