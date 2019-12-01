@@ -49,7 +49,7 @@ void CTestMove::SetupInput(CInputManager* Input)
 
 void CTestMove::Update()
 {
-	Transform.Rotation += TTime::DeltaTime * 1.0f;
+	Transform.Rotation.Z += TTime::DeltaTime * 1.0f;
 }
 
 

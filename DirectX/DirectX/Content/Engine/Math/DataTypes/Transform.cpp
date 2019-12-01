@@ -62,12 +62,19 @@ STransform STransform::GetWorldTransform() const
 	SMatrix4 ScaleMat;
 	SMatrix4 RotationMat;
 	SMatrix4 LocationMat;
-
+	
 	ScaleMat.SetScale(Scale);
 	RotationMat.SetRotate(Rotation);
-	LocationMat.SetTranslate(Location);
-
+	LocationMat.SetTranslate(Location, 0.0f);
+	
 	SMatrix4 Local{ ScaleMat * RotationMat * LocationMat };
+
+	//SMatrix4 Local;
+	//Local = Local.Rotate(Rotation);
+	//Local *= Local.Scale(Scale);
+	//
+	//Local *= Local.Translate(Location, 0.0f);
+
 
 	Local = ParentMat * Local;
 	//World = ParentMat * World;

@@ -463,18 +463,18 @@ public:
 	}
 
 
-	static SMatrix<4, 4> Scale(SVector NewScale, float InW = 1.0f)
-	{
-		//ASSERT(Columns == 4 && Rows == 4, "The matrix must be a 4x4 matrix in order to be scaled.");
-
-		SMatrix<4, 4> Result{ 0.0f };
-		for (uint i = 0; i < 4; ++i)
-		{
-			Result[i][i] = NewScale[i];
-		}
-
-		return Result;
-	}
+	//static SMatrix<4, 4> Scale(SVector NewScale, float InW = 1.0f)
+	//{
+	//	//ASSERT(Columns == 4 && Rows == 4, "The matrix must be a 4x4 matrix in order to be scaled.");
+	//
+	//	SMatrix<4, 4> Result{ 0.0f };
+	//	for (uint i = 0; i < 4; ++i)
+	//	{
+	//		Result[i][i] = NewScale[i];
+	//	}
+	//
+	//	return Result;
+	//}
 
 
 	static inline SMatrix<4, 4> PersepctiveFovLH(float FovAngleY, float AspectRatio, float NearZ, float FarZ)
@@ -1020,7 +1020,7 @@ inline SMatrix<4, 4> SMatrix<Columns, Rows>::SetRotate(const SQuaternion& Rotati
 	ASSERT(Columns == 4 && Rows == 4, "The matrix must be a 4x4 matrix in order to be rotated.");
 	Identity();
 
-	*this *= RotatePitch(Rotation.X);
+	*this = RotatePitch(Rotation.X);
 	*this *= RotateYaw(Rotation.Y);
 	*this *= RotateRoll(Rotation.Z);
 	return *this;
@@ -1086,8 +1086,6 @@ inline SMatrix<4, 4> SMatrix<Columns, Rows>::SetScale(const SVector4& InScale)
 	{
 		Result[i][i] = InScale[i];
 	}
-
-	//*this *= Result;
 	*this = Result;
 	return *this;
 }

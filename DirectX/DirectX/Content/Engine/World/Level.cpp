@@ -44,7 +44,7 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 	}
 	else
 	{
-		CTestPlayer* Player = SpawnObject<CTestPlayer>(SVector{ 0.0f, 2.0f, -10.0f});
+		CTestPlayer* Player = SpawnObject<CTestPlayer>(SVector{ 0.0f });
 
 		CTestSkyBox* Sky = SpawnObject<CTestSkyBox>();
 		//Sky->Camera = &Player->GetCamera()->Transform;
