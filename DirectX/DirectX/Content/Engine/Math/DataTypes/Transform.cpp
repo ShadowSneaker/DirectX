@@ -55,31 +55,30 @@ inline void STransform::SetParent(STransform* Transform)
 
 STransform STransform::GetWorldTransform() const
 {
+	//STransform Transform;
+	//Transform.Location = ((Parent) ? Parent->GetWorldTransform().Location : SVector{ 0.0 }) + Location;
+	//Transform.Rotation = ((Parent) ? Parent->GetWorldTransform().Rotation : SQuaternion{ 0.0 }) + Rotation;
+	//Transform.Scale = ((Parent) ? Parent->GetWorldTransform().Scale : SVector{ 1.0 }) * Scale;
+	//return Transform;
+
 	SMatrix4 ParentMat;
 	ParentMat.Identity();
 	if (Parent) ParentMat = Parent->GetWorldTransform();
-
+	
 	SMatrix4 ScaleMat;
 	SMatrix4 RotationMat;
 	SMatrix4 LocationMat;
 	
-	ScaleMat.SetScale(Scale);
-	RotationMat.SetRotate(Rotation);
-	LocationMat.SetTranslate(Location, 0.0f);
+	ScaleMat.ToScale(Scale);
+	RotationMat.ToRotation(Rotation);
+	LocationMat.ToTranslation(Location, 0.0f);
 	
 	SMatrix4 Local{ ScaleMat * RotationMat * LocationMat };
-
-	//SMatrix4 Local;
-	//Local = Local.Rotate(Rotation);
-	//Local *= Local.Scale(Scale);
-	//
-	//Local *= Local.Translate(Location, 0.0f);
-
-
+	
+	
 	Local = ParentMat * Local;
-	//World = ParentMat * World;
+	//Local = Local * ParentMat;
+	
 	// Convert the world matrix to a transform.
-	STransform Transform{ Local.GetTransform() };
-	return Transform;
-	//return World.GetTransform();
+	return Local.GetTransform();
 }

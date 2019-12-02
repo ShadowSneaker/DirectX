@@ -47,14 +47,14 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 		CTestPlayer* Player = SpawnObject<CTestPlayer>(SVector{ 0.0f });
 
 		CTestSkyBox* Sky = SpawnObject<CTestSkyBox>();
-		//Sky->Camera = &Player->GetCamera()->Transform;
-		Sky->Transform.SetParent(&Player->Transform);
+		Sky->Camera = &Player->GetCamera()->Transform;
+		//Sky->Transform.SetParent(&Player->Transform);
 
 		LoadObjects();
 
 	}
 
-	CTestMove* TMove = SpawnObject<CTestMove>(SVector{ 1.0f, 0.0f, 0.0f });
+	CTestMove* TMove = SpawnObject<CTestMove>(SVector{ 5.0f, 2.0f, 0.0f });
 #define INPUT_ENABLED
 	CTestMove* Test = SpawnObject<CTestMove>(SVector{ 0.0f, 2.0f, 0.0f });
 
@@ -114,6 +114,11 @@ void CLevel::LoadObjects()
 			Transform.Location[Y] = TFileManager::GetValue<float>(Line[2]);
 			Transform.Location[Z] = TFileManager::GetValue<float>(Line[3]);
 
+			//SVector Rotation;
+			//Rotation[X] = TFileManager::GetValue<float>(Line[4]);
+			//Rotation[Y] = TFileManager::GetValue<float>(Line[5]);
+			//Rotation[Z] = TFileManager::GetValue<float>(Line[6]);
+			//Transform.Rotation = SQuaternion::Euler(Rotation);
 			Transform.Rotation.X = TO_RADIAN(TFileManager::GetValue<float>(Line[4]));
 			Transform.Rotation.Y = TO_RADIAN(TFileManager::GetValue<float>(Line[5]));
 			Transform.Rotation.Z = TO_RADIAN(TFileManager::GetValue<float>(Line[6]));

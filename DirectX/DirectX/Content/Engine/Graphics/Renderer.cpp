@@ -313,12 +313,7 @@ bool CRenderer::AddTexture(SFilePath File)
 void CRenderer::DrawAll()
 {
 	Setup->ClearView();
-
-
-	
-
 	uint VertexCount{ 0 };
-
 
 	STexture* Texture;
 	ID3D11Buffer* Buffer;
@@ -349,27 +344,16 @@ void CRenderer::DrawAll()
 		Setup->GetDevice()->CreateDepthStencilState(&DSDesc, &RasterDepth);
 
 
-
 		SMatrix4 World;
-
 
 		SMatrix4 Scale;
 		SMatrix4 Rotation;
 		SMatrix4 Position;
 
 		STransform WorldTransform{ Objects[i]->Transform.GetWorldTransform() };
-
-		Scale.SetScale(WorldTransform.Scale);
-		Rotation.SetRotate(WorldTransform.Rotation);
-		Position.SetTranslate(WorldTransform.Location);
-		//Scale.SetScale(Objects[i]->Transform.Scale);
-		//Rotation.SetRotate(Objects[i]->Transform.Rotation);
-		//Position.SetTranslate(Objects[i]->Transform.Location);
-
-
-		//Scale.SetScale(1.0f, 1.0f, 1.0f);
-		//Rotation.SetRotate(TO_RADIAN(0.0f), TO_RADIAN(0.0f), TO_RADIAN(0.0f));
-		//Position.SetTranslate(0.0f, 0.0f, 5.0f);
+		Scale.ToScale(WorldTransform.Scale);
+		Rotation.ToRotation(WorldTransform.Rotation);
+		Position.ToTranslation(WorldTransform.Location);
 
 
 		World = Scale * Rotation * Position;
@@ -393,12 +377,8 @@ void CRenderer::DrawAll()
 		}
 
 		SVector2i Size = Window->GetWindowSize();
-		//World.SetTranslate(0.0f, 0.0f, 5.0f);
-		Projection = SMatrix4::PersepctiveFovLH(TO_RADIAN(FOV), (float)Size[X] / (float)Size[Y], NearClip, FarClip);
+		Projection = SMatrix4::PerspectiveFOV(TO_RADIAN(FOV), (float)Size[X] / (float)Size[Y], NearClip, FarClip);
 
-		
-
-		//DirectX::XMQuaternionRotationMatrix();
 
 		SVector4 Rot{ DirectionalLight->Transform.Rotation.GetAsVector() };
 
@@ -429,7 +409,6 @@ void CRenderer::DrawAll()
 
 		// Not sure if it's a good idea to have this here, however, by putting this here I am able to change the colour of objects during runtime.
 
-		//SVertex* Vertices = Objects[i]->GetVertices();
 		std::vector<SVertex> Vertices = Objects[i]->GetVertices();
 		uint VertexCount = Objects[i]->GetVertexCount();
 
@@ -444,7 +423,6 @@ void CRenderer::DrawAll()
 		
 		Setup->GetDeviceContext()->VSSetConstantBuffers(0, 1, &Buffer);
 	
-		//uint Stride = sizeof(SModelVertex);
 		uint Stride = sizeof(SVertex);
 		uint Offset = 0;
 
@@ -461,6 +439,5 @@ void CRenderer::DrawAll()
 		Setup->GetDeviceContext()->Draw(Objects[i]->GetVertexCount(), 0);
 	}
 
-	//Setup->GetDeviceContext()->Draw(VertexCount, 0);
 	Setup->GetSwapChain()->Present(0, 0);
 }

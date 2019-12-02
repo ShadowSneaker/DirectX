@@ -12,7 +12,7 @@ CTestMove::CTestMove(SObjectBase Base)
 	Mesh = CreateComponent<CStaticMeshComponent>();
 	Mesh->SetMesh("Cube.obj");
 	Mesh->SetShader("Shaders.hlsl");
-	Mesh->Transform.Scale = 0.05f;
+	Mesh->Transform.Scale = 1.0f;
 	Mesh->Transform.SetParent(&Transform);
 	
 	SphereCollider = CreateComponent<CSphereComponent>();
@@ -49,7 +49,9 @@ void CTestMove::SetupInput(CInputManager* Input)
 
 void CTestMove::Update()
 {
-	Transform.Rotation.Z += TTime::DeltaTime * 1.0f;
+	//Transform.Rotation.Z += TTime::DeltaTime * 1.0f;
+	TempRotate += TTime::DeltaTime * 20.0f;
+	Transform.Rotation = SQuaternion::Euler(SVector{ 0.0f, 0.0f, TempRotate });
 }
 
 

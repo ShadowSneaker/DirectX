@@ -9,6 +9,7 @@ private:
 	class CSphereComponent* SphereCollider;
 	class CRigidbodyComponent* Rigid;
 
+	float TempRotate{ 0.0f };
 public:
 	bool AllowMovement{ true };
 
