@@ -54,11 +54,13 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 
 	}
 
-	CTestMove* TMove = SpawnObject<CTestMove>(SVector{ 5.0f, 2.0f, 0.0f });
+	CTestMove* TMove = SpawnObject<CTestMove>(SVector{ 5.0f, 0.0f, 0.0f }, SVector{ 2.0f });
 #define INPUT_ENABLED
 	CTestMove* Test = SpawnObject<CTestMove>(SVector{ 0.0f, 2.0f, 0.0f });
 
 	TMove->Transform.SetParent(&Test->Transform);
+	CTestMove* Test2 = SpawnObject<CTestMove>(SVector{ 5.0f, 0.0f, 0.0f }, SVector{ 2.0f });
+	Test2->Transform.SetParent(&TMove->Transform);
 
 	Test->AllowMovement = false;
 

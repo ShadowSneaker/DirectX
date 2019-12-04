@@ -1,4 +1,5 @@
 #pragma once
+#define _XM_NO_INTRSECTS
 #include "Transform.h"
 #include "../MathStatics.h"
 
@@ -297,8 +298,6 @@ public:
 		Matrix.Identity();
 		return Matrix;
 	}
-
-
 };
 
 
@@ -340,6 +339,84 @@ typedef SMatrix<3, 4, float> SMatrix34;
 
 // A matrix with 4 columns and 3 rows.
 typedef SMatrix<4, 3, float> SMatrix43;
+
+// A matrix with 1 column and 2 rows.
+typedef SMatrix<1, 2, double> SMatrix12d;
+
+// A matrix with 2 columns and 1 row.
+typedef SMatrix<2, 1, double> SMatrix21d;
+
+// A matrix with 1 column and 3 rows.
+typedef SMatrix<1, 3, double> SMatrix13d;
+
+// A matrix with 3 columns and row.
+typedef SMatrix<3, 1, double> SMatrix31d;
+
+// A matrix with 1 column and 4 rows.
+typedef SMatrix<1, 4, double> SMatrix14d;
+
+// A matrix with 4 columns and 1 row.
+typedef SMatrix<4, 1, double> SMatrix41d;
+
+// A matrix with 2 columns and 2 rows.
+typedef SMatrix<2, 2, double> SMatrix2d;
+
+// A matrix with 2 columns and 3 rows.
+typedef SMatrix<2, 3, double> SMatrix23d;
+
+// A matrix with 3 columns and 2 rows.
+typedef SMatrix<3, 2, double> SMatrix32d;
+
+// A matrix with 2 columns and 4 rows.
+typedef SMatrix<2, 4, double> SMatrix24d;
+
+// A matrix with 4 columns and 2 rows.
+typedef SMatrix<4, 2, double> SMatrix42d;
+
+// A matrix with 3 columns and 4 rows.
+typedef SMatrix<3, 4, double> SMatrix34d;
+
+// A matrix with 4 columns and 3 rows.
+typedef SMatrix<4, 3, double> SMatrix43d;
+
+// A matrix with 1 column and 2 rows.
+typedef SMatrix<1, 2, int> SMatrix12i;
+
+// A matrix with 2 columns and 1 row.
+typedef SMatrix<2, 1, int> SMatrix21i;
+
+// A matrix with 1 column and 3 rows.
+typedef SMatrix<1, 3, int> SMatrix13i;
+
+// A matrix with 3 columns and row.
+typedef SMatrix<3, 1, int> SMatrix31i;
+
+// A matrix with 1 column and 4 rows.
+typedef SMatrix<1, 4, int> SMatrix14i;
+
+// A matrix with 4 columns and 1 row.
+typedef SMatrix<4, 1, int> SMatrix41i;
+
+// A matrix with 2 columns and 2 rows.
+typedef SMatrix<2, 2, int> SMatrix2i;
+
+// A matrix with 2 columns and 3 rows.
+typedef SMatrix<2, 3, int> SMatrix23i;
+
+// A matrix with 3 columns and 2 rows.
+typedef SMatrix<3, 2, int> SMatrix32i;
+
+// A matrix with 2 columns and 4 rows.
+typedef SMatrix<2, 4, int> SMatrix24i;
+
+// A matrix with 4 columns and 2 rows.
+typedef SMatrix<4, 2, int> SMatrix42i;
+
+// A matrix with 3 columns and 4 rows.
+typedef SMatrix<3, 4, int> SMatrix34i;
+
+// A matrix with 4 columns and 3 rows.
+typedef SMatrix<4, 3, int> SMatrix43i;
 
 
 template <uint Columns, uint Rows, typename Type>
@@ -910,8 +987,8 @@ INLINE Vector<Columns, Type> SMatrix<Columns, Rows, Type>::GetScaledAxis(EAxis A
 
 
 // A 2D arrangement of numbers in rows and columns.
-// This matrix type contains 4 rows and 4 columns.
-// This matrix is mostly used for 3D math and has a lot more functions independent from the other matrix types.
+// This matrix type contains 3 rows and 3 columns.
+// This matrix is mostly used for 2D math and has a lot more functions independent from the other matrix types.
 struct SMatrix3 :public SMatrix<3, 3, float>
 {
 public:
@@ -1629,7 +1706,7 @@ public:
 	// Converts this matrix to a transformation.
 	INLINE STransform ToTransform() const;
 
-#ifdef USE_DIRECTX_MATH
+#ifdef INCLUDE_DIRECTX_MATH
 	// Converts this matrix to a DirectX::XMMATRIX
 	INLINE DirectX::XMMATRIX ToXMMatrix() const;
 #endif
@@ -2318,6 +2395,31 @@ public:
 		SMatrix4 Result;
 		return Result.ToTransform(Location, Rotation, Scale);
 	}
+
+
+	// Gets the world transform as a matrix based on an inputted transform.
+	// @param Transform - The object to get the world location of.
+	// @return - Returns the world transform as a matrix4.
+	static INLINE SMatrix4 GetWorldTransform(const STransform Transform)
+	{
+		SMatrix4 ParentMat;
+		ParentMat.Identity();
+		if (Transform.GetParent()) ParentMat = GetWorldTransform(*Transform.GetParent());
+
+		SMatrix4 ScaleMat;
+		SMatrix4 RotationMat;
+		SMatrix4 LocationMat;
+
+		ScaleMat.ToScale(Transform.Scale);
+		RotationMat.ToRotation(Transform.Rotation);
+		LocationMat.ToTranslation(Transform.Location);
+
+		SMatrix4 Local{ ScaleMat * RotationMat * LocationMat };
+		//SMatrix4 Local{ LocationMat * RotationMat * ScaleMat };
+
+		//return ParentMat * Local;
+		return Local * ParentMat;
+	}
 };
 
 
@@ -2354,15 +2456,24 @@ INLINE STransform SMatrix4::ToTransform() const
 #ifdef INCLUDE_DIRECTX_MATH
 INLINE DirectX::XMMATRIX SMatrix4::ToXMMatrix() const
 {
-	DirectX::XMMatrix Result;
-	for (uint y = 0; y < Rows; ++y)
+	DirectX::XMMATRIX Result;
+#ifdef _XM_NO_INTRINSICS_
+	for (uint y = 0; y < 4; ++y)
 	{
-		for (uint x = 0; x < Columns; ++x)
+		for (uint x = 0; x < 4; ++x)
 		{
-			Result[y][x] = Data[y][x];
+			Result(y, x) = Data[y][x];
 		}
 	}
+
+#else
+	for (uint i = 0; i < 4; ++i)
+	{
+		Result.r[i] = Data[i].ToXMVector();
+	}
+#endif // _XM_NO_INTRINSICS_
 	return Result;
+
 }
 #endif
 

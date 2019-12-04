@@ -344,19 +344,20 @@ void CRenderer::DrawAll()
 		Setup->GetDevice()->CreateDepthStencilState(&DSDesc, &RasterDepth);
 
 
-		SMatrix4 World;
+		SMatrix4 World = SMatrix4::GetWorldTransform(Objects[i]->Transform);
 
-		SMatrix4 Scale;
-		SMatrix4 Rotation;
-		SMatrix4 Position;
+		//SMatrix4 Scale;
+		//SMatrix4 Rotation;
+		//SMatrix4 Position;
+		//
+		//STransform WorldTransform{ Objects[i]->Transform.GetWorldTransform() };
+		//Scale.ToScale(WorldTransform.Scale);
+		//Rotation.ToRotation(WorldTransform.Rotation);
+		//Position.ToTranslation(WorldTransform.Location);
 
-		STransform WorldTransform{ Objects[i]->Transform.GetWorldTransform() };
-		Scale.ToScale(WorldTransform.Scale);
-		Rotation.ToRotation(WorldTransform.Rotation);
-		Position.ToTranslation(WorldTransform.Location);
 
-
-		World = Scale * Rotation * Position;
+		//World = Scale * Rotation * Position;
+		//World = Position * Rotation * Scale;
 
 		SMatrix4 View;
 		SMatrix4 Projection;

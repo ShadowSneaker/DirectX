@@ -50,8 +50,8 @@ void CTestMove::SetupInput(CInputManager* Input)
 void CTestMove::Update()
 {
 	//Transform.Rotation.Z += TTime::DeltaTime * 1.0f;
-	TempRotate += TTime::DeltaTime * 20.0f;
-	Transform.Rotation = SQuaternion::Euler(SVector{ 0.0f, 0.0f, TempRotate });
+	TempRotate += TTime::DeltaTime * .3f;
+	Transform.Rotation = SQuaternion{ 0.0f, 0.0f, TempRotate };
 }
 
 
