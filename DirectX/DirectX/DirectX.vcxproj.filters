@@ -192,6 +192,12 @@
     <ClInclude Include="Content\Engine\Components\Physics\SphereComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Content\Engine\Graphics\Lighting\PointLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Engine\Graphics\Lighting\Spotlight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\Engine\Core\Source.cpp">
@@ -353,10 +359,18 @@
     <ClCompile Include="Content\Engine\Components\Physics\RigidbodyComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Content\Engine\Graphics\Lighting\Spotlight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Engine\Graphics\Lighting\PointLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Content\Assets\Shaders\Shaders.hlsl" />
     <FxCompile Include="Content\Assets\Shaders\SkyBox.hlsl" />
     <FxCompile Include="Content\Assets\Shaders\ReflectShader.hlsl" />
+    <FxCompile Include="Content\Assets\Shaders\HelperFX\LightHelper.fx" />
+    <FxCompile Include="Content\Assets\Shaders\Lighting.hlsl" />
   </ItemGroup>
 </Project>
