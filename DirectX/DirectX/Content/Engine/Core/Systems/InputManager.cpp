@@ -128,9 +128,9 @@ void CInputManager::Update()
 		DispatchMessage(&Message);
 	}
 
-	//if (!ReadKeyboard()) return;
+	if (!ReadKeyboard()) return;
 	//if (!ReadMouse()) return;
-	//
+	
 	//MousePos[X] += MouseState.lX;
 	//MousePos[Y] += MouseState.lY;
 	//MousePos = TMath::Clamp(SVector2i{ 0 }, ScreenSize, MousePos);
