@@ -51,7 +51,7 @@ void CTestMove::Update()
 {
 	//Transform.Rotation.Z += TTime::DeltaTime * 1.0f;
 	TempRotate += TTime::DeltaTime * .3f;
-	Transform.Rotation = SQuaternion{ 0.0f, 0.0f, TempRotate };
+	Transform.Rotation = SQuaternion{ TempRotate, 0.0f, TempRotate };
 }
 
 

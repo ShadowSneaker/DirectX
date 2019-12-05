@@ -1,90 +1,97 @@
-void CalculateDirectionalLight(SMaterial Material, DirectionalLight Light, float3 Normal, float3 Eye, out float4 Ambient, out float4 Diffuse, out float4 Specular)
+#include "HelperFX/LightHelper.fx"
+
+
+cbuffer CBPerFrame
 {
-	Ambient = float4(0.0f, 0.0f, 0.0f, 0.0f);
-	Diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
-	Specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
-
-	float3 LightVector = -Light.Direction;
-	Ambient = Material.Ambient * Light.Ambient;
-	float DiffuseFactor = dot(LightVector, Normal);
-
-	[flatten]
-	if (DiffuseFactor > 0.0f)
-	{
-		float3 V = reflect(-LightVector, Normal);
-		float SpecFactor = pow(max(dot(V, Eye), 0.0f), Material.Specular.W);
-
-		Diffuse = DiffuseFactor * Material.Diffuse * Light.Diffuse;
-		Specular = SpecFactor * Material.Specular * Light.Specular;
-	}
-}
+	SDirectionalLight DirectionalLight;
+	SPointLight PointLight;
+	SSpotLight SpotLight;
+	float3 EyePosW;
+};
 
 
-void CalculatePointLight(SMaterial Material, SPointLight Light, float3 Position, float3 Normal, float3 Eye, out float4 Ambient, out float4 Diffuse, out float4 Specular)
+cbuffer CBPerObject
 {
-	Ambient = float4(0.0f, 0.0f, 0.0f, 0.0f);
-	Diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
-	Specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
-
-	float3 LightVector = Light.Position - Position;
-	float Distance = length(LightVector);
-
-	if (Distance > Light.Range) return;
-
-	LightVector /= Distance;
-	Ambient = Material.Ambient * Light.Ambient;
-
-	// Add diffuse and specular term, provided the surface is in the line of sight.
-	float DiffuseFactor = dot(LightVector, Normal);
-
-	[flatten]
-	if (DiffuseFactor > 0.0f)
-	{
-		float3 V = reflect(-LightVector, Normal);
-		float SpecFactor = pow(max(dot(V, Eye), 0.0f), Material.Specular.W);
-
-		Diffuse = DiffuseFactor * Material.Diffuse * Light.Diffuse;
-		Specular = SpecFactor * Material.Specular * Light.Specular;
-	}
-
-	// Attenuate
-	float Att = 1.0f / dot(Light.Att, float3(1.0f, Distance, Distance * Distance));
-	Diffuse *= Att;
-	Specular *= Att;
-}
+	float4x4 World;
+	float4x4 WorldInvTranspose;
+	float4x4 WorldViewProj;
+	SMaterial Material;
+};
 
 
-void CalculateSpotLight(SMaterial Material, SSpotLight Light, float3 Position, float3 Normal, float3 Eye, out float4 Ambient, out float4 Diffuse, out float4 Specular)
+struct SVertexIn
 {
-	Ambient = float4(0.0f, 0.0f, 0.0f, 0.0f);
-	Diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
-	Specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	float3 Position : POSITION;
+	float3 NormalL : NORMAL;
+};
 
-	float3 LightVector = Light.Position - Position;
-	float Distance = length(LightVector);
 
-	if (Distance > Light.Range) return;
+struct SVertexOut
+{
+	float4 PositionH : SV_POSITION;
+	float3 PositionW : POSITION;
+	float3 NormalW : NORMAL;
+};
 
-	LightVector /= Distance;
-	Ambient = Material.Ambient * Light.Ambient;
 
-	float DiffuseFactor = dot(LightVector, Normal);
+SVertexOut VS(SVertexIn Vertex)
+{
+	SVertexOut VOut;
 
-	[flatten]
-	if (DiffuseFactor > 0.0f)
-	{
-		float3 V = reflect(-LightVector, Normal);
-		float SpecFactor = pow(max(dot(V, Eye), 0.0f), Material.Specular.W);
+	// Transform the world space to space.
+	VOut.PositionW = mul(Vertex.NormalL, (float3x3)WorldInvTranspose);
 
-		Diffuse = DiffuseFactor * Material.Diffuse * Light.Diffuse;
-		Specular = SpecFactor * Material.Specular * Light.Specular;
-	}
-
-	// Scale by spotlight factor and attenuate.
-	float Spot = pow(max(dot(-LightVector, Light.Direction), 0.0f), Light.Spot);
-	float Att = Spot / dot(Light.Att, float3(1.0f, Distance, Distance * Distance));
+	// Transform to homogeneous clip space.
+	VOut.PositionH = mul(float4(Vertex.Position, 1.0f), WorldViewProj);
 	
-	Ambient *= Spot;
-	Diffuse *= Att;
-	Specular *= Att;
+	return VOut;
+}
+
+
+float4 PS(SVertexOut PIn) : SV_TARGET
+{
+	// Interpolating normal can unnormalize it, so normalize it.
+	PIn.NormalW = normalize(PIn.NormalW);
+	float3 ToEye = normalize(EyePosW - PIn.PositionW);
+
+	// Start with a sum of zero.
+	float4 Ambient = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	float4 Diffuse = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	float4 Specular = float4(0.0f, 0.0f, 0.0f, 0.0f);
+
+	// Sum the light contribution from each light source.
+	float4 A, D, S;
+
+	CalculateDirectionalLight(Material, DirectionalLight, PIn.NormalW, ToEye, A, D, S);
+	Ambient += A;
+	Diffuse += D;
+	Specular += S;
+
+	CalculatePointLight(Material, PointLight, PIn.PositionW, PIn.NormalW, ToEye, A, D, S);
+	Ambient += A;
+	Diffuse += D;
+	Specular += S;
+
+	CalculateSpotLight(Material, SpotLight, PIn.PositionW, PIn.NormalW, ToEye, A, D, S);
+	Ambient += A;
+	Diffuse += D;
+	Specular += S;
+
+	float4 LitColour = Ambient + Diffuse + Specular;
+
+	// Common to take alpha from diffuse material.
+	LitColour.a = Material.Diffuse.a;
+
+	return LitColour;
+}
+
+
+technique11 LightTech
+{
+	pass P0
+	{
+		SetVertexShader(CompileShader(vs_5_0, VS()));
+		SetGeometryShader(NULL);
+		SetPixelShader(CompileShader(ps_5_0, PS()));
+	}
 }

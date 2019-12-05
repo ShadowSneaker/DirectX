@@ -145,6 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Content\Engine\Components\CharacterComponent.h" />
+    <ClInclude Include="Content\Engine\Components\Lighting\PointLightComponent.h" />
     <ClInclude Include="Content\Engine\Components\Physics\BoxComponent.h" />
     <ClInclude Include="Content\Engine\Components\Physics\CapsuleComponent.h" />
     <ClInclude Include="Content\Engine\Components\Physics\CylinderComponent.h" />
@@ -169,7 +170,9 @@
     <ClInclude Include="Content\Engine\Graphics\Lighting\LightBase.h" />
     <ClInclude Include="Content\Engine\Graphics\Lighting\PointLight.h" />
     <ClInclude Include="Content\Engine\Graphics\Lighting\Spotlight.h" />
+    <ClInclude Include="Content\Engine\Graphics\Meshes\Material.h" />
     <ClInclude Include="Content\Engine\Graphics\Meshes\Primitives\Cube.h" />
+    <ClInclude Include="Content\Engine\Graphics\Meshes\Shaders.h" />
     <ClInclude Include="Content\Engine\Graphics\Meshes\StaticMesh.h" />
     <ClInclude Include="Content\Engine\Graphics\Renderer.h" />
     <ClInclude Include="Content\Engine\Graphics\Window.h" />
@@ -208,6 +211,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\Engine\Components\CharacterComponent.cpp" />
+    <ClCompile Include="Content\Engine\Components\Lighting\PointLightComponent.cpp" />
     <ClCompile Include="Content\Engine\Components\Physics\BoxComponent.cpp" />
     <ClCompile Include="Content\Engine\Components\Physics\CapsuleComponent.cpp" />
     <ClCompile Include="Content\Engine\Components\Physics\RigidbodyComponent.cpp" />
@@ -269,8 +273,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Content\Assets\Shaders\Lighting.hlsl">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Content\Assets\Shaders\ReflectShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

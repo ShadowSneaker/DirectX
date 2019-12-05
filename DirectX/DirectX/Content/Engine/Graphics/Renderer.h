@@ -9,6 +9,8 @@
 #include "Meshes/StaticMesh.h"
 #include "../Math/DataTypes/Matrix.h"
 
+//#include "Meshes/Material.h"
+
 
 struct SCBuffer
 {
@@ -24,6 +26,24 @@ struct SReflectBuffer
 	SMatrix4 ViewMatrix;
 	SMatrix4 WorldMatrix;
 };
+
+
+/*struct SCBPerFrame
+{
+	SDirectionalLight DirectionalLight;
+	SPointLight PointLight;
+	SSpotLight SpotLight;
+	SVector EyePosW;
+};
+
+
+struct SCBPerObject
+{
+	SMatrix4 World;
+	SMatrix4 WorldInvTranspose;
+	SMatrix4 WorldViewProj;
+	SMaterial Material;
+};*/
 
 
 
@@ -108,6 +128,12 @@ private:
 	// Safely deletes all textures in memory.
 	void DeleteAllTextures();
 
+	// Updates all objects visuals in the world.
+	void UpdateObjects() ;
+
+	// Updates all the lights in the world.
+	void UpdateLights() const;
+
 public:
 	// Adds a created static mesh object to this class.
 	// @param Mesh - The static mesh reference to add.
@@ -161,6 +187,12 @@ public:
 	// @param UseDefaultPath - Should the file path start at the default path for shaders.
 	// @return - Returns the compiled shader.
 	SShader SetShader(CStaticMesh* Mesh, std::string FilePath, bool UseDefaultPath = true);
+
+	// Sets a specific shader onto the inputted light object.
+	// @param Light - The object that the shader should be applied on.
+	// @param FilePath - The location in files to the specific shader.
+	// @param useDefaultPath - Should the file path start at this default path for shaders.
+	SShader SetLightShader(CLightBase* Light, std::string FilePath, bool UseDefaultPath = true);
 
 	// Creates and returns a reference to a texture for an object.
 	// Note - There will only be one version of the texture created in this class.

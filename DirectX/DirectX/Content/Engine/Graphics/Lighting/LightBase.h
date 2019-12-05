@@ -1,5 +1,6 @@
 #pragma once
 #include "../../World/Objects/WorldObject.h"
+#include "../Meshes/Shaders.h"
 
 // http://aranna.altervista.org/data2/3d_game_programming_with_DirectX11.pdf#page=262&zoom=100,0,5
 
@@ -7,6 +8,8 @@ class CLightBase
 {
 protected:
 	/// Properties
+
+	//SShader Shader;
 
 	// The amount of ambient light emmited by the light source.
 	SVector4 Ambient = 0.01f;
@@ -44,4 +47,10 @@ public:
 
 
 	/// Functions
+
+
+	/// Getters
+
+
+	//INLINE SShader GetShader() const { return Shader; }
 };

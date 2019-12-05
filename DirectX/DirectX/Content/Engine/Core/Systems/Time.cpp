@@ -29,7 +29,7 @@ void TTime::Update()
 	}
 
 	QueryPerformanceCounter((LARGE_INTEGER*) &CurrentTime);
-	DeltaTime = ((CurrentTime - PreviousTime) * SecondsPerCount) * 100000.0f * TimeScale;
+	DeltaTime = ((CurrentTime - PreviousTime) * SecondsPerCount) * 10000.0f * TimeScale;
 
 	PreviousTime = CurrentTime;
 	if (DeltaTime < 0.0f) DeltaTime = 0.0f;

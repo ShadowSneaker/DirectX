@@ -45,9 +45,9 @@ public:
 
 	/// Getters
 
-	inline ID3D11Device* GetDevice() const { return Device; }
+	INLINE ID3D11Device* GetDevice() const { return Device; }
 
-	inline ID3D11DeviceContext* GetDeviceContext() const { return DeviceContext; }
+	INLINE ID3D11DeviceContext* GetDeviceContext() const { return DeviceContext; }
 
-	inline IDXGISwapChain* GetSwapChain() const { return SwapChain; }
+	INLINE IDXGISwapChain* GetSwapChain() const { return SwapChain; }
 };
