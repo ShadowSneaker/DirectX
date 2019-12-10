@@ -91,8 +91,8 @@ public:
 	inline SVector GetWorldLocation() const { return GetWorldTransform().Location; }
 
 	// Gets the rotation of this object in worldspace.
-	//inline SQuaternion GetWorldRotation() const { return ((Parent) ? Parent->GetWorldRotation() : SQuaternion{ 0.0f }) + Rotation; }
-	inline SQuaternion GetWorldRotation() const { return GetWorldTransform().Rotation; }
+	inline SQuaternion GetWorldRotation() const { SQuaternion Q = (((Parent) ? Parent->GetWorldRotation() : SQuaternion{ 1.0f }) * Rotation); Q.Normalize(); return Q; }
+	//inline SQuaternion GetWorldRotation() const { return GetWorldTransform().Rotation; }
 
 	// Gets the scale of this object in worldspace.
 	//inline SVector GetWorldScale() const { return ((Parent) ? Parent->GetWorldScale() : SVector{ 1.0f }) * Scale; }

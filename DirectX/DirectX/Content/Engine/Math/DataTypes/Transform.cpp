@@ -81,5 +81,8 @@ STransform STransform::GetWorldTransform() const
 	//Local = Local * ParentMat;
 	
 	// Convert the world matrix to a transform.
-	return Local.GetTransform();
+	STransform Result{ Local.GetTransform() };
+	Result.Rotation = GetWorldRotation();
+	return Result;
+	//return Local.GetTransform();
 }

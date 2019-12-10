@@ -979,8 +979,7 @@ INLINE Vector<Columns, Type> SMatrix<Columns, Rows, Type>::GetColumn(const EAxis
 template <uint Columns, uint Rows, typename Type>
 INLINE Vector<Columns, Type> SMatrix<Columns, Rows, Type>::GetScaledAxis(EAxis Axis) const
 {
-	// TODO:
-	// Is this correct?
+	if (Axis == EAxis::W) return Vector<Columns, Type>{ 0.0f };
 	return Data[Axis];
 }
 
@@ -2946,7 +2945,62 @@ INLINE SVector SMatrix4::GetLocation() const
 
 INLINE SQuaternion SMatrix4::GetRotation() const
 {
-	SQuaternion Quat;
+	// If the matrix is NULL, return Identity quaternion. Additionally if any of the Axis equals 0, then a rotation can't be made.
+	if (GetScaledAxis(EAxis::X).NearlyZero() || GetScaledAxis(EAxis::Y).NearlyZero() || GetScaledAxis(EAxis::Z).NearlyZero())
+	{
+		return SQuaternion::Identity;
+	}
+
+	if ((TMath::Abs(1.0f - GetScaledAxis(EAxis::X).SizeSquared()) <= SMALL_NUMBER) && (TMath::Abs(1.0f - GetScaledAxis(EAxis::Y).SizeSquared()) <= SMALL_NUMBER) && TMath::Abs(1.0f - GetScaledAxis(EAxis::Z).SizeSquared()) <= SMALL_NUMBER)
+	{
+		return SQuaternion::Identity;
+	}
+
+	SQuaternion Result;
+	float S;
+
+	const float Trace{ Data[0][0] + Data[1][1] + Data[2][2] };
+	if (Trace > 0.0f)
+	{
+		float InvS{ TMath::InvSqrt(Trace + 1.0f) };
+		Result.W = 0.5f * (1.0f / InvS);
+		S = 0.5f * InvS;
+
+		Result.X = (Data[1][2] - Data[2][1]) * S;
+		Result.Y = (Data[2][0] - Data[0][2]) * S;
+		Result.Z = (Data[0][1] - Data[1][0]) * S;
+	}
+	else
+	{
+		int32 i{ 0 };
+		
+		if (Data[1][1] > Data[0][0]) i = 1;
+		if (Data[2][2] > Data[i][i]) i = 2;
+
+		static const int32 Next[3] = { 1, 2, 3 };
+		const int32 j = Next[i];
+		const int32 k = Next[j];
+
+		S = Data[i][i] - Data[j][j] - Data[k][k] + 1.0f;
+
+		float InvS{ TMath::InvSqrt(S) };
+		float QT[4];
+		QT[i] = 0.5f * (1.0f / InvS);
+		S = 0.5f * InvS;
+
+		QT[3] = (Data[j][k] - Data[k][j]) * S;
+		QT[j] = (Data[i][j] + Data[j][i]) * S;
+		QT[k] = (Data[i][k] + Data[k][i]) * S;
+
+		Result.X = QT[0];
+		Result.Y = QT[1];
+		Result.Z = QT[2];
+		Result.W = QT[3];
+		Result.CheckNaN();
+	}
+	return Result;
+
+	/*SQuaternion Quat;
 	float R22{ Data[2][2] };
 	if (R22 <= 0.0f)
 	{
@@ -2994,7 +3048,7 @@ INLINE SQuaternion SMatrix4::GetRotation() const
 			Quat.W = FourWSqr * Inv4w;
 		}
 	}
-	return Quat;
+	return Quat;*/
 }
 
 

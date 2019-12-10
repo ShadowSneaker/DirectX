@@ -9,7 +9,7 @@
 #include "Meshes/StaticMesh.h"
 #include "../Math/DataTypes/Matrix.h"
 
-//#include "Meshes/Material.h"
+#include "Meshes/Material.h"
 
 
 struct SCBuffer
@@ -28,7 +28,7 @@ struct SReflectBuffer
 };
 
 
-/*struct SCBPerFrame
+struct SCBPerFrame
 {
 	SDirectionalLight DirectionalLight;
 	SPointLight PointLight;
@@ -43,7 +43,7 @@ struct SCBPerObject
 	SMatrix4 WorldInvTranspose;
 	SMatrix4 WorldViewProj;
 	SMaterial Material;
-};*/
+};
 
 
 

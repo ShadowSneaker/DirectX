@@ -1517,7 +1517,7 @@ INLINE Vector<Size, Element> Vector<Size, Element>::Power(uint Amount) const
 template <uint Size, typename Element>
 INLINE float Vector<Size, Element>::SizeSquared() const
 {
-	float Result;
+	float Result{ 0.0f };
 	for (uint i = 0; i < Size; ++i)
 	{
 		Result += Data[i] * Data[i];

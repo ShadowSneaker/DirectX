@@ -179,17 +179,18 @@ void CRenderer::UpdateObjects()
 
 void CRenderer::UpdateLights() const
 {
-	/*ID3D11Buffer* Buffer;
+	ID3D11Buffer* Buffer;
 	ID3D11Buffer* VBuffer;
 	for (uint i = 0; i < Lights.size(); ++i)
 	{
-		Buffer = Objects[i]->GetShader().ConstantBuffer;
-		VBuffer = Objects[i]->GetShader().VertexBuffer;
+		Buffer = Lights[i]->GetShader().ConstantBuffer;
+		VBuffer = Lights[i]->GetShader().VertexBuffer;
 
 
-		//SCBPerFrame PF;
+		SCBPerFrame PF;
+		
 
-		//SCBPerObject PO;
+		SCBPerObject PO;
 
 
 		// Update the ps and vs here for each light.
@@ -198,7 +199,7 @@ void CRenderer::UpdateLights() const
 		Setup->GetDeviceContext()->IASetInputLayout(Lights[i]->GetShader().InputLayout);
 		Setup->GetDeviceContext()->VSSetShader(Lights[i]->GetShader().VertexShader, 0, 0);
 		Setup->GetDeviceContext()->PSSetShader(Lights[i]->GetShader().PixelShader, 0, 0);
-	}*/
+	}
 }
 
 

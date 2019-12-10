@@ -15,7 +15,7 @@ CTestPlayer::CTestPlayer(SObjectBase Core)
 	Camera = CreateComponent<CCameraComponent>();
 	Camera->Transform.SetParent(&Transform);
 
-	Camera->UseLegacyControls = true;
+	Camera->UseLegacyControls = false;
 }
 
 
@@ -85,8 +85,8 @@ void CTestPlayer::Turn(float Value)
 {
 	if (Value != 0.0f)
 	{
-		//Transform.Rotation.Y += TMath::ToRadians(Value * Speed * 10.0f * TTime::DeltaTime);
-		Camera->Rotate(0.0f, TO_RADIAN(Value * Speed * 5.0f * TTime::DeltaTime), 0.0f);
+		Transform.Rotation.Y += TMath::ToRadians(Value * Speed * 10.0f * TTime::DeltaTime);
+		//Camera->Rotate(0.0f, TO_RADIAN(Value * Speed * 5.0f * TTime::DeltaTime), 0.0f);
 		//Camera->Rotate(0.0f, Value * Speed * TTime::DeltaTime, 0.0f);
 	}
 }
@@ -96,7 +96,8 @@ void CTestPlayer::LookUp(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->Rotate(0.0f, 0.0f, Value * Speed * TTime::DeltaTime);
+		Transform.Rotation.X += TMath::ToRadians(Value * Speed * 10.0f * TTime::DeltaTime);
+		//Camera->Rotate(0.0f, 0.0f, Value * Speed * TTime::DeltaTime);
 	}
 }
 

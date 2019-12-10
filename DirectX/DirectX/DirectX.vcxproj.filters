@@ -201,10 +201,31 @@
     <ClInclude Include="Content\Engine\Graphics\Meshes\Material.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Content\Engine\Components\Lighting\PointLightComponent.h">
+    <ClInclude Include="Content\Engine\Graphics\Meshes\Shaders.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Content\Engine\Graphics\Meshes\Shaders.h">
+    <ClInclude Include="Content\Engine\Components\Lighting\LightBaseComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Engine\World\Objects\Game\Entities\Entity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Engine\World\Objects\Game\Entities\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Engine\World\Objects\Game\Components\HealthComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Engine\World\Objects\Game\Gameplay\RegenStat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Engine\World\Objects\Game\Components\StaminaComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Engine\World\Objects\Game\Weapons\Gun.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\Engine\World\Objects\Game\Weapons\Bullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -374,7 +395,25 @@
     <ClCompile Include="Content\Engine\Graphics\Lighting\PointLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Content\Engine\Components\Lighting\PointLightComponent.cpp">
+    <ClCompile Include="Content\Engine\Components\Lighting\LightBaseComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Engine\World\Objects\Game\Entities\Entity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Engine\World\Objects\Game\Entities\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Engine\World\Objects\Game\Components\HealthComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Engine\World\Objects\Game\Components\StaminaComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Engine\World\Objects\Game\Weapons\Gun.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\Engine\World\Objects\Game\Weapons\Bullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

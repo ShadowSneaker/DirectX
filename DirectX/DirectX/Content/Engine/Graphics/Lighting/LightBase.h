@@ -2,15 +2,30 @@
 #include "../../World/Objects/WorldObject.h"
 #include "../Meshes/Shaders.h"
 
+
 // http://aranna.altervista.org/data2/3d_game_programming_with_DirectX11.pdf#page=262&zoom=100,0,5
+
+
+enum class ELightType
+{
+	Directional,
+	Spotlight,
+	Pointlight,
+};
+
 
 class CLightBase
 {
 protected:
 	/// Properties
 
-	//SShader Shader;
+	// Defines the type of light this light is.
+	ELightType LightType;
 
+	// Stores the light shader.
+	SShader Shader;
+
+public:
 	// The amount of ambient light emmited by the light source.
 	SVector4 Ambient = 0.01f;
 
@@ -20,7 +35,6 @@ protected:
 	// The amount of specular light emmited by the light source.
 	SVector4 Specular = 1.0f;
 	
-public:
 
 	// The location, rotation and scale of this light.
 	STransform Transform;
@@ -52,5 +66,7 @@ public:
 	/// Getters
 
 
-	//INLINE SShader GetShader() const { return Shader; }
+	INLINE SShader GetShader() const { return Shader; }
+
+	INLINE ELightType GetType() const { return LightType; }
 };

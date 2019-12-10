@@ -7,7 +7,8 @@ CObjectPool::CObjectPool(CWorld* InWorld)
 
 
 CObjectPool::~CObjectPool()
-{}
+{
+}
 
 
 void CObjectPool::ReturnObject(const char* Key, CWorldObject* Object)

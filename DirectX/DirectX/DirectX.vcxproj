@@ -145,7 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Content\Engine\Components\CharacterComponent.h" />
-    <ClInclude Include="Content\Engine\Components\Lighting\PointLightComponent.h" />
+    <ClInclude Include="Content\Engine\Components\Lighting\LightBaseComponent.h" />
     <ClInclude Include="Content\Engine\Components\Physics\BoxComponent.h" />
     <ClInclude Include="Content\Engine\Components\Physics\CapsuleComponent.h" />
     <ClInclude Include="Content\Engine\Components\Physics\CylinderComponent.h" />
@@ -198,7 +198,14 @@
     <ClInclude Include="Content\Engine\Math\Physics\Rigidbody.h" />
     <ClInclude Include="Content\Engine\World\Level.h" />
     <ClInclude Include="Content\Engine\World\Objects\Character.h" />
+    <ClInclude Include="Content\Engine\World\Objects\Game\Components\HealthComponent.h" />
+    <ClInclude Include="Content\Engine\World\Objects\Game\Components\StaminaComponent.h" />
+    <ClInclude Include="Content\Engine\World\Objects\Game\Entities\Entity.h" />
+    <ClInclude Include="Content\Engine\World\Objects\Game\Entities\Player.h" />
     <ClInclude Include="Content\Engine\World\Objects\Game\Floor.h" />
+    <ClInclude Include="Content\Engine\World\Objects\Game\Gameplay\RegenStat.h" />
+    <ClInclude Include="Content\Engine\World\Objects\Game\Weapons\Bullet.h" />
+    <ClInclude Include="Content\Engine\World\Objects\Game\Weapons\Gun.h" />
     <ClInclude Include="Content\Engine\World\Objects\ObjectBase.h" />
     <ClInclude Include="Content\Engine\World\ObjectPool.h" />
     <ClInclude Include="Content\Engine\World\Objects\Puppet.h" />
@@ -211,7 +218,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\Engine\Components\CharacterComponent.cpp" />
-    <ClCompile Include="Content\Engine\Components\Lighting\PointLightComponent.cpp" />
+    <ClCompile Include="Content\Engine\Components\Lighting\LightBaseComponent.cpp" />
     <ClCompile Include="Content\Engine\Components\Physics\BoxComponent.cpp" />
     <ClCompile Include="Content\Engine\Components\Physics\CapsuleComponent.cpp" />
     <ClCompile Include="Content\Engine\Components\Physics\RigidbodyComponent.cpp" />
@@ -257,7 +264,13 @@
     <ClCompile Include="Content\Engine\World\Level.cpp" />
     <ClCompile Include="Content\Engine\World\ObjectPool.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Character.cpp" />
+    <ClCompile Include="Content\Engine\World\Objects\Game\Components\HealthComponent.cpp" />
+    <ClCompile Include="Content\Engine\World\Objects\Game\Components\StaminaComponent.cpp" />
+    <ClCompile Include="Content\Engine\World\Objects\Game\Entities\Entity.cpp" />
+    <ClCompile Include="Content\Engine\World\Objects\Game\Entities\Player.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Game\Floor.cpp" />
+    <ClCompile Include="Content\Engine\World\Objects\Game\Weapons\Bullet.cpp" />
+    <ClCompile Include="Content\Engine\World\Objects\Game\Weapons\Gun.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\ObectBase.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Puppet.cpp" />
     <ClCompile Include="Content\Engine\World\Objects\Testing\SkyBox.cpp" />
