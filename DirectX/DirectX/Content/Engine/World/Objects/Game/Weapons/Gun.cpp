@@ -38,7 +38,7 @@ void CGun::Fire()
 		CBullet* Bullet{ BulletPool->CheckoutObject<CBullet>("Bullets") };
 		if (Bullet)
 		{
-			STransform WorldTransform{ Transform.GetWorldTransform };
+			STransform WorldTransform{ Transform.GetWorldTransform() };
 
 			Bullet->Transform = WorldTransform;
 		}

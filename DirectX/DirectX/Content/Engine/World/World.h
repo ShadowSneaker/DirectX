@@ -4,6 +4,7 @@
 
 //#include "../Graphics/Renderer.h"
 #include "Objects/ObjectBase.h"
+#include "Level.h"
 
 #include <vector>
 #include <Windows.h>
@@ -161,3 +162,55 @@ public:
 };
 
 
+
+template <typename Type>
+Type* CWorld::SpawnObject(CLevel* Level)
+{
+	return SpawnObject<Type>(STransform{ 0.0f, 0.0f, 1.0f }, Level);
+}
+
+
+template <typename Type>
+Type* CWorld::SpawnObject(SVector Location, CLevel* Level)
+{
+	return SpawnObject<Type>(STransform{ Location, 0.0f, 1.0f }, Level);
+}
+
+
+template <typename Type>
+Type* CWorld::SpawnObject(SVector Location, SQuaternion Rotation, CLevel* Level)
+{
+	return SpawnObject<Type>(STransform{ Location, Rotation, 1.0f }, Level);
+}
+
+
+template <typename Type>
+Type* CWorld::SpawnObject(SQuaternion Rotation, SVector Scale, CLevel* Level)
+{
+	return SpawnObject<Type>(STransform{ 0.0f, Rotation, Scale }, Level);
+}
+
+
+template <typename Type>
+Type* CWorld::SpawnObject(SVector Location, SVector Scale, CLevel* Level)
+{
+	return SpawnObject<Type>(STransform{ Location, 0.0f, Scale }, Level);
+}
+
+
+template <typename Type>
+Type* CWorld::SpawnObject(SVector Location, SQuaternion Rotation, SVector Scale, CLevel* Level)
+{
+	return SpawnObject<Type>(STransform{ Location, Rotation, Scale }, Level);
+}
+
+
+template <typename Type>
+Type* CWorld::SpawnObject(STransform Transform, CLevel* Level)
+{
+	if (Level)
+	{
+		return Level->SpawnObject<Type>(Transform);
+	}
+	return Levels[0]->SpawnObject<Type>(Transform);
+}

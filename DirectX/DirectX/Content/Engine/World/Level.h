@@ -1,7 +1,6 @@
 #pragma once
 #include "../Core/Systems/FileManager.h"
 #include "Objects/WorldObject.h"
-#include "World.h"
 
 #include <vector>
 

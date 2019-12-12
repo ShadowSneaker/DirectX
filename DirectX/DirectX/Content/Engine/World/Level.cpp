@@ -3,12 +3,13 @@
 #include "../Core/Systems/FileManager.h"
 
 #include "Objects/Game/Floor.h"
-#include "Objects/Testing/TestPlayer.h"
+#include "Objects/Game/Entities/Player.h"
 #include "Objects/Testing/SkyBox.h"
+//#include "Objects/Testing/TestPlayer.h"
 #include "../Components/Graphics/Camera/CameraComponent.h"
-#include "Objects/Testing/TestMove.h"
+//#include "Objects/Testing/TestMove.h"
 
-#include "../Components/Graphics/Meshes/StaticMeshComponent.h"
+//#include "../Components/Graphics/Meshes/StaticMeshComponent.h"
 
 
 const std::string CLevel::DefaultFilePath{ "Content/Assets/Levels/" };
@@ -44,16 +45,19 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 	}
 	else
 	{
-		CTestPlayer* Player = SpawnObject<CTestPlayer>(SVector{ 0.0f });
-
+		//CTestPlayer* Player = SpawnObject<CTestPlayer>(SVector{ 0.0f });
+		CPlayer* Player = SpawnObject<CPlayer>();
 		CTestSkyBox* Sky = SpawnObject<CTestSkyBox>();
 		Sky->Camera = &Player->GetCamera()->Transform;
+
+		//Sky->Camera = &Player->GetCamera()->Transform;
 		//Sky->Transform.SetParent(&Player->Transform);
 
 		LoadObjects();
 
 	}
 
+	/*
 	CTestMove* TMove = SpawnObject<CTestMove>(SVector{ 5.0f, 0.0f, 0.0f }, SVector{ 2.0f });
 #define INPUT_ENABLED
 	CTestMove* Test = SpawnObject<CTestMove>(SVector{ 0.0f, 2.0f, 0.0f });
@@ -62,7 +66,7 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 	CTestMove* Test2 = SpawnObject<CTestMove>(SVector{ 5.0f, 0.0f, 0.0f }, SVector{ 2.0f });
 	Test2->Transform.SetParent(&TMove->Transform);
 
-	Test->AllowMovement = false;
+	Test->AllowMovement = false;*/
 
 	//SFileInfo Info{ TFileManager::ReadFile(File) };
 	
