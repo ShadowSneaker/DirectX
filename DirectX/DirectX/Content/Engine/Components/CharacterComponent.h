@@ -19,7 +19,7 @@ public:
 
 	EMovementType MovementType{ EMovementType::Running };
 
-	float MoveSpeed{ 500.0f };
+	float MoveSpeed{ 50.0f };
 
 
 public:

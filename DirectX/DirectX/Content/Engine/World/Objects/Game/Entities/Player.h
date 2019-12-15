@@ -12,6 +12,10 @@ private:
 
 	class CCameraComponent* Camera{ nullptr };
 
+	class CFont* ScoreText{ nullptr };
+
+
+	uint Score{ 0 };
 
 
 public:
@@ -38,9 +42,13 @@ public:
 
 	void MoveSideways(float Value);
 
+	void MoveUp(float Value);
+
+	void Turn(float Value);
+
 	void Shoot(EInputMode InputMode);
 
-
+	void UpdateScore();
 
 
 	INLINE class CCameraComponent* GetCamera() const { return Camera; }

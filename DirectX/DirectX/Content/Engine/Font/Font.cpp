@@ -1,5 +1,5 @@
 #include "Font.h"
-
+#include "../Core/Systems/FileManager.h"
 
 //CFont::CFont()
 //{
@@ -30,7 +30,9 @@ CFont::CFont(std::string FileName, ID3D11Device* InDevice, ID3D11DeviceContext* 
 	ID3DBlob* PS;
 	ID3DBlob* Error;
 
-	HR = D3DX11CompileFromFile("text2D_shaders.hlsl", 0, 0, "TextVS", "vs_4_0", 0, 0, 0, &VS, &Error, 0);
+	std::string FilePath{ TFileManager::ShaderFilePath + "Text2DShader.hlsl" };
+
+	HR = D3DX11CompileFromFile(FilePath.c_str(), 0, 0, "TextVS", "vs_4_0", 0, 0, 0, &VS, &Error, 0);
 	if (Error != 0)
 	{
 		OutputDebugStringA((char*)Error->GetBufferPointer());
@@ -38,7 +40,7 @@ CFont::CFont(std::string FileName, ID3D11Device* InDevice, ID3D11DeviceContext* 
 		if (FAILED(HR)) exit(0);
 	}
 
-	HR = D3DX11CompileFromFile("text2D_shaders.hlsl", 0, 0, "TextPS", "ps_4_0", 0, 0, 0, &PS, &Error, 0);
+	HR = D3DX11CompileFromFile(FilePath.c_str(), 0, 0, "TextPS", "ps_4_0", 0, 0, 0, &PS, &Error, 0);
 	if (Error != 0)
 	{
 		OutputDebugStringA((char*)Error->GetBufferPointer());

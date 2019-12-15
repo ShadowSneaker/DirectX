@@ -2,6 +2,7 @@
 #include "Meshes/Primitives/Cube.h"
 #include "Camera.h"
 #include "Lighting/DirectionalLight.h"
+#include "../Font/Font.h"
 #include <DirectXMath.h>
 
 
@@ -23,6 +24,17 @@ CRenderer::CRenderer(HINSTANCE HandleInstance, int CommandShow)
 
 	// TEMP
 	DirectionalLight = new CDirectionalLight{};
+
+	// I don't like how the current setup of font is done. Currently I have to input the device and device context into
+	// the font then call a draw method which is what draws it on the screen. I dislike this approach as I feel as if
+	// components should not know how to draw themselves, but just have the nessissary information to draw themselves.
+	// At which point the renderer gets that information then draws the text. 
+	// Doing this also allows easy lists of fonts to go through the same procedure without the need to store duplicated functions in RAM.
+
+	// For now, since there will only be one font on screen. It doesn't really matter how it is setup, so long as it is setup.
+	ScoreText = new CFont{ "Content/Assets/Fonts/Font1.bmp", Setup->GetDevice(), Setup->GetDeviceContext() };
+	ScoreText->Location = SVector2{ -1.0f, 1.0f };
+	ScoreText->Size = 0.05f;
 }
 
 
@@ -555,6 +567,7 @@ void CRenderer::DrawAll()
 	Setup->ClearView();
 	UpdateObjects();
 	UpdateLights();
+	ScoreText->RenderText();
 
 	Setup->GetSwapChain()->Present(0, 0);
 }

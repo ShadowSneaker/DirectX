@@ -99,6 +99,10 @@ private:
 	// This should be removed into a component for world objects so I could have more than one directional light.
 	class CDirectionalLight* DirectionalLight{ nullptr };
 
+	// I don't like having a set font declared inside the renderer. This is a quick setup just to get font loaded on the screen.
+	// Prferbally I'd createa UI system which could house a font type allowing text.
+	class CFont* ScoreText{ nullptr };
+
 public:
 
 	// The amount of light that is equally applied to all faces.
@@ -219,4 +223,8 @@ public:
 	/// Getters
 
 	inline CWindow* GetWindow() const { return Window; }
+
+	inline ID3D11Device* GetDevice() const { return Setup->GetDevice(); }
+
+	inline class CFont* GetScoreText() const { return ScoreText; }
 };
