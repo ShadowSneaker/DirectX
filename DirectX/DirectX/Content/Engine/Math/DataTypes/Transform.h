@@ -53,22 +53,22 @@ private:
 public:
 
 	// Gets the forward pointing vector relative to this object.
-	inline SVector Forward() const { return Rotation.GetForwardVector(); }
+	inline SVector Forward() const { return GetWorldRotation().GetForwardVector(); }
 
 	// Gets the backward pointing vector relative to this object.
-	inline SVector Backward() const { return -Rotation.GetForwardVector(); }
+	inline SVector Backward() const { return -GetWorldRotation().GetForwardVector(); }
 
 	// Gets the right pointing vector relative to this object.
-	inline SVector Right() const { return Rotation.GetRightVector(); }
+	inline SVector Right() const { return GetWorldRotation().GetRightVector(); }
 
 	// Gets the left pointing vector relative to this object.
-	inline SVector Left() const { return -Rotation.GetRightVector(); }
+	inline SVector Left() const { return -GetWorldRotation().GetRightVector(); }
 
 	// Gets the up pointing vector relative to this object.
-	inline SVector Up() const { return Rotation.GetUpVector(); }
+	inline SVector Up() const { return GetWorldRotation().GetUpVector(); }
 
 	// Gets the down pointing vector relative to this object.
-	inline SVector Down() const { return -Rotation.GetUpVector(); }
+	inline SVector Down() const { return -GetWorldRotation().GetUpVector(); }
 
 	// Rotates this transform to look at another transform's position.
 	inline void LookAt(STransform Other);
@@ -91,7 +91,7 @@ public:
 	inline SVector GetWorldLocation() const { return GetWorldTransform().Location; }
 
 	// Gets the rotation of this object in worldspace.
-	inline SQuaternion GetWorldRotation() const { SQuaternion Q = (((Parent) ? Parent->GetWorldRotation() : SQuaternion{ 1.0f }) * Rotation); Q.Normalize(); return Q; }
+	inline SQuaternion GetWorldRotation() const { return (((Parent) ? Parent->GetWorldRotation() : SQuaternion{ 0.0f }) + Rotation); }
 	//inline SQuaternion GetWorldRotation() const { return GetWorldTransform().Rotation; }
 
 	// Gets the scale of this object in worldspace.

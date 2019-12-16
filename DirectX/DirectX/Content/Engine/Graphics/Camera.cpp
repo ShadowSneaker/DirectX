@@ -90,11 +90,13 @@ SMatrix4 CCamera::GetViewMatrix()
 {
 	if (UseLegacyControls)
 	{
-		SVector4 WorldLocation{ Transform.GetWorldLocation(), 0.0f };
+		STransform WorldTransform{ Transform.GetWorldTransform() };
+		SVector4 WorldLocation{ WorldTransform.Location, 0.0f };
 		//SVector4 WorldLocation{ Transform.Location, 0.0f };
 
-		DX = TMath::Sin(Transform.Rotation.Y);
-		DZ = TMath::Cos(Transform.Rotation.Y);
+
+		DX = TMath::Sin(WorldTransform.Rotation.Y);
+		DZ = TMath::Cos(WorldTransform.Rotation.Y);
 
 		Offset = WorldLocation;
 		LookAt = SVector4{ WorldLocation[X] + DX, WorldLocation[Y], WorldLocation[Z] + DZ, 0.0f };

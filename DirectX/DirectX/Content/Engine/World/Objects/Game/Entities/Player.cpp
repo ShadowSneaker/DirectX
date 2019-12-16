@@ -17,6 +17,7 @@ CPlayer::CPlayer(SObjectBase Base)
 	SetupInput(GetInputManager());
 	Camera = CreateComponent<CCameraComponent>();
 	Camera->Transform.SetParent(&Transform);
+	Camera->Transform.Location = SVector{ 0.0f, 0.0f, -5.0f };
 
 	GetRenderer()->SetCamera(Camera);
 	ScoreText = GetRenderer()->GetScoreText();
@@ -75,6 +76,7 @@ void CPlayer::MoveSideways(float Value)
 	if (Value != 0.0f)
 	{
 		CharacterComponent->Move(Transform.Right(), Value);
+		Transform.Right().Print();
 	}
 }
 
