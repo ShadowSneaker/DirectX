@@ -21,7 +21,7 @@ CPlayer::CPlayer(SObjectBase Base)
 
 	GetRenderer()->SetCamera(Camera);
 	ScoreText = GetRenderer()->GetScoreText();
-	ScoreText->SetText("Score: " + std::to_string(Score));
+	UpdateScore();
 
 	CharacterComponent->MoveSpeed = 5.0f;
 
@@ -108,5 +108,5 @@ void CPlayer::Shoot(EInputMode InputMode)
 
 void CPlayer::UpdateScore()
 {
-	ScoreText->SetText("Score: " + std::to_string(Score));
+	ScoreText->SetText("Score " + std::to_string(Score));
 }

@@ -94,13 +94,16 @@ SMatrix4 CCamera::GetViewMatrix()
 		SVector4 WorldLocation{ WorldTransform.Location, 0.0f };
 		//SVector4 WorldLocation{ Transform.Location, 0.0f };
 
-
+		//DX = TMath::Sin(Transform.Forward());
+		//DZ = TMath::Cos(Transform.Forward());
 		DX = TMath::Sin(WorldTransform.Rotation.Y);
 		DZ = TMath::Cos(WorldTransform.Rotation.Y);
-
+		
 		Offset = WorldLocation;
 		LookAt = SVector4{ WorldLocation[X] + DX, WorldLocation[Y], WorldLocation[Z] + DZ, 0.0f };
-		Up = SVector4{ SVector4::Up() };
+		//LookAt = SVector4{  Transform.Forward()), 0.0f };
+		Transform.Forward().Print();
+		Up = SVector4{ Transform.Up() };
 	}
 	else
 	{

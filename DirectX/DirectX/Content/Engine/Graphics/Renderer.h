@@ -106,8 +106,8 @@ private:
 public:
 
 	// The amount of light that is equally applied to all faces.
-	SVector4 AmbiantColour{ 1.0f, 1.0f, 1.0f, 1.0f };
-	float AmbiantLightStregth{ 0.1f };
+	SVector4 AmbiantColour{ 0.0f, 1.0f, 1.0f, 1.0f };
+	float AmbiantLightStregth{ 1.0f };
 
 
 public:
