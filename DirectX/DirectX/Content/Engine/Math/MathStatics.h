@@ -5,10 +5,10 @@
 #include <math.h>
 
 
-#define TO_RADIAN(x) { (float) ((x) * (TMath::Pi / 180.0f)) }
-#define RADIAN { (float) (TMath::Pi * 2.0f) }
-#define TO_DEGREES(x) { (float) ((x) * (180.0f / TMath::Pi)) }
-#define DEGREES { (float) (TMath::Pi / 180.0f) }
+#define TO_RADIAN(X) { ((X) * (TMath::Pi / 180.0f)) }
+#define RADIAN { (TMath::Pi * 2.0f) }
+#define TO_DEGREES(X) { ((X) * (180.0f / TMath::Pi)) }
+#define DEGREES { (TMath::Pi / 180.0f) }
 
 
 

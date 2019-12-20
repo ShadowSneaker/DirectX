@@ -4,6 +4,8 @@
 
 CCamera::CCamera()
 {
+	//Transform.Rotation.X = TMath::Sin(TO_RADIAN(90.0f));
+
 	if (UseLegacyControls)
 	{
 		DX = TMath::Sin(Transform.Rotation.Y);
@@ -101,8 +103,6 @@ SMatrix4 CCamera::GetViewMatrix()
 		
 		Offset = WorldLocation;
 		LookAt = SVector4{ WorldLocation[X] + DX, WorldLocation[Y], WorldLocation[Z] + DZ, 0.0f };
-		//LookAt = SVector4{  Transform.Forward()), 0.0f };
-		Transform.Forward().Print();
 		Up = SVector4{ Transform.Up() };
 	}
 	else
@@ -110,6 +110,7 @@ SMatrix4 CCamera::GetViewMatrix()
 		STransform WorldTransform{ Transform.GetWorldTransform() };
 
 		Offset = WorldTransform.Location;
+
 		LookAt = Offset + WorldTransform.Rotation.GetAxisZ();
 		Up = Transform.Up();
 	}

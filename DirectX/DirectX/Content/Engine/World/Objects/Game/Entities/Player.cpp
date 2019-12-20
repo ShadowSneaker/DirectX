@@ -24,6 +24,7 @@ CPlayer::CPlayer(SObjectBase Base)
 	UpdateScore();
 
 	CharacterComponent->MoveSpeed = 5.0f;
+	Camera->UseLegacyControls = false;
 
 	//Gun = new CGun{ Base };
 	//Gun->Transform.SetParent(&Transform);
@@ -75,8 +76,12 @@ void CPlayer::MoveSideways(float Value)
 {
 	if (Value != 0.0f)
 	{
+		// Based off testing, I think the problem I have with  my camera is not so much to do with the camera, but the math involved.
+		// Currently I am rotating the player instead of the camera, and that visually looks correct. The world rotates around the player correctly.
+		// However, doing this messes up the Transform.Right() and transform.Forward() functions. I Should look at those functions to possibly fix this.
+		// For now, I recommend just replacing Transform.Right() and transform.Forward() to use the cross product using SVector::Up().
+
 		CharacterComponent->Move(Transform.Right(), Value);
-		Transform.Right().Print();
 	}
 }
 
@@ -95,7 +100,9 @@ void CPlayer::Turn(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->Rotate(0.0f, Value * 5.0f * TTime::DeltaTime, 0.0f);
+		//Camera->Rotate(0.0f, Value * 5.0f * TTime::DeltaTime, 0.0f);
+		Camera->Transform.Rotation.Y += Value * 5.0f * TTime::DeltaTime;
+		//Transform.Rotation += SQuaternion::Euler(0.0f, Value * 5.0f * TTime::DeltaTime, 0.0f);
 	}
 }
 

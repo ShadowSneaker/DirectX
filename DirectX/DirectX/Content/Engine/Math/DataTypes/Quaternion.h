@@ -133,7 +133,7 @@ public:
 	{
 		if (ContainsNaN())
 		{
-			printf("Quaternion contains NaN");
+			//printf("Quaternion contains NaN");
 			*const_cast<Quaternion<Type>*>(this) = Quaternion<Type>::Identity;
 		}
 	}
@@ -284,25 +284,33 @@ public:
 	// @return - The constructor quaternion.
 	static Quaternion<Type> Euler(const Vector<3, Type>& Vec)
 	{
-		const Type DivideBy2{ ((Type)TMath::Pi / (Type)180.0f) / (Type)2.0f };
+		SVector Rad{ TO_RADIAN(Vec) };
 
-		Type SPitch{ TMath::Sin(Vec[EAxis::X] * 0.5f) };
-		Type SYaw{ TMath::Sin(Vec[EAxis::Y] * 0.5f) };
-		Type SRoll{ TMath::Sin(Vec[EAxis::Z] * 0.5f) };
+		Type SPitch{ TMath::Sin(Rad[EAxis::X] / 2.0f) };
+		Type SYaw{ TMath::Sin(Rad[EAxis::Y] / 2.0f) };
+		Type SRoll{ TMath::Sin(Rad[EAxis::Z] / 2.0f) };
 
-		Type CPitch{ TMath::Cos(Vec[EAxis::X] * 0.5f) };
-		Type CYaw{ TMath::Cos(Vec[EAxis::Y] * 0.5f) };
-		Type CRoll{ TMath::Cos(Vec[EAxis::Z] * 0.5f) };
+		Type CPitch{ TMath::Cos(Rad[EAxis::X] / 2.0f) };
+		Type CYaw{ TMath::Cos(Rad[EAxis::Y] / 2.0f) };
+		Type CRoll{ TMath::Cos(Rad[EAxis::Z] / 2.0f) };
+
+
+		Quaternion<Type> Result;
+		Result.W = (CPitch * CYaw * CRoll) - (SPitch * SYaw * SRoll);
+		Result.X = (CPitch * CYaw * SRoll) + (SPitch * SYaw * CRoll);
+		Result.Y = (SPitch * CYaw * CRoll) + (CPitch * SYaw * SRoll);
+		Result.Z = (CPitch * SYaw * CRoll) - (SPitch * CYaw * SRoll);
+
+		//Result.W = (CYaw * CPitch * CRoll) - (SYaw * SPitch * SRoll);
+		//Result.X = (CYaw * CPitch * SRoll) - (SYaw * SPitch * CRoll);
+		//Result.Y = (SYaw * CPitch * SRoll) + (CYaw * SPitch * CRoll);
+		//Result.Z = (SYaw * CPitch * CRoll) - (CYaw * SPitch * SRoll);
+
+		//const Type DivideBy2{ ((Type)TMath::PI / (Type)180.0f) / (Type)2.0f };
 
 		//TMath::SinCos(&SPitch, &CPitch, Vector[EAxis::X] * DivideBy2);
 		//TMath::SinCos(&SYaw, &CYaw, Vector[EAxis::Y] * DivideBy2);
 		//TMath::SinCos(&SRoll, &CRoll, Vector[EAxis::Z] * DivideBy2);
-
-		Quaternion<Type> Result;
-		Result.W = (CYaw * CPitch * CRoll) + (SYaw * SPitch * SRoll);
-		Result.X = (CYaw * CPitch * SRoll) - (SYaw * SPitch * CRoll);
-		Result.Y = (SYaw * CPitch * SRoll) + (CYaw * SPitch * CRoll);
-		Result.Z = (SYaw * CPitch * CRoll) - (CYaw * SPitch * SRoll);
 
 		//Result.X = ( CRoll * SPitch * SYaw) - (SRoll * CPitch * CYaw);
 		//Result.Y = ( CRoll * CPitch * SYaw) - (SRoll * SPitch * CYaw);
@@ -313,6 +321,11 @@ public:
 	}
 
 
+	// Converts a float vector of Euler angles (degrees) into a Quaternion.
+	// @param X - The degrees along the X axis.
+	// @param Y - The degrees along the Y axis.
+	// @param Z - The degrees along the Z axis.
+	// @return - The constructor quaternion.
 	static Quaternion<Type> Euler(const Type& X, const Type& Y, const Type& Z)
 	{
 		return Quaternion<Type>::Euler(Vector<3, Type>{ X, Y, Z });
@@ -380,13 +393,7 @@ inline Quaternion<Type> Quaternion<Type>::operator+=(const Quaternion<Type>& Q)
 template <typename Type>
 inline Quaternion<Type> Quaternion<Type>::operator-(const Quaternion<Type>& Q) const
 {
-	return Quaternion<Type>
-	{
-		X - Q.X,
-		Y - Q.Y,
-		Z - Q.Z,
-		W - Q.W
-	};
+	return Quaternion<Type> { X - Q.X, Y - Q.Y, Z - Q.Z, W - Q.W };
 }
 
 
@@ -410,25 +417,25 @@ inline Quaternion<Type> Quaternion<Type>::operator*(const Quaternion<Type>& Q) c
 	// Mask2 = -1.0f,  1.0f,  1.0f, -1.0f
 
 	Quaternion<Type> Result;
-	Result.X = this->W * Q.X;
-	Result.Y = this->W * Q.Y;
-	Result.Z = this->W * Q.Z;
-	Result.W = this->W * Q.W;
+	Result.X = W * Q.X;
+	Result.Y = W * Q.Y;
+	Result.Z = W * Q.Z;
+	Result.W = W * Q.W;
 
-	Result.X += (this->X * Q.W) * (Type)1.0f;
-	Result.Y += (this->X * Q.Z) * (Type)-1.0f;
-	Result.Z += (this->X * Q.Y) * (Type)1.0f;
-	Result.W += (this->X * Q.X) * (Type)-1.0f;
+	Result.X += (X * Q.W) * (Type)1.0f;
+	Result.Y += (X * Q.Z) * (Type)-1.0f;
+	Result.Z += (X * Q.Y) * (Type)1.0f;
+	Result.W += (X * Q.X) * (Type)-1.0f;
 
-	Result.X += (this->Y * Q.Z) * (Type)1.0f;
-	Result.Y += (this->Y * Q.W) * (Type)1.0f;
-	Result.Z += (this->Y * Q.X) * (Type)-1.0f;
-	Result.W += (this->Y * Q.Y) * (Type)-1.0f;
+	Result.X += (Y * Q.Z) * (Type)1.0f;
+	Result.Y += (Y * Q.W) * (Type)1.0f;
+	Result.Z += (Y * Q.X) * (Type)-1.0f;
+	Result.W += (Y * Q.Y) * (Type)-1.0f;
 
-	Result.X += (this->Z * Q.Y) * (Type)-1.0f;
-	Result.Y += (this->Z * Q.X) * (Type)1.0f;
-	Result.Z += (this->Z * Q.W) * (Type)1.0f;
-	Result.W += (this->Z * Q.Z) * (Type)-1.0f;
+	Result.X += (Z * Q.Y) * (Type)-1.0f;
+	Result.Y += (Z * Q.X) * (Type)1.0f;
+	Result.Z += (Z * Q.W) * (Type)1.0f;
+	Result.W += (Z * Q.Z) * (Type)-1.0f;
 
 	CheckNaN();
 	return Result;
@@ -453,13 +460,7 @@ inline Vector<3, Type> Quaternion<Type>::operator*(const Vector<3, Type>& V) con
 template <typename Type>
 inline Quaternion<Type> Quaternion<Type>::operator*(const Type& F) const
 {
-	return Quaternion<Type>
-	{
-		X* F,
-		Y* F,
-		Z* F,
-		W* F
-	};
+	return Quaternion<Type> { X* F, Y* F, Z* F, W* F };
 }
 
 
@@ -479,13 +480,7 @@ template <typename Type>
 inline Quaternion<Type> Quaternion<Type>::operator/(const Type& F) const
 {
 	const Type Recip{ (Type)1.0f / F };
-	return Quaternion
-	{
-		X * Recip,
-		Y * Recip,
-		Z * Recip,
-		W * Recip
-	};
+	return Quaternion{ X * Recip, Y * Recip, Z * Recip, W * Recip };
 }
 
 
@@ -505,39 +500,21 @@ inline Quaternion<Type> Quaternion<Type>::operator/=(const Type& F)
 template <typename Type>
 inline bool Quaternion<Type>::operator==(const Quaternion<Type>& Q) const
 {
-	return
-		(
-			X == Q.X &&
-			Y == Q.Y &&
-			Z == Q.Z &&
-			W == Q.W
-		);
+	return (X == Q.X && Y == Q.Y && Z == Q.Z && W == Q.W);
 }
 
 
 template <typename Type>
 inline bool Quaternion<Type>::operator!=(const Quaternion<Type>& Q) const
 {
-	return
-		(
-			X != Q.X ||
-			Y != Q.Y ||
-			Z != Q.Z ||
-			W != Q.W
-		);
+	return (X != Q.X || Y != Q.Y || Z != Q.Z || W != Q.W);
 }
 
 
 template <typename Type>
 inline Type Quaternion<Type>::operator|(const Quaternion<Type>& Q) const
 {
-	return
-		(
-			(X * Q.X) +
-			(Y * Q.Y) +
-			(Z + Q.Z) +
-			(W + Q.W)
-		);
+	return ((X * Q.X) + (Y * Q.Y) + (Z + Q.Z) + (W + Q.W));
 }
 
 
@@ -627,13 +604,14 @@ Vector<3, Type> Quaternion<Type>::ToEuler() const
 	Result[EAxis::Z] = TMath::ATan2(SinRCosP, CosRCosP);
 
 	Type SinP{ 2.0f * (W * Y - Z * X) };
-	if (TMath::Abs(SinP) >= 1.0f) Result[EAxis::X] = std::copysign(TMath::Pi / 2.0f, SinP);
+	if (TMath::Abs(SinP) >= 1.0f) Result[EAxis::X] = std::copysign(TMath::PI / 2.0f, SinP);
 	else Result[EAxis::X] = TMath::ASin(SinP);
 
 	Type SinYCosP{ 2.0f * (W * Z + X * Y) };
 	Type CosYCosP{ 1.0f - 2.0f * (Y * Y + Z * Z) };
 	Result[EAxis::Y] = TMath::ATan2(SinYCosP, CosYCosP);
-	return Result;
+
+	return TO_DEGREES(Result);
 
 
 	/*const Type SingularityTest{ Type((Z * X) - (W * Y)) };
@@ -803,13 +781,7 @@ inline void Quaternion<Type>::EnforceShortestArcWidth(const Quaternion<Type>& Ot
 template <typename Type>
 inline bool Quaternion<Type>::ContainsNaN() const
 {
-	return
-		(
-			!TMath::IsFinite(X) ||
-			!TMath::IsFinite(Y) ||
-			!TMath::IsFinite(Z) ||
-			!TMath::IsFinite(W)
-		);
+	return (!TMath::IsFinite(X) || !TMath::IsFinite(Y) || !TMath::IsFinite(Z) || !TMath::IsFinite(W));
 }
 
 
