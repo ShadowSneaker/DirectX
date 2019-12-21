@@ -104,10 +104,14 @@ private:
 	class CFont* ScoreText{ nullptr };
 
 public:
+	// I have found out that when I spawn objects it will draw that object after the skybox thus I need to this here.
+	// Personally I'd like to have the skybox always drawn last and this is the only way I can think to do it for the moment.
+	CStaticMesh* SkyBox{ nullptr };
+
 
 	// The amount of light that is equally applied to all faces.
-	SVector4 AmbiantColour{ 0.0f, 1.0f, 1.0f, 1.0f };
-	float AmbiantLightStregth{ 1.0f };
+	SVector4 AmbiantColour{ 1.0f, 1.0f, 1.0f, 1.0f };
+	float AmbiantLightStregth{ 0.1f };
 
 
 public:
@@ -181,6 +185,10 @@ public:
 	// Draws all the objects stored within this class.
 	// Note: does not draw disabled objects.
 	void DrawAll();
+
+	// Draws the specified static mesh object onto the screen.
+	void RenderObject(CStaticMesh* Mesh);
+
 
 
 	/// Setters 

@@ -3,8 +3,8 @@
 #include "Player.h"
 #include "../../../../Components/Graphics/Camera/CameraComponent.h"
 #include "../../../../Components/CharacterComponent.h"
-#include "../Weapons/Gun.h"
-#include "../../../World.h"
+#include "../../../../Components/Graphics/Meshes/StaticMeshComponent.h"
+//#include "../../../World.h"
 #include "../../../../Graphics/Renderer.h"
 #include "../../../../Font/Font.h"
 
@@ -14,21 +14,22 @@
 CPlayer::CPlayer(SObjectBase Base)
 	:CEntity::CEntity{ Base }
 {
+	//Mesh->SetMesh("Sphere.obj");
+	Transform.Scale = 0.5f;
+
 	SetupInput(GetInputManager());
 	Camera = CreateComponent<CCameraComponent>();
-	Camera->Transform.SetParent(&Transform);
-	Camera->Transform.Location = SVector{ 0.0f, 0.0f, -5.0f };
-
+	Camera->Transform.Location = SVector{ 0.0f, 0.0f, -10.0f };
 	GetRenderer()->SetCamera(Camera);
+	CameraOffset = SVector2{ 0.0f, 1.0f };
+
+	Camera->Transform.Location += CameraOffset;
+
 	ScoreText = GetRenderer()->GetScoreText();
 	UpdateScore();
 
-	CharacterComponent->MoveSpeed = 5.0f;
-	Camera->UseLegacyControls = false;
-
-	//Gun = new CGun{ Base };
-	//Gun->Transform.SetParent(&Transform);
-	//Gun->Transform.Location = SVector{ 0.0f, -1.0f, 5.0f };
+	CharacterComponent->MoveSpeed = 75.0f;
+	Camera->UseLegacyControls = true;
 
 	
 }
@@ -36,8 +37,6 @@ CPlayer::CPlayer(SObjectBase Base)
 
 CPlayer::~CPlayer()
 {
-	//GetWorld()->DeleteObject(Gun);
-	delete Gun;
 }
 
 
@@ -47,12 +46,6 @@ void CPlayer::SetupInput(CInputManager* Input)
 	Input->BindAxis("MoveForward", EKey::IE_S, -1.0f);
 	Input->BindAxis("MoveSideways", EKey::IE_D, std::bind(&CPlayer::MoveSideways, this, std::placeholders::_1));
 	Input->BindAxis("MoveSideways", EKey::IE_A, -1.0f);
-	Input->BindAxis("MoveUp", EKey::IE_E, std::bind(&CPlayer::MoveUp, this, std::placeholders::_1));
-	Input->BindAxis("MoveUp", EKey::IE_Q, -1.0f);
-	Input->BindAxis("Turn", EKey::IE_Right, std::bind(&CPlayer::Turn, this, std::placeholders::_1));
-	Input->BindAxis("Turn", EKey::IE_Left, -1.0f);
-
-	Input->BindAction("Shoot", EInputMode::Pressed, EKey::IE_F, std::bind(&CPlayer::Shoot, this, std::placeholders::_1));
 }
 
 
@@ -62,11 +55,23 @@ void CPlayer::Begin()
 }
 
 
+void CPlayer::Update()
+{
+	if (!Camera->Transform.Location.NearlyEqual(Transform.Location, 0.0001f)) 
+	{
+		SVector Location{ Camera->Transform.Location };
+		Location[X] = TMath::Lerp(Location[X], Transform.Location[X] + CameraOffset[X], CamLerpSpeed * TTime::DeltaTime);
+		Location[Y] = TMath::Lerp(Location[Y], Transform.Location[Y] + CameraOffset[Y], CamLerpSpeed * TTime::DeltaTime);
+		Camera->Transform.Location = Location;
+	}
+}
+
+
 void CPlayer::MoveForward(float Value)
 {
 	if (Value != 0.0f)
 	{
-		CharacterComponent->Move(Transform.Forward(), Value);
+		CharacterComponent->Move(SVector::Up(), Value);
 		//Transform.Location += SVector::Forward() * 4.0f * Value * TTime::DeltaTime;
 	}
 }
@@ -76,40 +81,13 @@ void CPlayer::MoveSideways(float Value)
 {
 	if (Value != 0.0f)
 	{
-		// Based off testing, I think the problem I have with  my camera is not so much to do with the camera, but the math involved.
+		// Based off testing, I think the problem I have with my camera is not so much to do with the camera, but the math involved.
 		// Currently I am rotating the player instead of the camera, and that visually looks correct. The world rotates around the player correctly.
 		// However, doing this messes up the Transform.Right() and transform.Forward() functions. I Should look at those functions to possibly fix this.
 		// For now, I recommend just replacing Transform.Right() and transform.Forward() to use the cross product using SVector::Up().
 
-		CharacterComponent->Move(Transform.Right(), Value);
+		CharacterComponent->Move(SVector::Right(), Value);
 	}
-}
-
-
-void CPlayer::MoveUp(float Value)
-{
-	if (Value != 0.0f)
-	{
-		//CharacterComponent->Move(Transform.Up(), Value);
-		Transform.Location += SVector::Up() * 4.0f * Value * TTime::DeltaTime;
-	}
-}
-
-
-void CPlayer::Turn(float Value)
-{
-	if (Value != 0.0f)
-	{
-		//Camera->Rotate(0.0f, Value * 5.0f * TTime::DeltaTime, 0.0f);
-		Camera->Transform.Rotation.Y += Value * 5.0f * TTime::DeltaTime;
-		//Transform.Rotation += SQuaternion::Euler(0.0f, Value * 5.0f * TTime::DeltaTime, 0.0f);
-	}
-}
-
-
-void CPlayer::Shoot(EInputMode InputMode)
-{
-	Gun->Fire();
 }
 
 

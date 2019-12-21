@@ -8,9 +8,15 @@ private:
 	/// Properties
 
 
-	class CGun* Gun{ nullptr };
+
+	/// Camera
 
 	class CCameraComponent* Camera{ nullptr };
+	
+	float CamLerpSpeed{ 25.0f };
+
+	SVector2 CameraOffset;
+
 
 	class CFont* ScoreText{ nullptr };
 
@@ -35,18 +41,14 @@ public:
 
 	virtual void Begin() override;
 
+	virtual void Update() override;
+
 
 	/// Functions
 
 	void MoveForward(float Value);
 
 	void MoveSideways(float Value);
-
-	void MoveUp(float Value);
-
-	void Turn(float Value);
-
-	void Shoot(EInputMode InputMode);
 
 	void UpdateScore();
 

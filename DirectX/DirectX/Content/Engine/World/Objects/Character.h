@@ -10,7 +10,7 @@ class CCharacter :public CPuppet
 public:
 	/// Properties
 
-	//class CSkeletalMesh* Mesh;
+	class CStaticMeshComponent* Mesh;
 
 	class CCharacterComponent* CharacterComponent;
 

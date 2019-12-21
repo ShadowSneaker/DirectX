@@ -9,7 +9,7 @@ private:
 
 
 	//class CStaticMeshComponent* Mesh;
-	class CCubeComponent* Mesh;
+	class CStaticMeshComponent* Mesh;
 
 public:
 	STransform* Camera;
@@ -21,4 +21,7 @@ public:
 
 
 	virtual void Update() override;
+
+
+	INLINE class CStaticMeshComponent* GetMesh() const { return Mesh; }
 };

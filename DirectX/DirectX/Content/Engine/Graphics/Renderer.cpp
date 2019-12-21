@@ -74,117 +74,22 @@ void CRenderer::DeleteAllTextures()
 
 void CRenderer::UpdateObjects()
 {
-	uint VertexCount{ 0 };
+	// I do this to make sure I render the skybox first.
+	// This is important as any object rendered before the skybox
+	// will appear invisible. Although it will still block the sight of other objects
+	// Instead it will create a "window" through the overlapped object.
 
-	STexture* Texture;
-	ID3D11Buffer* Buffer;
-	ID3D11Buffer* VBuffer;
+	// For some reason with this it just does not draw any nealy created objects.
+	// Without the skybox I can see the object and everything is fine.
+	RenderObject(SkyBox);
+
+
 	for (uint i = 0; i < Objects.size(); ++i)
 	{
-		VertexCount += Objects[i]->GetVertexCount();
-
-		Texture = Objects[i]->GetTexture();
-		Buffer = Objects[i]->GetShader().ConstantBuffer;
-		VBuffer = Objects[i]->GetShader().VertexBuffer;
-
-
-		if (Raster) Raster->Release();
-		if (RasterDepth) RasterDepth->Release();
-
-		D3D11_RASTERIZER_DESC Rasterizer;
-		ZeroMemory(&Rasterizer, sizeof(Rasterizer));
-		Rasterizer.FillMode = D3D11_FILL_SOLID;
-		Rasterizer.CullMode = (Objects[i]->InvertFaces) ? D3D11_CULL_FRONT : D3D11_CULL_BACK;
-		Setup->GetDevice()->CreateRasterizerState(&Rasterizer, &Raster);
-
-		D3D11_DEPTH_STENCIL_DESC DSDesc;
-		ZeroMemory(&DSDesc, sizeof(DSDesc));
-		DSDesc.DepthEnable = true;
-		DSDesc.DepthWriteMask = (Objects[i]->InvertFaces) ? D3D11_DEPTH_WRITE_MASK_ZERO : D3D11_DEPTH_WRITE_MASK_ALL;
-		DSDesc.DepthFunc = D3D11_COMPARISON_LESS;
-		Setup->GetDevice()->CreateDepthStencilState(&DSDesc, &RasterDepth);
-
-
-		SMatrix4 World = SMatrix4::GetWorldTransform(Objects[i]->Transform);
-		SMatrix4 View;
-		SMatrix4 Projection;
-
-		float NearClip{ 0.0001f };
-		float FarClip{ 1000.0f };
-		float FOV{ 45.0f };
-		if (SelectedCamera)
+		if (Objects[i] != SkyBox)
 		{
-			View = SelectedCamera->GetViewMatrix();
-			NearClip = SelectedCamera->NearClipPlane;
-			FarClip = SelectedCamera->FarClipPlane;
-			float FOV = SelectedCamera->FieldOfView;
+			RenderObject(Objects[i]);
 		}
-		else
-		{
-			View.Identity();
-		}
-
-		SVector2i Size = Window->GetWindowSize();
-		Projection = SMatrix4::PerspectiveFOV(TO_RADIAN(FOV), (float)Size[X] / (float)Size[Y], NearClip, FarClip);
-
-
-		SVector4 Rot{ DirectionalLight->Transform.Rotation.GetAsVector() };
-
-
-		SMatrix4 Transpose{ SMatrix4::Transpose(World) };
-
-		if (Objects[i]->Reflect)
-		{
-			SReflectBuffer RBValues;
-			RBValues.WorldMatrix = World * View;
-			RBValues.ViewMatrix = World * View * Projection;
-			Setup->GetDeviceContext()->UpdateSubresource(Buffer, 0, 0, &RBValues, 0, 0);
-
-		}
-		else
-		{
-			SCBuffer CBValues;
-			CBValues.LightColour = DirectionalLight->Colour * DirectionalLight->Strength;
-			CBValues.AmbiantLight = AmbiantColour * AmbiantLightStregth;
-			CBValues.DirectionalLight = Transpose.VectorTransform(Rot);
-			CBValues.DirectionalLight = Rot.Normalize();
-
-
-			CBValues.ViewMatrix = World * View * Projection;
-			Setup->GetDeviceContext()->UpdateSubresource(Buffer, 0, 0, &CBValues, 0, 0);
-		}
-
-
-		// Not sure if it's a good idea to have this here, however, by putting this here I am able to change the colour of objects during runtime.
-
-		std::vector<SVertex> Vertices = Objects[i]->GetVertices();
-		uint VertexCount = Objects[i]->GetVertexCount();
-
-		D3D11_MAPPED_SUBRESOURCE MS;
-		Setup->GetDeviceContext()->Map(VBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &MS);
-		//memcpy(MS.pData, &Objects[i]->GetVertices(), sizeof(Objects[i]->GetVertices()[0]) * Objects[i]->GetVertexCount());
-		memcpy(MS.pData, &Objects[i]->GetVertices()[0], sizeof(Objects[i]->GetVertices()[0]) * Objects[i]->GetVertices().size());
-
-		Setup->GetDeviceContext()->Unmap(VBuffer, NULL);
-
-
-
-		Setup->GetDeviceContext()->VSSetConstantBuffers(0, 1, &Buffer);
-
-		uint Stride = sizeof(SVertex);
-		uint Offset = 0;
-
-		Setup->GetDeviceContext()->IASetInputLayout(Objects[i]->GetShader().InputLayout);
-		Setup->GetDeviceContext()->VSSetShader(Objects[i]->GetShader().VertexShader, 0, 0);
-		Setup->GetDeviceContext()->PSSetShader(Objects[i]->GetShader().PixelShader, 0, 0);
-		Setup->GetDeviceContext()->IASetVertexBuffers(0, 1, &VBuffer, &Stride, &Offset);
-		Setup->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		Setup->GetDeviceContext()->PSSetSamplers(0, 1, &Sampler);
-		Setup->GetDeviceContext()->PSSetShaderResources(0, 1, &Texture);
-		Setup->GetDeviceContext()->RSSetState(Raster);
-		Setup->GetDeviceContext()->OMSetDepthStencilState(RasterDepth, 0);
-
-		Setup->GetDeviceContext()->Draw(Objects[i]->GetVertexCount(), 0);
 	}
 }
 
@@ -570,4 +475,115 @@ void CRenderer::DrawAll()
 	ScoreText->RenderText();
 
 	Setup->GetSwapChain()->Present(0, 0);
+}
+
+
+void CRenderer::RenderObject(CStaticMesh* Mesh)
+{
+	STexture* Texture;
+	ID3D11Buffer* Buffer;
+	ID3D11Buffer* VBuffer;
+
+	Texture = Mesh->GetTexture();
+	Buffer = Mesh->GetShader().ConstantBuffer;
+	VBuffer = Mesh->GetShader().VertexBuffer;
+
+
+	if (Raster) Raster->Release();
+	if (RasterDepth) RasterDepth->Release();
+
+	D3D11_RASTERIZER_DESC Rasterizer;
+	ZeroMemory(&Rasterizer, sizeof(Rasterizer));
+	Rasterizer.FillMode = D3D11_FILL_SOLID;
+	Rasterizer.CullMode = (Mesh->InvertFaces) ? D3D11_CULL_FRONT : D3D11_CULL_BACK;
+	Setup->GetDevice()->CreateRasterizerState(&Rasterizer, &Raster);
+
+	D3D11_DEPTH_STENCIL_DESC DSDesc;
+	ZeroMemory(&DSDesc, sizeof(DSDesc));
+	DSDesc.DepthEnable = true;
+	DSDesc.DepthWriteMask = (Mesh->InvertFaces) ? D3D11_DEPTH_WRITE_MASK_ZERO : D3D11_DEPTH_WRITE_MASK_ALL;
+	DSDesc.DepthFunc = D3D11_COMPARISON_LESS;
+	Setup->GetDevice()->CreateDepthStencilState(&DSDesc, &RasterDepth);
+
+
+	SMatrix4 World = SMatrix4::GetWorldTransform(Mesh->Transform);
+	SMatrix4 View;
+	SMatrix4 Projection;
+
+	float NearClip{ 0.0001f };
+	float FarClip{ 1000.0f };
+	float FOV{ 45.0f };
+	if (SelectedCamera)
+	{
+		View = SelectedCamera->GetViewMatrix();
+		NearClip = SelectedCamera->NearClipPlane;
+		FarClip = SelectedCamera->FarClipPlane;
+		float FOV = SelectedCamera->FieldOfView;
+	}
+	else
+	{
+		View.Identity();
+	}
+
+	SVector2i Size = Window->GetWindowSize();
+	Projection = SMatrix4::PerspectiveFOV(TO_RADIAN(FOV), (float)Size[X] / (float)Size[Y], NearClip, FarClip);
+
+
+	SVector4 Rot{ DirectionalLight->Transform.Rotation.GetAsVector() };
+
+
+	SMatrix4 Transpose{ SMatrix4::Transpose(World) };
+
+	if (Mesh->Reflect)
+	{
+		SReflectBuffer RBValues;
+		RBValues.WorldMatrix = World * View;
+		RBValues.ViewMatrix = World * View * Projection;
+		Setup->GetDeviceContext()->UpdateSubresource(Buffer, 0, 0, &RBValues, 0, 0);
+
+	}
+	else
+	{
+		SCBuffer CBValues;
+		CBValues.LightColour = DirectionalLight->Colour * DirectionalLight->Strength;
+		CBValues.AmbiantLight = AmbiantColour * AmbiantLightStregth;
+		CBValues.DirectionalLight = Transpose.VectorTransform(Rot);
+		CBValues.DirectionalLight = Rot.Normalize();
+
+
+		CBValues.ViewMatrix = World * View * Projection;
+		Setup->GetDeviceContext()->UpdateSubresource(Buffer, 0, 0, &CBValues, 0, 0);
+	}
+
+
+	// Not sure if it's a good idea to have this here, however, by putting this here I am able to change the colour of objects during runtime.
+
+	std::vector<SVertex> Vertices = Mesh->GetVertices();
+	uint VertexCount = Mesh->GetVertexCount();
+
+	D3D11_MAPPED_SUBRESOURCE MS;
+	Setup->GetDeviceContext()->Map(VBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &MS);
+	//memcpy(MS.pData, &Objects[i]->GetVertices(), sizeof(Objects[i]->GetVertices()[0]) * Objects[i]->GetVertexCount());
+	memcpy(MS.pData, &Mesh->GetVertices()[0], sizeof(Mesh->GetVertices()[0]) * Mesh->GetVertices().size());
+
+	Setup->GetDeviceContext()->Unmap(VBuffer, NULL);
+
+
+
+	Setup->GetDeviceContext()->VSSetConstantBuffers(0, 1, &Buffer);
+
+	uint Stride = sizeof(SVertex);
+	uint Offset = 0;
+
+	Setup->GetDeviceContext()->IASetInputLayout(Mesh->GetShader().InputLayout);
+	Setup->GetDeviceContext()->VSSetShader(Mesh->GetShader().VertexShader, 0, 0);
+	Setup->GetDeviceContext()->PSSetShader(Mesh->GetShader().PixelShader, 0, 0);
+	Setup->GetDeviceContext()->IASetVertexBuffers(0, 1, &VBuffer, &Stride, &Offset);
+	Setup->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	Setup->GetDeviceContext()->PSSetSamplers(0, 1, &Sampler);
+	Setup->GetDeviceContext()->PSSetShaderResources(0, 1, &Texture);
+	Setup->GetDeviceContext()->RSSetState(Raster);
+	Setup->GetDeviceContext()->OMSetDepthStencilState(RasterDepth, 0);
+
+	Setup->GetDeviceContext()->Draw(Mesh->GetVertexCount(), 0);
 }

@@ -5,14 +5,10 @@
 #include "Objects/Game/Floor.h"
 #include "Objects/Game/Entities/Player.h"
 #include "Objects/Testing/SkyBox.h"
-//#include "Objects/Testing/TestPlayer.h"
 #include "../Components/Graphics/Camera/CameraComponent.h"
-//#include "Objects/Testing/TestMove.h"
-
-//#include "../Components/Graphics/Meshes/StaticMeshComponent.h"
 
 
-const std::string CLevel::DefaultFilePath{ "Content/Assets/Levels/" };
+//const std::string CLevel::DefaultFilePath{ "Content/Assets/Levels/" };
 
 
 CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
@@ -41,6 +37,7 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 	{
 		// Log error
 		// Debug->LogError("Error: Could not open level: " + FilePath.GetFilePath());
+		std::runtime_error("Could not open level: " + FilePath.GetFilePath());
 		GetWorld()->CloseLevel(this);
 	}
 	else
@@ -49,6 +46,7 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 		CPlayer* Player = SpawnObject<CPlayer>();
 		CTestSkyBox* Sky = SpawnObject<CTestSkyBox>();
 		Sky->Camera = &Player->GetCamera()->Transform;
+
 
 		//Sky->Camera = &Player->GetCamera()->Transform;
 		//Sky->Transform.SetParent(&Player->Transform);

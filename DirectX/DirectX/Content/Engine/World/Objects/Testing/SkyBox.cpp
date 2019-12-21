@@ -1,12 +1,13 @@
 #include "SkyBox.h"
 #include "../../../Components/Graphics/Meshes/StaticMeshComponent.h"
-#include "../../../Components/Graphics/Meshes/CubeComponent.h"
+#include "../../../Graphics/Renderer.h"
 
 
 CTestSkyBox::CTestSkyBox(SObjectBase Base)
 	:CWorldObject::CWorldObject{ Base }
 {
-	Mesh = CreateComponent<CCubeComponent>();
+	Mesh = CreateComponent<CStaticMeshComponent>();
+	Mesh->SetMesh("Cube.obj");
 	Mesh->SetShader("SkyBox.hlsl");
 	Mesh->SetTexture("skybox02.dds");
 	Mesh->InvertFaces = true;
@@ -14,6 +15,7 @@ CTestSkyBox::CTestSkyBox(SObjectBase Base)
 	Mesh->Transform.Scale = 1.0f;
 	Mesh->SetColour(SColour::White());
 
+	GetRenderer()->SkyBox = Mesh;
 }
 
 
