@@ -3,6 +3,10 @@
 #include "../Math/DataTypes/Matrix.h"
 
 
+// So I think the reason why the camera was rotating around a point could possibly be because it was rotating the object
+// then offseting the object. This makes sense as it would cause the object to rotate around the origin point.
+// Although this is still a guess and I have no idea how to fix it. 
+
 
 class CCamera
 {
@@ -67,5 +71,7 @@ public:
 	/// Getters
 
 	
+	SVector GetForward() const;
 
+	SVector GetRight() const;
 };

@@ -4,6 +4,7 @@
 #include "../../../../Components/Graphics/Camera/CameraComponent.h"
 #include "../../../../Components/CharacterComponent.h"
 #include "../../../../Components/Graphics/Meshes/StaticMeshComponent.h"
+#include "../../../../Components/Physics/CapsuleComponent.h"
 //#include "../../../World.h"
 #include "../../../../Graphics/Renderer.h"
 #include "../../../../Font/Font.h"
@@ -14,7 +15,10 @@
 CPlayer::CPlayer(SObjectBase Base)
 	:CEntity::CEntity{ Base }
 {
-	//Mesh->SetMesh("Sphere.obj");
+	Mesh->SetMesh("Sphere.obj");
+	Mesh->SetShader("Shaders.hlsl");
+	CapsuleCollider->SetVertices(&Mesh->Vertices);
+
 	Transform.Scale = 0.5f;
 
 	SetupInput(GetInputManager());
@@ -28,9 +32,8 @@ CPlayer::CPlayer(SObjectBase Base)
 	ScoreText = GetRenderer()->GetScoreText();
 	UpdateScore();
 
-	CharacterComponent->MoveSpeed = 75.0f;
-	Camera->UseLegacyControls = true;
-
+	CharacterComponent->RunSpeed = 75.0f;
+	CharacterComponent->GravityScale = 1.0f;
 	
 }
 
@@ -46,24 +49,34 @@ void CPlayer::SetupInput(CInputManager* Input)
 	Input->BindAxis("MoveForward", EKey::IE_S, -1.0f);
 	Input->BindAxis("MoveSideways", EKey::IE_D, std::bind(&CPlayer::MoveSideways, this, std::placeholders::_1));
 	Input->BindAxis("MoveSideways", EKey::IE_A, -1.0f);
+
+	Input->BindAxis("Turn", EKey::IE_Right, std::bind(&CPlayer::Turn, this, std::placeholders::_1));
+	Input->BindAxis("Turn", EKey::IE_Left, -1.0f);
+
+	Input->BindAction("Jump", EInputMode::Pressed, EKey::IE_Space, std::bind(&CPlayer::Jump, this, std::placeholders::_1));
 }
 
 
 void CPlayer::Begin()
 {
-	
+	Transform.Location[Y] = 1.0f;
 }
 
 
 void CPlayer::Update()
 {
-	if (!Camera->Transform.Location.NearlyEqual(Transform.Location, 0.0001f)) 
+	CEntity::Update();
+	/*if (!Camera->Transform.Location.NearlyEqual(Transform.Location, 0.0001f)) 
 	{
 		SVector Location{ Camera->Transform.Location };
 		Location[X] = TMath::Lerp(Location[X], Transform.Location[X] + CameraOffset[X], CamLerpSpeed * TTime::DeltaTime);
 		Location[Y] = TMath::Lerp(Location[Y], Transform.Location[Y] + CameraOffset[Y], CamLerpSpeed * TTime::DeltaTime);
 		Camera->Transform.Location = Location;
-	}
+
+	}*/
+
+	// Due to the nature of how the camera works, I have to set the location of the camera manually instead of just setting it as a parent.
+	Camera->Transform.Location = Transform.Location;
 }
 
 
@@ -71,7 +84,7 @@ void CPlayer::MoveForward(float Value)
 {
 	if (Value != 0.0f)
 	{
-		CharacterComponent->Move(SVector::Up(), Value);
+		CharacterComponent->Move(Camera->GetForward(), Value);
 		//Transform.Location += SVector::Forward() * 4.0f * Value * TTime::DeltaTime;
 	}
 }
@@ -86,8 +99,23 @@ void CPlayer::MoveSideways(float Value)
 		// However, doing this messes up the Transform.Right() and transform.Forward() functions. I Should look at those functions to possibly fix this.
 		// For now, I recommend just replacing Transform.Right() and transform.Forward() to use the cross product using SVector::Up().
 
-		CharacterComponent->Move(SVector::Right(), Value);
+		CharacterComponent->Move(Camera->GetRight(), Value);
 	}
+}
+
+
+void CPlayer::Turn(float Value)
+{
+	if (Value != 0.0f)
+	{
+		Camera->Rotate(0.0f, 5.0f * Value * TTime::DeltaTime, 0.0f);
+	}
+}
+
+
+void CPlayer::Jump(EInputMode InputMode)
+{
+	CharacterComponent->Jump();
 }
 
 

@@ -116,3 +116,15 @@ SMatrix4 CCamera::GetViewMatrix()
 	}
 	return SMatrix4::LookAt(Offset, LookAt, Up);
 }
+
+
+SVector CCamera::GetForward() const
+{
+	return SVector{ DX, 0.0f, DZ };
+}
+
+
+SVector CCamera::GetRight() const
+{
+	return -SVector::CrossProduct(GetForward(), SVector::Up());
+}

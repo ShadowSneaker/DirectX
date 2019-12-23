@@ -43,7 +43,7 @@ void CStaminaComponent::Sprint()
 	if (Stamina > 0.0f && CanSprint)
 	{
 		Sprinting = true;
-		Movement->MovementType = EMovementType::Sprinting;
+		Movement->SetMovementMode(EMovementType::Sprinting);
 	}
 }
 
@@ -51,7 +51,7 @@ void CStaminaComponent::Sprint()
 void CStaminaComponent::StopSprinting()
 {
 	Sprinting = false;
-	Movement->MovementType = EMovementType::Running;
+	Movement->SetMovementMode(EMovementType::Running);
 	Stamina.ResetDelay();
 }
 

@@ -9,12 +9,14 @@ CCharacter::CCharacter(SObjectBase Core)
 	:CPuppet::CPuppet{ Core }
 {
 	Mesh = CreateComponent<CStaticMeshComponent>();
-	Mesh->SetMesh("Cube.obj");
+	Mesh->SetMesh("Sphere.obj");
 	Mesh->SetShader("Shaders.hlsl");
 	Mesh->Transform.SetParent(&Transform);
 
 	CharacterComponent = CreateComponent<CCharacterComponent>();
-	//CapsuleCollider = CreateComponent<CCapsuleComponent>();
+	CapsuleCollider = CreateComponent<CCapsuleComponent>();
+	CharacterComponent->Collider = CapsuleCollider;
+	CapsuleCollider->SetVertices(&Mesh->Vertices);
 }
 
 

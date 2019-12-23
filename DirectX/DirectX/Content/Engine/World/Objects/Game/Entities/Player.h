@@ -50,6 +50,10 @@ public:
 
 	void MoveSideways(float Value);
 
+	void Turn(float Value);
+
+	void Jump(EInputMode InputMode);
+
 	void UpdateScore();
 
 

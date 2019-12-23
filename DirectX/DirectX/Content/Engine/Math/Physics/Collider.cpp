@@ -69,12 +69,15 @@ bool CCollider::CheckSATCollision(std::vector<SVector> Normals, const CCollider*
 
 bool CCollider::SATCollision(const CCollider* Other) const
 {
-	//if (Vertices->size() > 0 && Other->Vertices->size() > 0)
-	//{
-	if (!CheckSATCollision(GetNormals(), Other)) return false;
-	if (!CheckSATCollision(Other->GetNormals(), this)) return false;
-	//return true;
-//}
+	if (Vertices)
+	{
+		if (Vertices->size() > 0 && Other->Vertices->size() > 0)
+		{
+			if (!CheckSATCollision(GetNormals(), Other)) return false;
+			if (!CheckSATCollision(Other->GetNormals(), this)) return false;
+			return true;
+		}
+	}
 	return true;
 }
 
