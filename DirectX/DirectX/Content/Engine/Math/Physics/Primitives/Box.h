@@ -14,7 +14,6 @@ public:
 
 
 public:
-public:
 	/// Constructors
 
 	// Constructor, Default.

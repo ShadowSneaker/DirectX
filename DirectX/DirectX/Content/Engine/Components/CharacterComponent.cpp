@@ -14,6 +14,8 @@ CCharacterComponent::CCharacterComponent(SComponentInfo Info)
 
 void CCharacterComponent::Update()
 {
+	SetMovementMode(MovementType);
+
 	if (Collider)
 	{
 		SVector NewLocation{ GetPhysics()->Gravity * TTime::DeltaTime };

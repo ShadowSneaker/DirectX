@@ -24,6 +24,10 @@ void TTime::Update()
 		return;
 	}
 
+	int64 CountsPerSecond;
+	QueryPerformanceCounter((LARGE_INTEGER*)&CountsPerSecond);
+	SecondsPerCount = 1.0f / (float)CountsPerSecond;
+
 	QueryPerformanceCounter((LARGE_INTEGER*) &CurrentTime);
 	DeltaTime = ((CurrentTime - PreviousTime) * SecondsPerCount) * 5000.0f * TimeScale;
 

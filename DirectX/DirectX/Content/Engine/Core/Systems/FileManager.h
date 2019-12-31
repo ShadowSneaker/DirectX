@@ -129,7 +129,7 @@ public:
 	// @return - Returns a copy of every line in the file.
 	static SFileInfo ReadFile(String FilePath);
 
-
+	// Returns true if the file exists.
 	static bool DoesFileExist(String FilePath)
 	{
 		FILE* File;
@@ -143,14 +143,28 @@ public:
 		return false;
 	}
 
-
+	// Reads the contents of the file and stores it in an array of strings.
+	// @param FilePath - The file location of the file to read.
+	// @return - Returns every line of the file in a array of strings.
 	static SStringBlock ReadFileAlt(String FilePath);
 
+	// Reads a string and converts every word in the string into a seperate index in an array.
+	// @param Data - The string to read.
+	// @return - The converted string.
 	static SStringBlock LineToWord(String Data);
 
-	template <uint Size, typename Type>
+	// Reads a string and converts every number into a vector.
+	// @template Size - The amount of dimensions the vector should have.
+	// @template Type - The datatype the vector should have.
+	// @param DataLine - The string to read.
+	// @return - A vector with the values in the file.
+	template <uint Size, typename Type = float>
 	static Vector<Size, Type> ReadVector(String DataLine);
 
+	// Converts a string to a number.
+	// @template Type - The datatype the string should be converted to.
+	// @param Data - The string of the value to convert.
+	// @return - The converted value.
 	template <typename Type>
 	static Type GetValue(String Data)
 	{
@@ -158,8 +172,6 @@ public:
 		Type Value;
 		ISS >> Value;
 		return Value;
-		//return (Type)atoi(Data.c_str());
-		
 	}
 };
 

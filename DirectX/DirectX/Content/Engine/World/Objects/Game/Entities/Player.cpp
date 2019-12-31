@@ -32,7 +32,7 @@ CPlayer::CPlayer(SObjectBase Base)
 	ScoreText = GetRenderer()->GetScoreText();
 	UpdateScore();
 
-	CharacterComponent->RunSpeed = 75.0f;
+	CharacterComponent->RunSpeed = 10.0f;
 	CharacterComponent->GravityScale = 1.0f;
 	
 }
@@ -108,7 +108,7 @@ void CPlayer::Turn(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->Rotate(0.0f, 5.0f * Value * TTime::DeltaTime, 0.0f);
+		Camera->Rotate(0.0f, Value * TTime::DeltaTime, 0.0f);
 	}
 }
 

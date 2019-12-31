@@ -101,6 +101,8 @@ public:
 	// Allows the update function to run.
 	bool Active{ true };
 
+
+
 public:
 	/// Constructors
 
@@ -111,8 +113,17 @@ public:
 	~CTimerManager();
 
 
+private:
 	/// Functions.
 
+	// Deletes a timer from the manager based on an index.
+	// @param Index - The index of the timer to remove.
+	void DeleteTimerIndex(uint Index);
+
+	// Delets all the timers from the manager.
+	void DeleteAllTimers();
+
+public:
 	// Updates all the timers in this manager.
 	void Update();
 
@@ -138,12 +149,4 @@ public:
 	// Deletes a specified timer from the manager.
 	// @param Timer - A reference to the timer to be deleted.
 	void DeleteTimer(STimer* Timer);
-
-private:
-	// Deletes a timer from the manager based on an index.
-	// @param Index - The index of the timer to remove.
-	void DeleteTimerIndex(uint Index);
-
-	// Delets all the timers from the manager.
-	void DeleteAllTimers();
 };

@@ -137,7 +137,7 @@ private:
 	void DeleteAllTextures();
 
 	// Updates all objects visuals in the world.
-	void UpdateObjects() ;
+	void UpdateObjects();
 
 	// Updates all the lights in the world.
 	void UpdateLights() const;
