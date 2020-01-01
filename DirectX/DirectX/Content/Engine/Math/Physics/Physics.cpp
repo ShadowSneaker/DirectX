@@ -249,7 +249,7 @@ std::vector<SCollision> CPhysics::QuerryCollisions(CCollider* Collider, bool Ign
 	std::vector<SCollision> Results;
 	for (uint i = 0; i < Bodies.size(); ++i)
 	{
-		if (Bodies[i]->Collider != Collider || !IgnoreSelf)
+		if (Bodies[i]->Collider->Owner != Collider->Owner || !IgnoreSelf)
 		{
 			if (Collider->CheckCollision(Bodies[i]->Collider))
 			{

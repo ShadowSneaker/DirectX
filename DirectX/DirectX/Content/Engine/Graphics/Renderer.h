@@ -187,7 +187,7 @@ public:
 	void DrawAll();
 
 	// Draws the specified static mesh object onto the screen.
-	void RenderObject(CStaticMesh* Mesh);
+	void RenderObject(CStaticMesh* Mesh, SMatrix4 View, SMatrix4 Projection, SVector4 Rot);
 
 
 

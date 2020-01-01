@@ -4,7 +4,7 @@
 #include "../../../../Components/Graphics/Camera/CameraComponent.h"
 #include "../../../../Components/CharacterComponent.h"
 #include "../../../../Components/Graphics/Meshes/StaticMeshComponent.h"
-#include "../../../../Components/Physics/CapsuleComponent.h"
+#include "../../../../Components/Physics/BoxComponent.h"
 //#include "../../../World.h"
 #include "../../../../Graphics/Renderer.h"
 #include "../../../../Font/Font.h"
@@ -17,7 +17,7 @@ CPlayer::CPlayer(SObjectBase Base)
 {
 	Mesh->SetMesh("Sphere.obj");
 	Mesh->SetShader("Shaders.hlsl");
-	CapsuleCollider->SetVertices(&Mesh->Vertices);
+	BoxCollider->SetVertices(&Mesh->Vertices);
 
 	Transform.Scale = 0.5f;
 
@@ -108,7 +108,7 @@ void CPlayer::Turn(float Value)
 {
 	if (Value != 0.0f)
 	{
-		Camera->Rotate(0.0f, Value * TTime::DeltaTime, 0.0f);
+		Camera->Rotate(0.0f, RotationSpeed * Value * TTime::DeltaTime, 0.0f);
 	}
 }
 
@@ -122,4 +122,11 @@ void CPlayer::Jump(EInputMode InputMode)
 void CPlayer::UpdateScore()
 {
 	ScoreText->SetText("Score " + std::to_string(Score));
+}
+
+
+void CPlayer::AddPoints(uint Amount)
+{
+	Score += Amount;
+	UpdateScore();
 }

@@ -18,12 +18,18 @@ void CCharacterComponent::Update()
 
 	if (Collider)
 	{
-		SVector NewLocation{ GetPhysics()->Gravity * TTime::DeltaTime };
-		GetOwner()->Transform.Location += NewLocation;
-		std::vector<SCollision> Collisions{ GetPhysics()->QuerryCollisions(Collider) };
-		if (Collisions.size() > 0)
+		if (TTime::DeltaTime < 1.0f)
 		{
-			GetOwner()->Transform.Location -= NewLocation;
+			//SVector NewLocation{ (GetPhysics()->Gravity + Velocity) * TTime::DeltaTime };
+			Velocity += GetPhysics()->Gravity * TTime::DeltaTime;
+			GetOwner()->Transform.Location += Velocity * TTime::DeltaTime;
+			std::vector<SCollision> Collisions{ GetPhysics()->QuerryCollisions(Collider) };
+			if (Collisions.size() > 0)
+			{
+				GetOwner()->Transform.Location -= Velocity * TTime::DeltaTime;
+				Velocity[Y] = 0.0f;
+				OnGround = true;
+			}
 		}
 	}
 }
@@ -35,22 +41,29 @@ void CCharacterComponent::Move(SVector Direction, float Axis, bool ForceMove)
 
 	if (!ForceMove)
 	{
-		// Do collision check
-		// if (Collision)
-		//{
-		//	Move back the object.
-		//	return;
-		//}
+		GetOwner()->Transform.Location += Location;
+		std::vector<SCollision> Collisions{ GetPhysics()->QuerryCollisions(Collider)};
+		if (Collisions.size() > 0)
+		{
+			GetOwner()->Transform.Location -= Location;
+		}
+	}
+	else
+	{
+		GetOwner()->Transform.Location += Location;
 	}
 
-	GetOwner()->Transform.Location += Location;
 }
 
 
 
 void CCharacterComponent::Jump()
 {
-
+	if (OnGround)
+	{
+		Velocity[Y] = JumpStrength;
+		OnGround = false;
+	}
 }
 
 

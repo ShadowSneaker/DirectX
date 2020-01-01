@@ -20,6 +20,7 @@ private:
 
 	class CFont* ScoreText{ nullptr };
 
+	float RotationSpeed{ 2.0f };
 
 	uint Score{ 0 };
 
@@ -55,6 +56,8 @@ public:
 	void Jump(EInputMode InputMode);
 
 	void UpdateScore();
+
+	void AddPoints(uint Amount);
 
 
 	INLINE class CCameraComponent* GetCamera() const { return Camera; }

@@ -14,7 +14,7 @@ public:
 
 	class CCharacterComponent* CharacterComponent;
 
-	class CCapsuleComponent* CapsuleCollider;
+	class CBoxComponent* BoxCollider;
 
 public:
 	/// Constructors

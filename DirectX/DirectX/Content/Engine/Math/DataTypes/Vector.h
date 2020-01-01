@@ -1372,9 +1372,9 @@ INLINE bool Vector<Size, Element>::ContainsNaN() const
 {
 	for (uint i = 0; i < Size; ++i)
 	{
-		if (TMath::IsFinite(Data[i])) return false;
+		if (!TMath::IsFinite(Data[i])) return true;
 	}
-	return true;
+	return false;
 }
 
 
@@ -1424,7 +1424,7 @@ INLINE Element Vector<Size, Element>::MaxComp() const
 	{
 		Result = (Result > Data[i]) ? Result : Data[i];
 	}
-	if (TMath::IsFinite(Result)) Result = 0.0f;
+	if (!TMath::IsFinite(Result)) Result = 0.0f;
 	return Result;
 }
 

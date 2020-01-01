@@ -60,7 +60,13 @@ bool CBox::CheckCollision(const CBox* Other) const
 	{
 		if (SVector::NearlyEqual(Other->Transform.Up(), SVector::Up(), SMALL_NUMBER))
 		{
+			SVector Dist1{ (Other->GetMinExtents() - GetMaxExtents()) };
+			SVector Dist2{ (GetMinExtents() - Other->GetMaxExtents()) };
 
+			SVector Distance{ SVector::Max(Dist1, Dist2) };
+			float MaxDistance{ Distance.MaxComp() };
+
+			return (MaxDistance < 0.0f);
 		}
 	}
 #endif

@@ -74,6 +74,31 @@ void CRenderer::DeleteAllTextures()
 
 void CRenderer::UpdateObjects()
 {
+	SMatrix4 View;
+	SMatrix4 Projection;
+
+	float NearClip{ 0.0001f };
+	float FarClip{ 1000.0f };
+	float FOV{ 45.0f };
+	if (SelectedCamera)
+	{
+		View = SelectedCamera->GetViewMatrix();
+		NearClip = SelectedCamera->NearClipPlane;
+		FarClip = SelectedCamera->FarClipPlane;
+		float FOV = SelectedCamera->FieldOfView;
+	}
+	else
+	{
+		View.Identity();
+	}
+
+	SVector2i Size = Window->GetWindowSize();
+	Projection = SMatrix4::PerspectiveFOV(TO_RADIAN(FOV), (float)Size[X] / (float)Size[Y], NearClip, FarClip);
+
+
+	SVector4 Rot{ DirectionalLight->Transform.Rotation.GetAsVector() };
+
+
 	// I do this to make sure I render the skybox first.
 	// This is important as any object rendered before the skybox
 	// will appear invisible. Although it will still block the sight of other objects
@@ -81,14 +106,14 @@ void CRenderer::UpdateObjects()
 
 	// For some reason with this it just does not draw any nealy created objects.
 	// Without the skybox I can see the object and everything is fine.
-	RenderObject(SkyBox);
+	RenderObject(SkyBox, View, Projection, Rot);
 
 
 	for (uint i = 0; i < Objects.size(); ++i)
 	{
 		if (Objects[i] != SkyBox)
 		{
-			RenderObject(Objects[i]);
+			RenderObject(Objects[i], View, Projection, Rot);
 		}
 	}
 }
@@ -478,7 +503,7 @@ void CRenderer::DrawAll()
 }
 
 
-void CRenderer::RenderObject(CStaticMesh* Mesh)
+void CRenderer::RenderObject(CStaticMesh* Mesh, SMatrix4 View, SMatrix4 Projection, SVector4 Rot)
 {
 	STexture* Texture;
 	ID3D11Buffer* Buffer;
@@ -507,29 +532,7 @@ void CRenderer::RenderObject(CStaticMesh* Mesh)
 
 
 	SMatrix4 World = SMatrix4::GetWorldTransform(Mesh->Transform);
-	SMatrix4 View;
-	SMatrix4 Projection;
-
-	float NearClip{ 0.0001f };
-	float FarClip{ 1000.0f };
-	float FOV{ 45.0f };
-	if (SelectedCamera)
-	{
-		View = SelectedCamera->GetViewMatrix();
-		NearClip = SelectedCamera->NearClipPlane;
-		FarClip = SelectedCamera->FarClipPlane;
-		float FOV = SelectedCamera->FieldOfView;
-	}
-	else
-	{
-		View.Identity();
-	}
-
-	SVector2i Size = Window->GetWindowSize();
-	Projection = SMatrix4::PerspectiveFOV(TO_RADIAN(FOV), (float)Size[X] / (float)Size[Y], NearClip, FarClip);
-
-
-	SVector4 Rot{ DirectionalLight->Transform.Rotation.GetAsVector() };
+	
 
 
 	SMatrix4 Transpose{ SMatrix4::Transpose(World) };
@@ -555,18 +558,12 @@ void CRenderer::RenderObject(CStaticMesh* Mesh)
 		Setup->GetDeviceContext()->UpdateSubresource(Buffer, 0, 0, &CBValues, 0, 0);
 	}
 
-
-	// Not sure if it's a good idea to have this here, however, by putting this here I am able to change the colour of objects during runtime.
-
-	std::vector<SVertex> Vertices = Mesh->GetVertices();
-	uint VertexCount = Mesh->GetVertexCount();
-
-	D3D11_MAPPED_SUBRESOURCE MS;
+	/*D3D11_MAPPED_SUBRESOURCE MS;
 	Setup->GetDeviceContext()->Map(VBuffer, NULL, D3D11_MAP_WRITE_DISCARD, NULL, &MS);
 	//memcpy(MS.pData, &Objects[i]->GetVertices(), sizeof(Objects[i]->GetVertices()[0]) * Objects[i]->GetVertexCount());
 	memcpy(MS.pData, &Mesh->GetVertices()[0], sizeof(Mesh->GetVertices()[0]) * Mesh->GetVertices().size());
 
-	Setup->GetDeviceContext()->Unmap(VBuffer, NULL);
+	Setup->GetDeviceContext()->Unmap(VBuffer, NULL);*/
 
 
 
@@ -579,11 +576,11 @@ void CRenderer::RenderObject(CStaticMesh* Mesh)
 	Setup->GetDeviceContext()->VSSetShader(Mesh->GetShader().VertexShader, 0, 0);
 	Setup->GetDeviceContext()->PSSetShader(Mesh->GetShader().PixelShader, 0, 0);
 	Setup->GetDeviceContext()->IASetVertexBuffers(0, 1, &VBuffer, &Stride, &Offset);
-	Setup->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//Setup->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	Setup->GetDeviceContext()->PSSetSamplers(0, 1, &Sampler);
 	Setup->GetDeviceContext()->PSSetShaderResources(0, 1, &Texture);
 	Setup->GetDeviceContext()->RSSetState(Raster);
 	Setup->GetDeviceContext()->OMSetDepthStencilState(RasterDepth, 0);
-
+	
 	Setup->GetDeviceContext()->Draw(Mesh->GetVertexCount(), 0);
 }

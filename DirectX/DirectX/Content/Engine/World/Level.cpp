@@ -3,9 +3,15 @@
 #include "../Core/Systems/FileManager.h"
 
 #include "Objects/Game/Floor.h"
+#include "Objects/Game/Wall.h"
+#include "Objects/Game/Gameplay/Coin.h"
+
 #include "Objects/Game/Entities/Player.h"
 #include "Objects/Testing/SkyBox.h"
 #include "../Components/Graphics/Camera/CameraComponent.h"
+
+#include "Objects/Game/Showcase/RotationShowcase.h"
+#include "../Components/Graphics/Meshes/StaticMeshComponent.h"
 
 
 //const std::string CLevel::DefaultFilePath{ "Content/Assets/Levels/" };
@@ -36,55 +42,68 @@ CLevel::CLevel(SObjectBase Core, std::string File, bool UseDeafultFilePath)
 	if (!TFileManager::DoesFileExist(FilePath.GetFilePath()))
 	{
 		// Log error
-		// Debug->LogError("Error: Could not open level: " + FilePath.GetFilePath());
-		std::runtime_error("Could not open level: " + FilePath.GetFilePath());
+		std::runtime_error(std::string{ "Could not open level: " + FilePath.GetFilePath() });
 		GetWorld()->CloseLevel(this);
 	}
 	else
 	{
-		//CTestPlayer* Player = SpawnObject<CTestPlayer>(SVector{ 0.0f });
-		CPlayer* Player = SpawnObject<CPlayer>();
+		Player = SpawnObject<CPlayer>(SVector{ 0.0f, 2.0f, 0.0f });
 		CTestSkyBox* Sky = SpawnObject<CTestSkyBox>();
 		Sky->Camera = &Player->GetCamera()->Transform;
 
-
-		//Sky->Camera = &Player->GetCamera()->Transform;
-		//Sky->Transform.SetParent(&Player->Transform);
-
 		LoadObjects();
-
 	}
 
-	/*
-	CTestMove* TMove = SpawnObject<CTestMove>(SVector{ 5.0f, 0.0f, 0.0f }, SVector{ 2.0f });
-#define INPUT_ENABLED
-	CTestMove* Test = SpawnObject<CTestMove>(SVector{ 0.0f, 2.0f, 0.0f });
 
-	TMove->Transform.SetParent(&Test->Transform);
-	CTestMove* Test2 = SpawnObject<CTestMove>(SVector{ 5.0f, 0.0f, 0.0f }, SVector{ 2.0f });
-	Test2->Transform.SetParent(&TMove->Transform);
+	// This is hard coded stuff in the level just for showcasing. Normally this would not be here but
+	// instead be in a sub-level.
+#pragma region Showcase
 
-	Test->AllowMovement = false;*/
+	// Base
+	CRotationShowcase* RotShow = SpawnObject<CRotationShowcase>(SVector{ 0.0f, 1.0f, 50.0f});
+	RotShow->RotationSpeed = 1.0f;
+	RotShow->RotationAxis = EAxis::Y;
 
-	//SFileInfo Info{ TFileManager::ReadFile(File) };
-	
-	
-	
-	//CTestObject* Test = SpawnObject<CTestObject>();
-	//Test->Transform.Location = SVector{ -1.5f, 0.0f, 5.0f };
-	////Test->Transform.Scale = 0.2f;
-	//Test->Transform.Scale = 0.1f;
-	//Test->GetMesh()->SetShader("ReflectShader.hlsl");
-	//Test->GetMesh()->Reflect = true;
-	//
-	//CTestObject* Test2 = SpawnObject<CTestObject>();
-	//Test2->Transform.Location = SVector{ 1.0f, 0.0f, 5.0f };
-	//Test2->Transform.Scale = 0.2f;
-	//Test2->GetMesh()->SetTexture("Texture.bmp");
-	//Test2->GetMesh()->SetShader("ReflectShader.hlsl");
-	//Test2->GetMesh()->Reflect = true;
+	// X rotation planet
+	CRotationShowcase* Show2 = SpawnObject<CRotationShowcase>(SVector{ 10.0f, 0.0f, 0.0f });
+	Show2->Transform.Scale = 0.5f;
+	Show2->RotationSpeed = 4.0f;
+	Show2->Transform.Rotation.Z = TO_RADIAN(45.0f);
+	Show2->Transform.SetParent(&RotShow->Transform);
 
+	// X rotation moon
+	CRotationShowcase* Show3 = SpawnObject<CRotationShowcase>(SVector{ 0.0f, 5.0f, 0.0f });
+	Show3->Transform.Scale = 0.3f;
+	Show3->Transform.SetParent(&Show2->Transform);
 
+	// Y rotation Base copy
+	CRotationShowcase* RotShow2 = SpawnObject<CRotationShowcase>(SVector{ 0.0f, 1.0f, 50.0f });
+	RotShow2->GetMesh()->SetEnabled(false);
+	RotShow2->Transform.Scale = 0.45f;
+	RotShow2->Transform.Rotation.Z = TO_RADIAN(-30.0f);
+	RotShow2->RotationSpeed = 0.4f;
+
+	// Y rotation planet.
+	Show2 = SpawnObject<CRotationShowcase>(SVector{ 0.0f, 20.0f, 0.0f });
+	Show2->RotationAxis = EAxis::Z;
+	Show2->Transform.SetParent(&RotShow2->Transform);
+
+	// Z rotation base copy.
+	RotShow2 = SpawnObject<CRotationShowcase>(SVector{ 0.0f, 1.0f, 50.0f });
+	RotShow2->Transform.Scale = 0.7f;
+	RotShow2->RotationSpeed = -0.3f;
+	RotShow2->RotationAxis = EAxis::Z;
+
+	// Z rotation planet
+	Show2 = SpawnObject<CRotationShowcase>(SVector{ 18.0f, 0.0f, 0.0f });
+	Show2->RotationSpeed = 1.5f;
+	Show2->Transform.SetParent(&RotShow2->Transform);;
+
+	// Z rotation planet moon.
+	Show3 = SpawnObject<CRotationShowcase>(SVector{ 0.0f, 5.5f, 0.0f });
+	Show3->Transform.Scale = 0.2f;
+	Show3->Transform.SetParent(&Show2->Transform);
+#pragma endregion
 }
 
 
@@ -110,29 +129,44 @@ void CLevel::LoadObjects()
 	for (uint i = 0; i < Contents.size(); ++i)
 	{
 		SStringBlock Line{ TFileManager::LineToWord(Contents[i]) };
-		STransform Transform;
 
 		if (Line[0] == "Floor")
 		{
-			Transform.Location[X] = TFileManager::GetValue<float>(Line[1]);
-			Transform.Location[Y] = TFileManager::GetValue<float>(Line[2]);
-			Transform.Location[Z] = TFileManager::GetValue<float>(Line[3]);
-
-			//SVector Rotation;
-			//Rotation[X] = TFileManager::GetValue<float>(Line[4]);
-			//Rotation[Y] = TFileManager::GetValue<float>(Line[5]);
-			//Rotation[Z] = TFileManager::GetValue<float>(Line[6]);
-			//Transform.Rotation = SQuaternion::Euler(Rotation);
-			Transform.Rotation.X = TO_RADIAN(TFileManager::GetValue<float>(Line[4]));
-			Transform.Rotation.Y = TO_RADIAN(TFileManager::GetValue<float>(Line[5]));
-			Transform.Rotation.Z = TO_RADIAN(TFileManager::GetValue<float>(Line[6]));
-
-			Transform.Scale[X] = TFileManager::GetValue<float>(Line[7]);
-			Transform.Scale[Y] = TFileManager::GetValue<float>(Line[8]);
-			Transform.Scale[Z] = TFileManager::GetValue<float>(Line[9]);
-			CFloor* Floor = SpawnObject<CFloor>(Transform);
+			CFloor* Floor = SpawnObject<CFloor>(BuildTransform(Line));
+		}
+		else if (Line[0] == "Wall")
+		{
+			CWall* Wall = SpawnObject<CWall>(BuildTransform(Line));
+		}
+		else if (Line[0] == "Coin")
+		{
+			CCoin* Coin = SpawnObject<CCoin>(BuildTransform(Line));
+			Coin->Player = Player;
 		}
 	}
+}
+
+
+STransform CLevel::BuildTransform(const SStringBlock& Line)
+{
+	STransform Transform;
+	Transform.Location[X] = TFileManager::GetValue<float>(Line[1]);
+	Transform.Location[Y] = TFileManager::GetValue<float>(Line[2]);
+	Transform.Location[Z] = TFileManager::GetValue<float>(Line[3]);
+
+	//SVector Rotation;
+	//Rotation[X] = TFileManager::GetValue<float>(Line[4]);
+	//Rotation[Y] = TFileManager::GetValue<float>(Line[5]);
+	//Rotation[Z] = TFileManager::GetValue<float>(Line[6]);
+	//Transform.Rotation = SQuaternion::Euler(Rotation);
+	Transform.Rotation.X = TO_RADIAN(TFileManager::GetValue<float>(Line[4]));
+	Transform.Rotation.Y = TO_RADIAN(TFileManager::GetValue<float>(Line[5]));
+	Transform.Rotation.Z = TO_RADIAN(TFileManager::GetValue<float>(Line[6]));
+
+	Transform.Scale[X] = TFileManager::GetValue<float>(Line[7]);
+	Transform.Scale[Y] = TFileManager::GetValue<float>(Line[8]);
+	Transform.Scale[Z] = TFileManager::GetValue<float>(Line[9]);
+	return Transform;
 }
 
 

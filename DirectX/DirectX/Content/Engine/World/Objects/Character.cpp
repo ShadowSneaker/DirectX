@@ -2,7 +2,7 @@
 #include "../../Components/CharacterComponent.h"
 //#include "../../Components/Graphics/SkeletalMesh.h"
 #include "../../Components/Graphics/Meshes/StaticMeshComponent.h"
-#include "../../Components/Physics/CapsuleComponent.h"
+#include "../../Components/Physics/BoxComponent.h"
 
 
 CCharacter::CCharacter(SObjectBase Core)
@@ -14,9 +14,11 @@ CCharacter::CCharacter(SObjectBase Core)
 	Mesh->Transform.SetParent(&Transform);
 
 	CharacterComponent = CreateComponent<CCharacterComponent>();
-	CapsuleCollider = CreateComponent<CCapsuleComponent>();
-	CharacterComponent->Collider = CapsuleCollider;
-	CapsuleCollider->SetVertices(&Mesh->Vertices);
+	BoxCollider = CreateComponent<CBoxComponent>();
+	BoxCollider->Transform.SetParent(&Transform);
+	BoxCollider->SetVertices(&Mesh->Vertices);
+	BoxCollider->Extents = SVector{ 1.0f, 2.0f, 1.0f };
+	CharacterComponent->Collider = BoxCollider;
 }
 
 

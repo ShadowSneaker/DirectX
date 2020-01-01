@@ -22,6 +22,9 @@ private:
 	// A list of all the stored objects in this level.
 	std::vector<class CWorldObject*> Objects;
 
+	// A reference to the created player.
+	class CPlayer* Player;
+
 
 
 public:
@@ -61,6 +64,7 @@ public:
 private:
 
 	void LoadObjects();
+	STransform BuildTransform(const SStringBlock& Block);
 	void DeleteAllObjects();
 
 

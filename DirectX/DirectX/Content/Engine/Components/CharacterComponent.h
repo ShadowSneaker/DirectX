@@ -23,9 +23,18 @@ private:
 	// The type of movement option this object is currently using.
 	EMovementType MovementType{ EMovementType::Running };
 
+	// The velocity this charater is moving at.
+	SVector Velocity{ 0.0f };
+
+	// Determines if this character is standing on a surface.
+	bool OnGround{ false };
+
 public:
 	// The collider attached to this object.
-	class CCapsuleComponent* Collider;
+	class CCollider* Collider;
+
+	// How high this character jumps.
+	float JumpStrength = 5.0f;
 
 	
 
