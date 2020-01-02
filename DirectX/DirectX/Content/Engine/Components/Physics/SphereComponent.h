@@ -3,6 +3,7 @@
 #include "../../Math/Physics/Primitives/Sphere.h"
 
 
+// A sphere collider that can be attached to world objects.
 class CSphereComponent :public CComponent, public CSphere
 {
 private: 

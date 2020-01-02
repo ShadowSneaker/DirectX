@@ -3,6 +3,8 @@
 
 #include <DirectXMath.h>
 
+
+
 // A light type which illuminates light in a sphere around the origin.
 class CPointLight :public CLightBase
 {

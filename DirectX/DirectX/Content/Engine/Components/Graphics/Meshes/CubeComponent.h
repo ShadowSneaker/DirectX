@@ -3,6 +3,9 @@
 #include "../../../Graphics/Meshes/Primitives/Cube.h"
 
 
+
+// A static mesh with a cube built in.
+// @note - The mesh can be changed.
 class CCubeComponent :public CComponent, public CCube
 {
 private:

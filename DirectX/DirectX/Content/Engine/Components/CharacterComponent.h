@@ -2,6 +2,7 @@
 #include "Component.h"
 
 
+// The types of movement the character component can use.
 enum class EMovementType
 {
 	Walking,
@@ -12,6 +13,8 @@ enum class EMovementType
 };
 
 
+
+// A component type that gives first person-like movement and controls to a world object.
 class CCharacterComponent :public CComponent
 {
 private:
@@ -76,13 +79,14 @@ public:
 	// The speed this character moves at in the swimming state.
 	float SwimSpeed{ 30.0f };
 
-	// 
+	// Determines how much this character floats in water.
 	float Buoyancy{ 0.8f };
 
 
 public:
 	/// Constructors
 
+	// Constructor, Default.
 	CCharacterComponent(SComponentInfo Info);
 
 
@@ -96,15 +100,23 @@ public:
 	
 	/// Fuctions
 
+	// Moves this character in a direction.
+	// @param Direction - The normalized direction to move in.
+	// @param - The strength of the movement.
+	// @param ForceMove - If true, ignores the collision checks.
 	void Move(SVector Direction, float Axis, bool ForceMove = false);
 
+	// Launches the character up in the air.
 	void Jump();
 
 
 
 	/// Setters
 
+	// Sets the type of movement this character uses.
 	void SetMovementMode(EMovementType Mode);
+
+
 
 	/// Getters
 

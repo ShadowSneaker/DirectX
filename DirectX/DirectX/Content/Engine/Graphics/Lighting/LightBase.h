@@ -6,6 +6,7 @@
 // http://aranna.altervista.org/data2/3d_game_programming_with_DirectX11.pdf#page=262&zoom=100,0,5
 
 
+// The type of light the light is.
 enum class ELightType
 {
 	Directional,
@@ -14,6 +15,8 @@ enum class ELightType
 };
 
 
+
+// The base object for all light types.
 class CLightBase
 {
 protected:
@@ -35,7 +38,6 @@ public:
 	// The amount of specular light emmited by the light source.
 	SVector4 Specular = 1.0f;
 	
-
 	// The location, rotation and scale of this light.
 	STransform Transform;
 
@@ -65,8 +67,9 @@ public:
 
 	/// Getters
 
-
+	// Returns the shader of this light.
 	INLINE SShader GetShader() const { return Shader; }
 
+	// Returns the type of light thils light is.
 	INLINE ELightType GetType() const { return LightType; }
 };

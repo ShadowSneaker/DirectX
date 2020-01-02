@@ -12,7 +12,6 @@ private:
 	SVector Att;
 
 public:
-
 	// The furthest point circle radius.
 	float Radius;
 
@@ -20,6 +19,10 @@ public:
 	float Range;
 
 
+
 public:
+	/// Constructors 
+
+	// Constructor, Default.
 	CSpotlight();
 };

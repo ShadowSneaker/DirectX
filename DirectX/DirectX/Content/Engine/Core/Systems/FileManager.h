@@ -1,7 +1,4 @@
 #pragma once
-
-
-
 #include "../../Math/MathValues.h"
 #include "../../Math/DataTypes/Vector.h"
 
@@ -23,10 +20,15 @@
 #endif
 
 
+// A tyepdef for a string.
 typedef std::string String;
+
+// A typedef of a vector of strings.
 typedef std::vector<String> SStringBlock;
 
 
+
+// Helper structure to store the file path and file name of a file.
 struct SFilePath
 {
 	/// Properties
@@ -71,7 +73,8 @@ struct SFilePath
 };
 
 
-// TODO write description.
+
+// Stores the contents of a file and other gerneral information about the file.
 struct SFileInfo
 {
 	// The amount of lines the file has.
@@ -80,7 +83,9 @@ struct SFileInfo
 	// The contents of the file.
 	char* Contents{ nullptr };
 
+	// The amount of lines in the file.
 	uint ActualSize{ 0 };
+
 
 
 	/// Functions
@@ -93,7 +98,7 @@ struct SFileInfo
 };
 
 
-// TODO write description.
+// Static functions to help reading and writing to files.
 class TFileManager
 {
 public:
@@ -174,5 +179,3 @@ public:
 		return Value;
 	}
 };
-
-

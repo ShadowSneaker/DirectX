@@ -3,6 +3,7 @@
 #include "../../Math/Physics/Primitives/Cylinder.h"
 
 
+// A cylinder collider that can be attached to world objects.
 class CCylinderComponent :public CComponent, public CCylinder
 {
 private:

@@ -2,6 +2,8 @@
 #include "../World/World.h"
 
 
+
+// Initiates the core engine systems.
 class CEngineSetup
 {
 private:
@@ -10,7 +12,9 @@ private:
 	// A reference to the created DirectX Object.
 	//CDirectXSetup* DirectXSetup;
 
+	// A reference to the world.
 	CWorld* World;
+
 
 
 public:
@@ -23,7 +27,9 @@ public:
 	~CEngineSetup();
 
 
+
 	/// Functions
 
+	// Startups the game.
 	void Startup();
 };

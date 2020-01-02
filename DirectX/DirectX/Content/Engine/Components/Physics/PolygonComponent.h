@@ -3,6 +3,7 @@
 #include "../../Math/Physics/Primitives/Polygon.h"
 
 
+// An abiguous collider type that takes the shape of the static mesh attached.
 class CPolygonComponent :public CComponent, public CPolygon
 {
 private:

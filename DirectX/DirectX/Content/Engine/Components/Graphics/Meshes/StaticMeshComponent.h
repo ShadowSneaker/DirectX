@@ -3,6 +3,8 @@
 #include "../../../Graphics/Meshes/StaticMesh.h"
 
 
+
+// A static mesh component that can be attached to world objects.
 class CStaticMeshComponent :public CComponent, public CStaticMesh
 {
 private:

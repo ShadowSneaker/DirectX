@@ -2,6 +2,7 @@
 #include "LightBase.h"
 
 
+// A light type that globaly illuminates the world in a direction.
 class CDirectionalLight :public CLightBase
 {
 private:
@@ -10,8 +11,9 @@ private:
 
 
 public:
-	/// Construction
+	/// Constructors
 
+	// Constructor, Default.
 	CDirectionalLight();
 
 

@@ -229,6 +229,7 @@ enum EKey
 };
 
 
+
 // Determines at what point the bound input will call it's bound function.
 enum EInputMode
 {
@@ -238,6 +239,7 @@ enum EInputMode
 	Toggle = 0x00000008,		// Calls the bound function when the corosponding key is pressed / released.
 	All = 0x00000016			// Calls teh bound functoin when the corosponding key is pressed / held / released.
 };
+
 
 
 // The core information for a bound axis input.
@@ -266,6 +268,7 @@ public:
 };
 
 
+
 // The core information for a bound action input.
 struct SActionKeyInfo
 {
@@ -289,6 +292,7 @@ public:
 };
 
 
+
 // The storage container for an axis input.
 struct SAxisKey
 {
@@ -302,6 +306,7 @@ public:
 	std::function<void(float)> Function;
 
 
+
 	/// Constructors
 
 	// Constructor, Default.
@@ -311,6 +316,7 @@ public:
 	SAxisKey(std::function<void(float)> Delegate)
 		:Function{ Delegate }
 	{}
+
 
 
 	/// Functions
@@ -341,6 +347,7 @@ public:
 	std::function<void(EInputMode)> Function;
 
 
+
 	/// Constructors
 
 	// Constructor, Default.
@@ -369,17 +376,26 @@ private:
 	// A reference to the current message.
 	MSG Message;
 
+	// A reference to the direct input object.
 	IDirectInput8* Input{ nullptr };
 
+	// The device for keyboards.
 	IDirectInputDevice8* KeyboardDevice{ nullptr };
+
+	// The device for mouse.
 	IDirectInputDevice8* MouseDevice{ nullptr };
 
+	// The state of all keys on the keyboard.
 	unsigned char KeyboardState[256];
+
+	// The state of the mouse.
 	DIMOUSESTATE MouseState;
+
+	// The size of the window screen.
 	SVector2i ScreenSize;
+
+	// The position of the mouse.
 	SVector2i MousePos;
-
-
 
 	// Determines if control is currently being pressed.
 	bool ControlPressed{ false };
@@ -394,6 +410,7 @@ private:
 	std::map<std::string, SActionKey> ActionBinds;
 
 
+
 public:
 	/// Constructors
 
@@ -404,15 +421,20 @@ public:
 	~CInputManager();
 
 
-	/// Functions
 
 private: 
+	/// Functions
+
+	// Sets up the devices.
 	bool SetupDevice();
 
+	// Reads the keyboard device.
 	bool ReadKeyboard();
-	bool ReadMouse();
-public:
 
+	// Reads the mouse device.
+	bool ReadMouse();
+
+public:
 	// Updates the current event and updates all inputs.
 	void Update();
 
@@ -459,7 +481,6 @@ public:
 	//void BindAction(std::string Name, EInputMode InputMode, SInputData InputData, std::function<void(float)> Delegate);
 
 private:
-
 	// Calls all the axis input's bound functions.
 	void AxisUpdate();
 	
@@ -492,7 +513,7 @@ public:
 	// Gets a reference of the current message.
 	inline MSG GetMsg() const { return Message; }
 
-
+	// Returns the position of the mouse.
 	inline SVector2i GetMousePos() const { return MousePos; }
 
 	// Returns true if this button is currently held down.

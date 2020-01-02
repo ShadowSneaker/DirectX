@@ -6,6 +6,7 @@
 #include <vector>
 
 
+// Represents when the timer will call it's bound function.
 enum ETimerMethod
 {
 	OnEnd = 0x00000000,			// Runs once when the timer hits 0.
@@ -63,12 +64,12 @@ public:
 	std::function<void(const ETimerMethod)> BoundFunction{ NULL };
 
 
+
 public:
 	/// Constructors
 
 	// Constructor, Default.
 	STimer() {}
-
 
 	// Constructor, Initiates all properties of the timer.
 	// @param Function - The assigned function to call.
@@ -84,6 +85,7 @@ public:
 		OnDelay = (TotalDelay > 0.0f);
 	}
 };
+
 
 
 // Manages all the timers in the world.
@@ -111,6 +113,7 @@ public:
 
 	// Destructor.
 	~CTimerManager();
+
 
 
 private:
