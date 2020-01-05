@@ -12,47 +12,77 @@
 #include "Meshes/Material.h"
 
 
+// The main constant buffer struct.
 struct SCBuffer
 {
+	// The calculated view matrix.
 	SMatrix4 ViewMatrix;
+
+	// The direction the directional light points in.
 	SVector4 DirectionalLight;
+
+	// The colour of the directional light.
 	SVector4 LightColour;
+
+	// The intensity of the ambiant light in the world.
 	SVector4 AmbiantLight;
 };
 
 
+
+// A constant buffer used for reflections.
 struct SReflectBuffer
 {
+	// The calculated view matrix.
 	SMatrix4 ViewMatrix;
+
+	// The calculated world matrix.
 	SMatrix4 WorldMatrix;
 };
 
 
+
+// A constant buffer used Lights (not in use).
 struct SCBPerFrame
 {
+	// The directional light object.
 	SDirectionalLight DirectionalLight;
+
+	// The point light object.
 	SPointLight PointLight;
+
+	// The spotlight object.
 	SSpotLight SpotLight;
+
+	// The eye postion.
 	SVector EyePosW;
 };
 
 
+
+// A constant buffer used Lights (not in use).
 struct SCBPerObject
 {
+	// The world matrix.
 	SMatrix4 World;
+
+	// The inverted world transpose matrix.
 	SMatrix4 WorldInvTranspose;
+
+	// The world projection matrix.
 	SMatrix4 WorldViewProj;
+
+	// The material used on the object.
 	SMaterial Material;
 };
 
 
 
-
+// The main system used to render all triangles and textures in the world.
 class CRenderer
 {
 private:
 	/// Properties
-
 
 	// A list of textures that this renderer has created.
 	// This is used to allow multiple objects to use the same texture without needing to create multiple copies of the texture.
@@ -64,12 +94,8 @@ private:
 	// A reference to the created DirectX setup.
 	CDirectXSetup* Setup{ nullptr };
 
-	// A reference to the created vertex buffer.
-	//ID3D11Buffer* VertexBuffer{ nullptr };
-
 	// A reference to the created sampler state.
 	ID3D11SamplerState* Sampler{ nullptr };
-
 
 	// The name of the aplicatoin window.
 	std::string WindowName{ "Name" };
@@ -86,10 +112,12 @@ private:
 	// A reference to the camera the world should be viewd through.
 	class CCamera* SelectedCamera{ nullptr };
 
-
-
+	// A reference to the raster state.
 	ID3D11RasterizerState* Raster{ nullptr };
+
+	// A reference to the depth raster state.
 	ID3D11DepthStencilState* RasterDepth{ nullptr };
+
 
 
 	/// temp
@@ -108,10 +136,12 @@ public:
 	// Personally I'd like to have the skybox always drawn last and this is the only way I can think to do it for the moment.
 	CStaticMesh* SkyBox{ nullptr };
 
-
 	// The amount of light that is equally applied to all faces.
 	SVector4 AmbiantColour{ 1.0f, 1.0f, 1.0f, 1.0f };
+
+	// The strenght of the ambient light.
 	float AmbiantLightStregth{ 0.1f };
+
 
 
 public:
@@ -125,10 +155,8 @@ public:
 
 
 
-
-	/// Functions
-
 private:
+	/// Functions
 	
 	// Safely deletes all static meshes in memory.
 	void DeleteAllMeshes();
@@ -213,6 +241,7 @@ public:
 	// @return - A reference to the created texture.
 	STexture* SetTexture(std::string FilePath, bool UseDefaultPath = true);
 
+	// Sets the direction of every face.
 	void SetFaceDirection(CStaticMesh* Mesh);
 
 private:
@@ -230,9 +259,12 @@ public:
 
 	/// Getters
 
+	// Returns a reference to the window.
 	inline CWindow* GetWindow() const { return Window; }
 
+	// Returns a reference to the Direct3D device.
 	inline ID3D11Device* GetDevice() const { return Setup->GetDevice(); }
 
+	// Returns a reference to the on screen score text.
 	inline class CFont* GetScoreText() const { return ScoreText; }
 };

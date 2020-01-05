@@ -5,13 +5,16 @@
 #include <DxErr.h>
 #include <Windows.h>
 
+
+// A helper struct that is used to easily transfer core information into a shader.
 struct SShader
 {
 	/// Properties
 
+	// a reference to the vertex buffer.
 	ID3D11Buffer* VertexBuffer{ nullptr };
 
-	// A reference to the vertex buffer.
+	// A reference to the constant buffer.
 	ID3D11Buffer* ConstantBuffer{ nullptr };
 
 	// A reference to the pixel shader.
@@ -24,6 +27,8 @@ struct SShader
 	ID3D11InputLayout* InputLayout{ nullptr };
 
 
+
+	// Deletes all components from the heap.
 	void Clear()
 	{
 		if (VertexBuffer) VertexBuffer->Release();

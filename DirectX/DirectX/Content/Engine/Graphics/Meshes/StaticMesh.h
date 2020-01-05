@@ -8,12 +8,13 @@
 
 
 
-
-
-
+// A typedef type for textures.
 typedef ID3D11ShaderResourceView STexture;
 
 
+
+// The main 3D object that is comprised of vertices.
+// This object is used to draw objects in the game world.
 class CStaticMesh
 {
 private:
@@ -21,7 +22,6 @@ private:
 
 	// The name and file path of this mesh.
 	SFilePath FileName{ "" };
-
 
 	// TEMP
 	uint TokenPtr{ 0 };
@@ -31,9 +31,6 @@ private:
 	std::vector<int> PIndices{ std::vector<int>{} };
 	std::vector<int> TIndices{ std::vector<int>{} };
 	std::vector<int> NIndices{ std::vector<int>{} };
-
-
-protected:
 
 public:
 	// A reference to all the vertices that is on this mesh.
@@ -57,6 +54,7 @@ public:
 	// Should the mesh's faces be looking inwards (false for outwards (default)).
 	bool InvertFaces{ false };
 
+	// Should this object reflect the surroundings.
 	bool Reflect{ false };
 
 
@@ -78,18 +76,16 @@ private:
 	// @param FileInfo - The file information that was gathered when reading the .obj file.
 	void SetupVertices(SFileInfo FileInfo);
 
-	// 
+	// Returns the next token, used for initiating the vertices.
 	bool GetNextToken(SFileInfo File, int& Start, int& Length);
 
-	// 
+	// Gets the next file line.
 	bool GetNextLine(SFileInfo File);
 
 
+
 public:
-
-
 	/// Setters
-
 	
 	// Sets this mesh to a .obj mesh stored in files.
 	// @param FilePath - The location of the file.
@@ -110,14 +106,18 @@ public:
 	void SetColour(SColour Colour);
 
 
+
 	/// Getters
 
+	// Returns the amount of vertices stored in this mesh.
 	inline uint GetVertexCount() const { return VertexCount; }
 
-	//inline SVertex* GetVertices() const { return Vertices; }
+	// Returns all the vertices stored in this mesh.
 	inline std::vector<SVertex> GetVertices() const { return Vertices; }
 
+	// Returns the shader bound to this mesh.
 	SShader GetShader() const;
 
+	// Returns the texture on this mesh.
 	ID3D11ShaderResourceView* GetTexture() { return Texture; }
 };

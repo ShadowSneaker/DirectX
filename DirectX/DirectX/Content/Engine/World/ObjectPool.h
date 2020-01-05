@@ -6,6 +6,7 @@
 #include <any>
 
 
+
 // An instance of an object represented in an object pool.
 struct SObjectInstance
 {
@@ -17,6 +18,7 @@ public:
 
 	// Represents if this object is currently being used.
 	bool Activated{ false };
+
 
 
 public:
@@ -50,6 +52,8 @@ private:
 	// A reference to the world this object pool is created in.
 	class CWorld* World;
 
+
+
 public:
 	/// Constructors
 
@@ -59,6 +63,7 @@ public:
 
 	// Destructor.
 	~CObjectPool();
+
 
 
 	/// Functions
@@ -83,6 +88,7 @@ public:
 	void ReturnObject(const char* Key, CWorldObject* Object);
 
 
+
 	/// Setters
 
 	// Sets how many objects of a specified type should exist within this pool.
@@ -91,6 +97,7 @@ public:
 	// @param AllowShrinking - Should this pool delete objects if the count is lower than the current size.
 	template <typename Type>
 	inline void SetObjectCount(const char* Key, uint Count, bool AllowShrinking = false);
+
 
 
 	/// Getters

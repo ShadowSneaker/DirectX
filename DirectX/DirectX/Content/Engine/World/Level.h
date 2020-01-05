@@ -5,14 +5,17 @@
 #include <vector>
 
 
+
 // Loads in from a file and creates all the objects in the level.
 // These levels are created externally and saved in a file. This
 // class just loads that file and reads all the objects to spawn.
 class CLevel : CObjectBase
 {
 private:
-
+	// The default file location for levels.
 	static const std::string DefaultFilePath;
+
+
 
 	/// Properties
 
@@ -33,13 +36,16 @@ public:
 	// Constructor, Initiates the world based on an inputted file path.
 	CLevel(SObjectBase Core, std::string InFilePath, bool UseDefaultFilePath = true);
 
-
+	// Destructor.
 	~CLevel();
+
 
 
 	/// Overridables
 
+	// Runs every frame.
 	virtual void Update() override;
+
 
 
 	/// Functions
@@ -51,10 +57,10 @@ public:
 	// 
 	//inline class CWorld* GetWorld() const { return World; }
 
-	// 
+	// Returns the name of this level.
 	inline std::string GetLevelName() const { return FilePath.FileName; }
 
-	// 
+	// Returns the file path of this level.
 	inline std::string GetLevelFilePath() const { return FilePath.GetFilePath(); }
 
 
@@ -62,14 +68,16 @@ public:
 	/// Spawning
 
 private:
-
+	// Loads all the objects from the given file path.
 	void LoadObjects();
+
+	// Builds a transfrom from the information in the file line.
 	STransform BuildTransform(const SStringBlock& Block);
+
+	// Deletes all the objects in this level.
 	void DeleteAllObjects();
 
-
 public:
-
 	// Deletes an inputted object from this world.
 	// @param Object - A reference to the object to be deleted.
 	void DeleteObject(class CWorldObject* Object);

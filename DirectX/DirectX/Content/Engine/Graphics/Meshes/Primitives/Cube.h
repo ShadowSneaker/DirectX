@@ -7,12 +7,17 @@
 class CCube : public CStaticMesh
 {
 public:
+	/// Properties
 
 
 
 public:
+	/// Constructors
+
+	// Constructor, Default.
 	CCube();
 
+	// Destructor.
 	~CCube();
 
 

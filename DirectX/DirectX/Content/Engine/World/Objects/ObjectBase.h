@@ -36,17 +36,23 @@ struct SObjectBase
 };
 
 
+
+// The base object type.
 class CObjectBase
 {
 private:
 	/// Properties
 
+	// Allows this object to update.
 	bool Enable{ true };
 
+	// The core information of an object.
 	SObjectBase Base;
 
 public:
+	// Should the update function be ran once before Begin().
 	bool UpdateBeforeBegin{ false };
+
 
 
 public:
@@ -78,10 +84,12 @@ public:
 
 	/// Setters
 
+	// Sets this object to be enabled.
 	inline void SetEnabled(bool NewEnable) { Enable = NewEnable; }
 
-	/// Getters
 
+
+	/// Getters
 
 	// This will be changed to a recursion function to go through all parents to see if they are also enabled.
 	inline bool IsEnabled() const { return Enable; }

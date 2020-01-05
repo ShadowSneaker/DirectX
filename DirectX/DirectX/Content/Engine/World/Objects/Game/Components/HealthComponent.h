@@ -3,6 +3,8 @@
 #include "../Gameplay/RegenStat.h"
 
 
+
+// The info gathered when an object is damaged.
 struct SDamageInfo
 {
 	// Determines if the attack killed the target.
@@ -19,6 +21,8 @@ struct SDamageInfo
 };
 
 
+
+// The information gathered when an object is healed.
 struct SHealInfo
 {
 	// The amount of healing the target actually healed for.
@@ -32,6 +36,8 @@ struct SHealInfo
 };
 
 
+
+// A component type that gives objects health and has helper functions for damaging.
 class CHealthComponent : public CComponent
 {
 private:

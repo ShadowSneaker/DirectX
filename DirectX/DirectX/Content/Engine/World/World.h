@@ -10,6 +10,8 @@
 #include <Windows.h>
 
 
+
+// The object that initates all the core systems and manages the open levels.
 class CWorld
 {
 	/// Properties
@@ -29,6 +31,7 @@ class CWorld
 	// A reference to the created input manager object.
 	class CInputManager* InputManager;
 
+	// A reference to the created time object.
 	class TTime* Time;
 
 	// A list of all the objects in the world. - this will likely change to hold all the levels.
@@ -40,6 +43,7 @@ class CWorld
 	bool Playing{ true };
 
 
+
 public:
 	/// Constructors
 
@@ -48,6 +52,7 @@ public:
 
 	// Destructor.
 	~CWorld();
+
 
 
 	/// Functions
@@ -76,9 +81,12 @@ public:
 	// Closes the currently opened level(s) and opens the inputted level.
 	void LoadLevel(std::string File, bool UseDefaultPath = true);
 
+	// Closes a level based on its file path.
 	void CloseLevel(std::string FilePath);
 
+	// Closes a level based on a reference.
 	void CloseLevel(CLevel* LevelInstance);
+
 
 
 	/// Getters
@@ -99,6 +107,7 @@ public:
 
 	// Gets all the core infor for an object to be created.
 	SObjectBase GetCore();
+
 
 
 	/// Spawning

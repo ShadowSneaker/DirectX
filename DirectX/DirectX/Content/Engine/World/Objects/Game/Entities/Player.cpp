@@ -15,7 +15,7 @@
 CPlayer::CPlayer(SObjectBase Base)
 	:CEntity::CEntity{ Base }
 {
-	Mesh->SetMesh("Sphere.obj");
+	//Mesh->SetMesh("Sphere.obj");
 	Mesh->SetShader("Shaders.hlsl");
 	BoxCollider->SetVertices(&Mesh->Vertices);
 
@@ -25,9 +25,6 @@ CPlayer::CPlayer(SObjectBase Base)
 	Camera = CreateComponent<CCameraComponent>();
 	Camera->Transform.Location = SVector{ 0.0f, 0.0f, -10.0f };
 	GetRenderer()->SetCamera(Camera);
-	CameraOffset = SVector2{ 0.0f, 1.0f };
-
-	Camera->Transform.Location += CameraOffset;
 
 	ScoreText = GetRenderer()->GetScoreText();
 	UpdateScore();
@@ -66,16 +63,6 @@ void CPlayer::Begin()
 void CPlayer::Update()
 {
 	CEntity::Update();
-	/*if (!Camera->Transform.Location.NearlyEqual(Transform.Location, 0.0001f)) 
-	{
-		SVector Location{ Camera->Transform.Location };
-		Location[X] = TMath::Lerp(Location[X], Transform.Location[X] + CameraOffset[X], CamLerpSpeed * TTime::DeltaTime);
-		Location[Y] = TMath::Lerp(Location[Y], Transform.Location[Y] + CameraOffset[Y], CamLerpSpeed * TTime::DeltaTime);
-		Camera->Transform.Location = Location;
-
-	}*/
-
-	// Due to the nature of how the camera works, I have to set the location of the camera manually instead of just setting it as a parent.
 	Camera->Transform.Location = Transform.Location;
 }
 

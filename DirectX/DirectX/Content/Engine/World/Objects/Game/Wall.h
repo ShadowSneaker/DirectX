@@ -27,5 +27,6 @@ public:
 
 	/// Getters
 
+	// Returns the static mesh.
 	INLINE class CStaticMeshComponent* GetMesh() const { return Mesh; }
 };

@@ -12,17 +12,21 @@
 #include "../Math/DataTypes/Vector.h"
 
 
+
+// A class used to create a window.
 class CWindow
 {
 private:
-
+	// The handle instance of the window.
 	HINSTANCE HInstance{ NULL };
 
+	// The Window Handle.
 	HWND HWindow{ NULL };
 
 	// The name that will be displayed at the top of the window.
 	std::string ApplicationName{ "Name" };
 
+	// The size of the window (in pixels).
 	SVector2i WindowSize{ 1920, 1080 };
 
 
@@ -30,12 +34,16 @@ private:
 public:
 	/// Constructors
 
+	// Constructor, Default.
 	CWindow(std::string WindowName);
+
 
 
 	/// Functions
 
+	// Creates the window object.
 	HRESULT InitialiseWindow(HINSTANCE HandleInstance, int CommandShow);
+
 
 
 	/// Getters

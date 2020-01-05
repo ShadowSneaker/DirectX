@@ -3,6 +3,8 @@
 #include "../../../../Core/Systems/Time.h"
 
 
+
+// The types of regeneration there are.
 enum class ERegenType
 {
 	Constant,		// Regenerates a set value per second.
@@ -12,6 +14,8 @@ enum class ERegenType
 };
 
 
+
+// A helper struct to give regenerative stats to objects.
 struct SRegenStat
 {
 private:
@@ -48,13 +52,18 @@ public:
 
 	/// Operators
 
+	// Removes the main stat from this stat by a float amount.
 	INLINE SRegenStat operator-=(float F);
 
+	// Adds the main stat from this stat by a float amount.
 	INLINE SRegenStat operator+=(float F);
 
+	// Sets the current amount of stat this stat has.
 	INLINE SRegenStat operator=(float F);
 
+	// Returns the current stat value.
 	INLINE operator float() const;
+
 
 
 	/// Functions
@@ -77,6 +86,7 @@ public:
 	// Returns if this object is currently regenerating.
 	INLINE bool IsRegenerating() const { return Regenerating; }
 };
+
 
 
 INLINE SRegenStat SRegenStat::operator-=(float F)

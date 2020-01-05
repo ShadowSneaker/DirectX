@@ -4,6 +4,7 @@
 
 
 
+// A simple class used to give the player points.
 class CCoin :public CWorldObject
 {
 private:
@@ -34,5 +35,6 @@ public:
 
 	/// Functions
 
+	// Runs when the player collides with the coin.
 	void CollisionEnter(SCollision Collision);
 };

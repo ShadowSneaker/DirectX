@@ -7,17 +7,15 @@
 class CWorldObject :public CObjectBase
 {
 private:
-
 	/// Properties
 
 	// A list of all components attached to this object.
 	std::vector<CComponent*> Components;
 
-
 public:
-
 	// The location, rotation and scale of this object.
 	STransform Transform;
+
 
 
 public:
@@ -30,6 +28,7 @@ public:
 	virtual ~CWorldObject();
 
 
+
 	/// Overridables
 
 	// Updates every frame.
@@ -39,29 +38,32 @@ public:
 	virtual void End() override;
 
 
-	/// Functions
 
 protected:
+	/// Functions
+
 	// Creates a component and attaches it to this object.
 	template <typename Type>
 	Type* CreateComponent();
 
-
 private:
 	// Removes all components attached to this object.
 	void DeleteAllComponents();
-
 
 public:
 	// Removes a specified component on this object.
 	// @param Component - A reference to the component to remove.
 	void DeleteComponent(CComponent* Component);
 
+
+
 	/// Setters
+
 
 
 	/// Getters
 
+	// Returns a specified component on this object (if applicable).
 	template <typename Type>
 	Type* FindComponent();
 };
