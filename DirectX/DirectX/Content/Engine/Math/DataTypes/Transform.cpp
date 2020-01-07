@@ -55,12 +55,6 @@ inline void STransform::SetParent(STransform* Transform)
 
 STransform STransform::GetWorldTransform() const
 {
-	//STransform Transform;
-	//Transform.Location = ((Parent) ? Parent->GetWorldTransform().Location : SVector{ 0.0 }) + Location;
-	//Transform.Rotation = ((Parent) ? Parent->GetWorldTransform().Rotation : SQuaternion{ 0.0 }) + Rotation;
-	//Transform.Scale = ((Parent) ? Parent->GetWorldTransform().Scale : SVector{ 1.0 }) * Scale;
-	//return Transform;
-
 	SMatrix4 ParentMat;
 	ParentMat.Identity();
 	if (Parent) ParentMat = Parent->GetWorldTransform();
